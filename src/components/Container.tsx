@@ -17,8 +17,6 @@ interface PropTypes {
   width?: Size;
   top?: number;
   left?: number;
-  before: number;
-  after: number;
   addContainer: AddContainer;
 }
 
@@ -47,8 +45,6 @@ const Container: React.FC<PropTypes> = (props) => {
     addContainer,
     top: initialTop,
     left: initialLeft,
-    before,
-    after,
     emitter,
   } = props;
   const [width, setWidth] = React.useState<number>();
@@ -60,15 +56,6 @@ const Container: React.FC<PropTypes> = (props) => {
     height: height || initialHeight,
     top,
     left,
-  };
-  const siblingsRef = React.useRef({
-    before,
-    after,
-  });
-
-  siblingsRef.current = {
-    before,
-    after,
   };
 
   const setSize = (

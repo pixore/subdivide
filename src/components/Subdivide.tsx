@@ -1,7 +1,7 @@
 import React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
 import Container from './Container';
-import { ContainerData, Size, AddContainer } from '../types';
+import { ContainerData, AddContainer } from '../types';
 
 type Component = React.ComponentType<any>;
 
@@ -54,15 +54,11 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
   return (
     <>
-      {containerList.map((id, index) => {
-        const before = containers[index - 1];
-        const after = containers[index + 1];
+      {containerList.map((id) => {
         if (newContainer.id === id && isNewContainer) {
           return (
             <Container
               addContainer={addContainer}
-              before={before}
-              after={after}
               emitter={emitter}
               key={id}
               {...newContainer}
@@ -74,8 +70,6 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         return (
           <Container
             addContainer={addContainer}
-            before={before}
-            after={after}
             emitter={emitter}
             key={id}
             id={id}
