@@ -3,15 +3,9 @@ import { TinyEmitter } from 'tiny-emitter';
 
 import Config from '../contexts/Config';
 import Corner from './Corner';
-import { dragDirection, Direction } from '../utils';
-import {
-  Vertical,
-  Horizontal,
-  FromCorner,
-  Size,
-  AddContainer,
-  NewContainerData,
-} from '../types';
+import { dragDirection } from '../utils';
+import Direction, { OptionalDirection } from '../utils/Direction';
+import { FromCorner, Size, AddContainer, NewContainerData } from '../types';
 
 type Component = React.ComponentType<any>;
 
@@ -77,34 +71,36 @@ const Container: React.FC<PropTypes> = (props) => {
     after,
   };
 
-  const setSize = (deltaX: number, deltaY: number, direction: Direction) => {
-    if (direction === Vertical.TOP) {
+  const setSize = (
+    deltaX: number,
+    deltaY: number,
+    direction: OptionalDirection,
+  ) => {
+    if (direction === Direction.TOP) {
       setHeight((height) => (height as number) + deltaY);
     }
 
-    if (direction === Vertical.BOTTOM) {
+    if (direction === Direction.BOTTOM) {
       setTop((top) => top + deltaY);
       setHeight((height) => (height as number) - deltaY);
     }
 
-    if (direction === Horizontal.LEFT) {
+    if (direction === Direction.LEFT) {
       setWidth((width) => (width as number) + deltaX);
     }
 
-    if (direction === Horizontal.RIGHT) {
+    if (direction === Direction.RIGHT) {
       setLeft((left) => left + deltaX);
       setWidth((width) => (width as number) - deltaX);
     }
   };
 
-  const split = (direction: Direction) => {
+  const split = (direction: OptionalDirection) => {
     if (!height || !width) {
       return;
     }
 
-    const isVertical =
-      direction === Vertical.BOTTOM || direction === Vertical.TOP;
-    console.log(isVertical, direction);
+    const isVertical = Direction.isVertical(direction);
     const newDataContainer: { [k: string]: any } = {
       parent: id,
     };
@@ -117,7 +113,7 @@ const Container: React.FC<PropTypes> = (props) => {
       newDataContainer.width = width;
       newDataContainer.height = splitRatio;
 
-      if (direction === Vertical.BOTTOM) {
+      if (direction === Direction.BOTTOM) {
         setTop(top + splitRatio);
 
         newDataContainer.top = top;
@@ -134,7 +130,7 @@ const Container: React.FC<PropTypes> = (props) => {
       newDataContainer.width = splitRatio;
       newDataContainer.height = height;
 
-      if (direction === Horizontal.RIGHT) {
+      if (direction === Direction.RIGHT) {
         setLeft(left + splitRatio);
 
         newDataContainer.top = top;
@@ -229,18 +225,12 @@ const Container: React.FC<PropTypes> = (props) => {
   }, []);
 
   React.useEffect(() => {
-    const onResize = (deltaX: number, deltaY: number, direction: Direction) => {
-      setSize(
-        deltaX,
-        deltaY,
-        direction === Vertical.TOP
-          ? Vertical.BOTTOM
-          : direction === Vertical.BOTTOM
-          ? Vertical.TOP
-          : direction === Horizontal.LEFT
-          ? Horizontal.RIGHT
-          : Horizontal.LEFT,
-      );
+    const onResize = (
+      deltaX: number,
+      deltaY: number,
+      direction: OptionalDirection,
+    ) => {
+      setSize(deltaX, deltaY, Direction.getOpposite(direction));
     };
     emitter.on(`resize-${id}`, onResize);
 
@@ -254,23 +244,23 @@ const Container: React.FC<PropTypes> = (props) => {
       <Comp />
       <Corner
         onStartDrag={onStartDrag}
-        vertical={Vertical.TOP}
-        horizontal={Horizontal.LEFT}
+        vertical={Direction.TOP}
+        horizontal={Direction.LEFT}
       />
       <Corner
         onStartDrag={onStartDrag}
-        vertical={Vertical.TOP}
-        horizontal={Horizontal.RIGHT}
+        vertical={Direction.TOP}
+        horizontal={Direction.RIGHT}
       />
       <Corner
         onStartDrag={onStartDrag}
-        vertical={Vertical.BOTTOM}
-        horizontal={Horizontal.RIGHT}
+        vertical={Direction.BOTTOM}
+        horizontal={Direction.RIGHT}
       />
       <Corner
         onStartDrag={onStartDrag}
-        vertical={Vertical.BOTTOM}
-        horizontal={Horizontal.LEFT}
+        vertical={Direction.BOTTOM}
+        horizontal={Direction.LEFT}
       />
     </div>
   );

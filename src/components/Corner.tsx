@@ -1,19 +1,20 @@
 import React, { CSSProperties } from 'react';
 import Config from '../contexts/Config';
 
-import { Vertical, Horizontal, FromCorner } from '../types';
+import { FromCorner } from '../types';
+import Direction from '../utils/Direction';
 
 interface PropTypes {
-  vertical: Vertical;
-  horizontal: Horizontal;
+  vertical: Direction;
+  horizontal: Direction;
   onStartDrag: (from: FromCorner) => void;
 }
 
 const getVerticalPosition = (
   size: number,
-  vertical: Vertical,
+  vertical: Direction,
 ): CSSProperties => {
-  if (Vertical.TOP === vertical) {
+  if (Direction.TOP === vertical) {
     return { top: -(size / 2) };
   }
 
@@ -22,9 +23,9 @@ const getVerticalPosition = (
 
 const getHorizontalPosition = (
   size: number,
-  horizontal: Horizontal,
+  horizontal: Direction,
 ): CSSProperties => {
-  if (Horizontal.LEFT === horizontal) {
+  if (Direction.LEFT === horizontal) {
     return { left: -(size / 2) };
   }
 
@@ -33,8 +34,8 @@ const getHorizontalPosition = (
 
 const getPosition = (
   size: number,
-  vertical: Vertical,
-  horizontal: Horizontal,
+  vertical: Direction,
+  horizontal: Direction,
 ): CSSProperties => {
   return {
     ...getVerticalPosition(size, vertical),

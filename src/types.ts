@@ -1,16 +1,8 @@
-export enum Vertical {
-  TOP = 'top',
-  BOTTOM = 'bottom',
-}
-
-export enum Horizontal {
-  LEFT = 'left',
-  RIGHT = 'right',
-}
+import Direction from './utils/Direction';
 
 export interface FromCorner {
-  vertical: Vertical;
-  horizontal: Horizontal;
+  vertical: Direction;
+  horizontal: Direction;
   x: number;
   y: number;
 }

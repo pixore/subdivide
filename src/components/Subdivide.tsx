@@ -52,8 +52,6 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     ? containers.concat(newContainer.id)
     : containers;
 
-  console.log(newContainer.id, containers);
-
   return (
     <>
       {containerList.map((id, index) => {

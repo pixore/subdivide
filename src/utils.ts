@@ -1,8 +1,8 @@
-import { Horizontal, Vertical } from './types';
+import Direction, { OptionalDirection } from './utils/Direction';
 
 interface Corner {
-  vertical: Vertical;
-  horizontal: Horizontal;
+  vertical: Direction;
+  horizontal: Direction;
 }
 
 interface Position {
@@ -10,10 +10,8 @@ interface Position {
   y: number;
 }
 
-export type Direction = Vertical | Horizontal | undefined;
-
-const getVerticalDelta = (vertical: Vertical, fromX: number, toX: number) => {
-  if (vertical === Vertical.TOP) {
+const getVerticalDelta = (vertical: Direction, fromX: number, toX: number) => {
+  if (vertical === Direction.TOP) {
     return toX - fromX;
   } else {
     return fromX - toX;
@@ -21,11 +19,11 @@ const getVerticalDelta = (vertical: Vertical, fromX: number, toX: number) => {
 };
 
 const getHorizontalDelta = (
-  horizontal: Horizontal,
+  horizontal: Direction,
   fromY: number,
   toY: number,
 ) => {
-  if (horizontal === Horizontal.LEFT) {
+  if (horizontal === Direction.LEFT) {
     return toY - fromY;
   } else {
     return fromY - toY;
@@ -37,20 +35,18 @@ const dragDirection = (
   from: Position,
   to: Position,
   splitRatio: number,
-): Direction => {
+): OptionalDirection => {
   const verticalDelta = getVerticalDelta(corner.vertical, from.y, to.y);
   const horizontalDelta = getHorizontalDelta(corner.horizontal, from.x, to.x);
 
   if (verticalDelta > horizontalDelta) {
     if (verticalDelta > splitRatio) {
-      return corner.vertical === Vertical.TOP ? Vertical.BOTTOM : Vertical.TOP;
+      return Direction.getOpposite(corner.vertical);
     }
     return undefined;
   } else {
     if (horizontalDelta > splitRatio) {
-      return corner.horizontal === Horizontal.LEFT
-        ? Horizontal.RIGHT
-        : Horizontal.LEFT;
+      return Direction.getOpposite(corner.horizontal);
     }
     return undefined;
   }

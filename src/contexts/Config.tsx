@@ -17,8 +17,8 @@ const defaultClassNames = {
 
 const initialValue = {
   classNames: defaultClassNames,
-  cornerSize: 30,
-  splitRatio: 30,
+  cornerSize: 40,
+  splitRatio: 40,
 };
 
 export interface ConfigState {
