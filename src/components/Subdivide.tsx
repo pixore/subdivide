@@ -55,27 +55,16 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   return (
     <>
       {containerList.map((id) => {
-        if (newContainer.id === id && isNewContainer) {
-          return (
-            <Container
-              addContainer={addContainer}
-              emitter={emitter}
-              key={id}
-              {...newContainer}
-              component={component}
-            />
-          );
-        }
-
-        return (
-          <Container
-            addContainer={addContainer}
-            emitter={emitter}
-            key={id}
-            id={id}
-            component={component}
-          />
-        );
+        const isNew = newContainer.id === id && isNewContainer;
+        const props = {
+          addContainer,
+          emitter,
+          key: id,
+          id,
+          component,
+          ...(isNew ? newContainer : {}),
+        };
+        return <Container {...props} />;
       })}
     </>
   );
