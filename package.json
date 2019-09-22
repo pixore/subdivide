@@ -1,0 +1,32 @@
+{
+  "name": "subdivide",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel examples/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pixore/subdivide.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pixore/subdivide/issues"
+  },
+  "homepage": "https://github.com/pixore/subdivide#readme",
+  "dependencies": {
+    "tiny-emitter": "^2.1.0"
+  },
+  "devDependencies": {
+    "@pixore/prettier-config": "0.0.2",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "parcel-bundler": "^1.12.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "typescript": "^3.6.3"
+  }
+}
