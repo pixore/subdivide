@@ -9,9 +9,13 @@ interface PropTypes {
   component: Component;
 }
 
-const Subdivide: React.FC<PropTypes> = (props) => {
-  const { component } = props;
-  const emitter = React.useMemo(() => new TinyEmitter(), []);
+type UseContainers = {
+  containers: number[];
+  newContainer: ContainerData;
+  setNewContainer: React.Dispatch<React.SetStateAction<ContainerData>>;
+};
+
+const useContainers = (): UseContainers => {
   const [newContainer, setNewContainer] = React.useState<ContainerData>({
     id: 0,
     top: 0,
@@ -20,9 +24,9 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     width: '100%',
     height: '100%',
   });
-
-  const [containers, setContainers] = React.useState<number[]>([]);
   const { id: newContainerId } = newContainer;
+  const [containers, setContainers] = React.useState<number[]>([]);
+
   React.useEffect(() => {
     setContainers((currentContainers) => {
       if (currentContainers.includes(newContainerId)) {
@@ -31,6 +35,23 @@ const Subdivide: React.FC<PropTypes> = (props) => {
       return currentContainers.concat(newContainerId);
     });
   }, [newContainerId]);
+
+  const isNewContainer = !containers.includes(newContainer.id);
+
+  return {
+    containers: isNewContainer
+      ? containers.concat(newContainer.id)
+      : containers,
+    setNewContainer,
+    newContainer,
+  };
+};
+
+const Subdivide: React.FC<PropTypes> = (props) => {
+  const { component } = props;
+  const emitter = React.useMemo(() => new TinyEmitter(), []);
+
+  const { containers, setNewContainer, newContainer } = useContainers();
 
   const addContainer: AddContainer = ({ parent, width, height, top, left }) => {
     const id = containers.length;
@@ -46,16 +67,10 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     return id;
   };
 
-  const isNewContainer = !containers.includes(newContainer.id);
-
-  const containerList = isNewContainer
-    ? containers.concat(newContainer.id)
-    : containers;
-
   return (
     <>
-      {containerList.map((id) => {
-        const isNew = newContainer.id === id && isNewContainer;
+      {containers.map((id) => {
+        const isNew = newContainer.id === id;
         const props = {
           addContainer,
           emitter,
