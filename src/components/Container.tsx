@@ -5,14 +5,14 @@ import Config from '../contexts/Config';
 import Corner from './Corner';
 import { dragDirection } from '../utils';
 import Direction, { OptionalDirection } from '../utils/Direction';
-import { FromCorner, Size, AddContainer, NewContainerData } from '../types';
+import { FromCorner, Size, AddContainer, NewContainerData, ID } from '../types';
 
 type Component = React.ComponentType<any>;
 
 interface PropTypes {
   emitter: TinyEmitter;
   component: Component;
-  id: number;
+  id: ID;
   height?: Size;
   width?: Size;
   top?: number;

@@ -1,5 +1,7 @@
 import Direction from './utils/Direction';
 
+export type ID = number;
+
 export interface FromCorner {
   vertical: Direction;
   horizontal: Direction;
@@ -10,8 +12,8 @@ export interface FromCorner {
 export type Size = number | string;
 
 export interface ContainerData {
-  id: number;
-  parent: number;
+  id: ID;
+  parent: ID;
   width: Size;
   height: Size;
   top: number;
@@ -19,11 +21,11 @@ export interface ContainerData {
 }
 
 export interface NewContainerData {
-  parent: number;
+  parent: ID;
   width: Size;
   height: Size;
   top: number;
   left: number;
 }
 
-export type AddContainer = (data: NewContainerData) => number;
+export type AddContainer = (data: NewContainerData) => ID;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
 import Container from './Container';
-import { ContainerData, AddContainer } from '../types';
+import { ContainerData, AddContainer, ID } from '../types';
 
 type Component = React.ComponentType<any>;
 
@@ -10,7 +10,7 @@ interface PropTypes {
 }
 
 type UseContainers = {
-  containers: number[];
+  containers: ID[];
   newContainer: ContainerData;
   setNewContainer: React.Dispatch<React.SetStateAction<ContainerData>>;
 };
@@ -25,7 +25,7 @@ const useContainers = (): UseContainers => {
     height: '100%',
   });
   const { id: newContainerId } = newContainer;
-  const [containers, setContainers] = React.useState<number[]>([]);
+  const [containers, setContainers] = React.useState<ID[]>([]);
 
   React.useEffect(() => {
     setContainers((currentContainers) => {
