@@ -1,9 +1,6 @@
 import Direction, { OptionalDirection } from './utils/Direction';
+import { FromCorner } from './types';
 
-interface Corner {
-  vertical: Direction;
-  horizontal: Direction;
-}
 
 interface Position {
   x: number;
@@ -31,25 +28,37 @@ const getHorizontalDelta = (
 };
 
 const dragDirection = (
-  corner: Corner,
-  from: Position,
+  from: FromCorner,
   to: Position,
   splitRatio: number,
 ): OptionalDirection => {
-  const verticalDelta = getVerticalDelta(corner.vertical, from.y, to.y);
-  const horizontalDelta = getHorizontalDelta(corner.horizontal, from.x, to.x);
+  const verticalDelta = getVerticalDelta(from.vertical, from.y, to.y);
+  const horizontalDelta = getHorizontalDelta(from.horizontal, from.x, to.x);
 
   if (verticalDelta > horizontalDelta) {
     if (verticalDelta > splitRatio) {
-      return Direction.getOpposite(corner.vertical);
+      return Direction.getOpposite(from.vertical);
     }
     return undefined;
   } else {
     if (horizontalDelta > splitRatio) {
-      return Direction.getOpposite(corner.horizontal);
+      return Direction.getOpposite(from.horizontal);
     }
     return undefined;
   }
 };
 
-export { dragDirection };
+const once = (fn: Function) => {
+  let called = false;
+  let returnedValue;
+  return (...args) => {
+    if (!called) {
+      called = true;
+      returnedValue = fn(...args);
+    }
+
+    return returnedValue;
+  };
+};
+
+export { dragDirection, once };

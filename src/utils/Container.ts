@@ -1,6 +1,12 @@
 import Direction from '../utils/Direction';
 import { ContainerData } from '../types';
 
+interface OptionalSizeAndPosition {
+  width?: number;
+  height?: number;
+  top?: number;
+  left?: number;
+}
 interface Size {
   width: number;
   height: number;
@@ -11,7 +17,43 @@ interface SplitRatioPercentage {
   horizontal: number;
 }
 
-const getSize = (
+interface Delta {
+  x: number;
+  y: number;
+}
+
+const getSizeAndPositionFromDelta = (
+  container: ContainerData,
+  delta: Delta,
+  direction?: Direction,
+): OptionalSizeAndPosition => {
+  const { height, width, top, left } = container;
+  if (direction === Direction.TOP) {
+    return {
+      height: height + delta.y,
+    };
+  }
+
+  if (direction === Direction.BOTTOM) {
+    return {
+      top: top + delta.y,
+      height: height - delta.y,
+    };
+  }
+
+  if (direction === Direction.LEFT) {
+    return {
+      width: width + delta.x,
+    };
+  }
+
+  return {
+    left: left + delta.x,
+    width: width - delta.x,
+  };
+};
+
+const getSizeAfterSplit = (
   container: ContainerData,
   splitRatio: SplitRatioPercentage,
   isVertical: boolean,
@@ -30,7 +72,7 @@ const getSize = (
   };
 };
 
-const getSizeFrom = (
+const getSizeAfterSplitFrom = (
   container: ContainerData,
   splitRatio: SplitRatioPercentage,
   isVertical: boolean,
@@ -59,7 +101,7 @@ interface NewPosition {
   left: number;
 }
 
-const getPosition = (
+const getPositionAfterSplit = (
   container: ContainerData,
   splitRatio: SplitRatioPercentage,
   direction?: Direction,
@@ -79,7 +121,7 @@ const getPosition = (
   return {};
 };
 
-const getPositionFrom = (
+const getPositionAfterSplitFrom = (
   container: ContainerData,
   updatedContainer: ContainerData,
   direction?: Direction,
@@ -114,10 +156,11 @@ const getPositionFrom = (
 };
 
 const Container = {
-  getSizeFrom,
-  getPositionFrom,
-  getSize,
-  getPosition,
+  getSizeAfterSplit,
+  getSizeAfterSplitFrom,
+  getPositionAfterSplit,
+  getPositionAfterSplitFrom,
+  getSizeAndPositionFromDelta,
 };
 
 export default Container;

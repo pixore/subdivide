@@ -1,7 +1,13 @@
 import React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
-import Container from './Container';
-import { ContainerData, AddContainer, ID } from '../types';
+import Con from './Container';
+import Direction from '../utils/Direction';
+import { dragDirection, once } from '../utils';
+import Hooks from '../hooks';
+import Config from '../contexts/Config';
+import Percentage from '../utils/Percentage';
+import Container from '../utils/Container';
+import { ContainerData, Emitter, SplitArgs, NewContainerData } from '../types';
 
 type Component = React.ComponentType<any>;
 
@@ -9,77 +15,150 @@ interface PropTypes {
   component: Component;
 }
 
-type UseContainers = {
-  containers: ID[];
-  newContainer: ContainerData;
-  setNewContainer: React.Dispatch<React.SetStateAction<ContainerData>>;
-};
-
-const useContainers = (): UseContainers => {
-  const [newContainer, setNewContainer] = React.useState<ContainerData>({
-    id: 0,
-    top: 0,
-    left: 0,
-    parent: -1,
-    width: '100%',
-    height: '100%',
-  });
-  const { id: newContainerId } = newContainer;
-  const [containers, setContainers] = React.useState<ID[]>([]);
-
-  React.useEffect(() => {
-    setContainers((currentContainers) => {
-      if (currentContainers.includes(newContainerId)) {
-        return currentContainers;
-      }
-      return currentContainers.concat(newContainerId);
-    });
-  }, [newContainerId]);
-
-  const isNewContainer = !containers.includes(newContainer.id);
-
-  return {
-    containers: isNewContainer
-      ? containers.concat(newContainer.id)
-      : containers,
-    setNewContainer,
-    newContainer,
-  };
-};
-
 const Subdivide: React.FC<PropTypes> = (props) => {
   const { component } = props;
-  const emitter = React.useMemo(() => new TinyEmitter(), []);
+  const { splitRatio } = Config.useConfig();
+  const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
 
-  const { containers, setNewContainer, newContainer } = useContainers();
+  const [list, actions] = Hooks.useContainers();
+  const listRef = React.useRef<ContainerData[]>(list);
+  const actionsRef = React.useRef(actions);
 
-  const addContainer: AddContainer = ({ parent, width, height, top, left }) => {
-    const id = containers.length;
-    setNewContainer({
-      id,
-      parent,
-      height,
-      width,
-      top,
-      left,
-    });
+  listRef.current = list;
+  actionsRef.current = actions;
 
-    return id;
+  const split = (
+    containerIndex: number,
+    container: ContainerData,
+    direction?: Direction,
+  ): number => {
+    const isVertical = Direction.isVertical(direction);
+    const splitRatioPercentage = {
+      vertical: Percentage.create(window.innerHeight, splitRatio),
+      horizontal: Percentage.create(window.innerWidth, splitRatio),
+    };
+
+    const updateData: ContainerData = {
+      ...container,
+      ...Container.getSizeAfterSplit(
+        container,
+        splitRatioPercentage,
+        isVertical,
+      ),
+      ...Container.getPositionAfterSplit(
+        container,
+        splitRatioPercentage,
+        direction,
+      ),
+    };
+
+    const newData: NewContainerData = {
+      ...Container.getSizeAfterSplitFrom(
+        updateData,
+        splitRatioPercentage,
+        isVertical,
+      ),
+      ...Container.getPositionAfterSplitFrom(container, updateData, direction),
+    };
+
+    console.log(updateData, newData);
+
+    actionsRef.current.update(containerIndex, updateData);
+    const index = actionsRef.current.push(newData);
+
+    return index;
   };
+
+  React.useEffect(() => {
+    const onStartSplit = (args: SplitArgs) => {
+      const { containerIndex, from } = args;
+      let direction: Direction | undefined;
+      let newContainerIndex: number | undefined;
+
+      const onceSplit = once(split);
+      const onMouseMove = (event: MouseEvent) => {
+        const container = listRef.current[containerIndex];
+        const to = {
+          x: event.clientX,
+          y: event.clientY,
+        };
+
+        if (!direction) {
+          direction = dragDirection(from, to, splitRatio);
+          if (direction) {
+            from.x = to.x;
+            from.y = to.y;
+          }
+          return;
+        }
+
+        if (!newContainerIndex) {
+          newContainerIndex = onceSplit(containerIndex, container, direction);
+          return;
+        }
+
+        const newContainer = listRef.current[newContainerIndex];
+        const delta = {
+          x: Percentage.create(window.innerWidth, to.x - from.x),
+          y: Percentage.create(window.innerHeight, to.y - from.y),
+        };
+
+        console.log(
+          container,
+          listRef.current,
+          Container.getSizeAndPositionFromDelta(container, delta, direction),
+        );
+
+        actionsRef.current.update(
+          containerIndex,
+          Container.getSizeAndPositionFromDelta(container, delta, direction),
+        );
+
+        actionsRef.current.update(
+          newContainerIndex,
+          Container.getSizeAndPositionFromDelta(
+            newContainer,
+            delta,
+            Direction.getOpposite(direction),
+          ),
+        );
+
+        if (direction) {
+          from.x = to.x;
+          from.y = to.y;
+        }
+      };
+
+      const onMouseUp = () => {
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    };
+
+    emitter.on('split', onStartSplit);
+
+    return () => {
+      emitter.off('split', onStartSplit);
+    };
+  }, []);
 
   return (
     <>
-      {containers.map((id) => {
-        const isNew = newContainer.id === id;
-        const props = {
-          addContainer,
-          emitter,
-          key: id,
-          id,
-          component,
-          ...(isNew ? newContainer : {}),
-        };
-        return <Container {...props} />;
+      {list.map((item, index) => {
+        const { id } = item;
+
+        return (
+          <Con
+            key={id}
+            emitter={emitter}
+            component={component}
+            index={index}
+            {...item}
+          />
+        );
       })}
     </>
   );
