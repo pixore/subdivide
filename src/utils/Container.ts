@@ -1,6 +1,7 @@
 import Direction from '../utils/Direction';
-import { ContainerData } from '../types';
 import Percentage from './Percentage';
+import Id from './Id';
+import { ContainerData, NewContainerData, ContainerDataUpdate } from '../types';
 
 interface OptionalSizeAndPosition {
   width?: number;
@@ -166,7 +167,71 @@ const getPositionAfterSplitFrom = (
   };
 };
 
+const addId = <T extends object>(id: Id, data: T): T & { id: Id } => {
+  (data as T & { id: Id }).id = id;
+  return data as T & { id: Id };
+};
+
+interface Vector {
+  x: number;
+  y: number;
+}
+
+interface SplitResult {
+  originContainer: ContainerDataUpdate,
+  newContainer: NewContainerData,
+}
+
+const split = (
+  container: ContainerData,
+  to: Vector,
+  direction: Direction,
+): SplitResult => {
+  const isVertical = Direction.isVertical(direction);
+  const { top, left, width, height } = Container.toPixels(container);
+  const deltaX =
+    direction === Direction.RIGHT ? to.x - left : left + width - to.x;
+  const deltaY =
+    direction === Direction.BOTTOM ? to.y - top : top + height - to.y;
+  const splitRatioPercentage = {
+    horizontal: Percentage.create(window.innerWidth, deltaX),
+    vertical: Percentage.create(window.innerHeight, deltaY),
+  };
+
+  const updateData: ContainerData = {
+    ...container,
+    ...Container.getSizeAfterSplit(
+      container,
+      splitRatioPercentage,
+      isVertical,
+    ),
+    ...Container.getPositionAfterSplit(
+      container,
+      splitRatioPercentage,
+      direction,
+    ),
+  };
+
+  const newData: NewContainerData = {
+    ...Container.getSizeAfterSplitFrom(
+      updateData,
+      splitRatioPercentage,
+      isVertical,
+    ),
+    ...Container.getPositionAfterSplitFrom(container, updateData, direction),
+  };
+
+  const id = Id.create();
+
+  return {
+    originContainer: updateData,
+    newContainer: addId(id, newData),
+  }
+};
+
 const Container = {
+  addId,
+  split,
   toPixels,
   getSizeAfterSplit,
   getSizeAfterSplitFrom,
