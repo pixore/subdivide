@@ -8,13 +8,14 @@ body {
   background: black;
 }
 
-.ps-corner {
+.px-corner {
   position: absolute;
   transform: rotate(45deg);
   cursor: grab;
+  z-index: 2;
 }
 
-.ps-container {
+.px-container {
   position: absolute;
   overflow: hidden;
 }

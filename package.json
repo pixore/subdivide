@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel examples/index.html"
+    "start": "parcel examples/index.html",
+    "cypress:open": "cypress open"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "@pixore/prettier-config": "0.0.2",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
+    "cypress": "~3.4.1",
     "parcel-bundler": "^1.12.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",

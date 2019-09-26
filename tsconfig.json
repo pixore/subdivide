@@ -17,10 +17,9 @@
     "baseUrl": ".",
     "typeRoots": ["./node_modules/@types"],
     "lib": ["dom", "es2015", "es2016"],
-    "declarationDir": "dist",
-    "rootDir": "./src"
+    "declarationDir": "dist"
   },
-  "include": ["src/**/*"],
+  "include": ["cypress.d.ts", "src/**/*", "cypress/**/*"],
   "exclude": [
     "node_modules",
     "dist",
