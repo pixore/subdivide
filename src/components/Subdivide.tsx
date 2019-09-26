@@ -31,7 +31,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   const { splitRatio } = Config.useConfig();
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
 
-  const [map, actions] = Hooks.useContainers();
+  const [map, actions, actionCreators] = Hooks.useContainers();
   const mapRef = React.useRef(map);
   const actionsRef = React.useRef(actions);
 
@@ -77,8 +77,12 @@ const Subdivide: React.FC<PropTypes> = (props) => {
       ...Container.getPositionAfterSplitFrom(container, updateData, direction),
     };
 
-    actionsRef.current.update(updateData);
-    const id = actionsRef.current.add(newData);
+    const id = Id.create();
+
+    actionsRef.current.batch([
+      actionCreators.update(updateData),
+      actionCreators.add(addId(id, newData)),
+    ]);
 
     return id;
   };
@@ -113,16 +117,20 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         }
 
         const newContainer = mapRef.current[newContainerId];
+
         const delta = {
           x: Percentage.create(window.innerWidth, to.x - from.x),
           y: Percentage.create(window.innerHeight, to.y - from.y),
         };
 
-        const containersUpdate = [
+        const originalContainerData = actionCreators.update(
           addId(
             containerId,
             Container.getSizeAndPositionFromDelta(container, delta, direction),
           ),
+        );
+
+        const newContainerData = actionCreators.update(
           addId(
             newContainerId,
             Container.getSizeAndPositionFromDelta(
@@ -131,9 +139,9 @@ const Subdivide: React.FC<PropTypes> = (props) => {
               Direction.getOpposite(direction),
             ),
           ),
-        ];
+        );
 
-        actionsRef.current.update(containersUpdate);
+        actionsRef.current.batch([originalContainerData, newContainerData]);
 
         if (direction) {
           from.x = to.x;

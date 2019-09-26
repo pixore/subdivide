@@ -18,6 +18,10 @@ export interface ContainerData {
   next?: Id;
 }
 
+export interface ContainersMap {
+  [id: number]: ContainerData;
+}
+
 export interface ContainerDataUpdate {
   id: Id,
   width?: number;
@@ -29,6 +33,7 @@ export interface ContainerDataUpdate {
 }
 
 export interface NewContainerData {
+  id?: Id;
   width: number;
   height: number;
   top: number;
