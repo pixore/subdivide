@@ -1,8 +1,9 @@
 import React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
+import once from 'once';
 import Con from './Container';
 import Direction from '../utils/Direction';
-import { dragDirection, once } from '../utils';
+import { dragDirection } from '../utils';
 import Hooks from '../hooks';
 import Config from '../contexts/Config';
 import Percentage from '../utils/Percentage';
@@ -41,7 +42,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   const split = (
     container: ContainerData,
     to: Vector,
-    direction?: Direction,
+    direction: Direction,
   ): Id => {
     const isVertical = Direction.isVertical(direction);
     const { top, left, width, height } = Container.toPixels(container);
@@ -94,7 +95,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
       let direction: Direction | undefined;
       let newContainerId: number | undefined;
 
-      const onceSplit = once<Id>(split);
+      const onceSplit = once(split);
       const onMouseMove = (event: MouseEvent) => {
         const container = mapRef.current[containerId];
         const to = {
@@ -104,7 +105,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
         if (!direction) {
           direction = dragDirection(from, to, splitRatio);
-          if (direction && !newContainerId) {
+          if (direction) {
             newContainerId = onceSplit(container, to, direction);
             from.x = to.x;
             from.y = to.y;
