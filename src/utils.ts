@@ -47,17 +47,4 @@ const dragDirection = (
   }
 };
 
-const once = <R>(fn: (...args: any[]) => R) => {
-  let called = false;
-  let returnedValue;
-  return (...args: any[]): R => {
-    if (!called) {
-      called = true;
-      returnedValue = fn(...args);
-    }
-
-    return returnedValue;
-  };
-};
-
-export { dragDirection, once };
+export { dragDirection };
