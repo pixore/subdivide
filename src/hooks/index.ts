@@ -1,5 +1,4 @@
 import React from 'react';
-import List from '../utils/List';
 import Percentage from '../utils/Percentage';
 import Id from '../utils/Id';
 import { ContainerData, ContainerDataUpdate, NewContainerData } from '../types';
