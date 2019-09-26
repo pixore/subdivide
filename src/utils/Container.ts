@@ -1,5 +1,6 @@
 import Direction from '../utils/Direction';
 import { ContainerData } from '../types';
+import Percentage from './Percentage';
 
 interface OptionalSizeAndPosition {
   width?: number;
@@ -20,6 +21,17 @@ interface Delta {
   x: number;
   y: number;
 }
+
+const toPixels = (container: ContainerData): ContainerData => {
+  const { top, left, width, height } = container;
+  return {
+    ...container,
+    top: Percentage.toPixels(window.innerHeight, top),
+    left: Percentage.toPixels(window.innerWidth, left),
+    width: Percentage.toPixels(window.innerWidth, width),
+    height: Percentage.toPixels(window.innerHeight, height),
+  };
+};
 
 const getSizeAndPositionFromDelta = (
   container: ContainerData,
@@ -155,6 +167,7 @@ const getPositionAfterSplitFrom = (
 };
 
 const Container = {
+  toPixels,
   getSizeAfterSplit,
   getSizeAfterSplitFrom,
   getPositionAfterSplit,

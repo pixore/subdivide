@@ -9,9 +9,14 @@ const toString = (value: Percentage): string => {
   return `${value}%`;
 };
 
+const toPixels = (total: Pixel, value: Percentage): Pixel => {
+  return (value * total) / 100;
+};
+
 const Percentage = {
   create,
-  toString
-}
+  toString,
+  toPixels,
+};
 
 export default Percentage;

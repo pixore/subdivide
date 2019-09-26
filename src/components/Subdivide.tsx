@@ -32,10 +32,10 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
 
   const [map, actions] = Hooks.useContainers();
-  const listRef = React.useRef(map);
+  const mapRef = React.useRef(map);
   const actionsRef = React.useRef(actions);
 
-  listRef.current = map;
+  mapRef.current = map;
   actionsRef.current = actions;
 
   const split = (
@@ -44,10 +44,14 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     direction?: Direction,
   ): Id => {
     const isVertical = Direction.isVertical(direction);
-    const { top, left } = container;
+    const { top, left, width, height } = Container.toPixels(container);
+    const deltaX =
+      direction === Direction.RIGHT ? to.x - left : left + width - to.x;
+    const deltaY =
+      direction === Direction.BOTTOM ? to.y - top : top + height - to.y;
     const splitRatioPercentage = {
-      vertical: Percentage.create(window.innerHeight, to.y - top),
-      horizontal: Percentage.create(window.innerWidth, to.x - left),
+      horizontal: Percentage.create(window.innerWidth, deltaX),
+      vertical: Percentage.create(window.innerHeight, deltaY),
     };
 
     const updateData: ContainerData = {
@@ -88,7 +92,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
       const onceSplit = once<Id>(split);
       const onMouseMove = (event: MouseEvent) => {
-        const container = listRef.current[containerId];
+        const container = mapRef.current[containerId];
         const to = {
           x: event.clientX,
           y: event.clientY,
@@ -108,7 +112,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
           return;
         }
 
-        const newContainer = listRef.current[newContainerId];
+        const newContainer = mapRef.current[newContainerId];
         const delta = {
           x: Percentage.create(window.innerWidth, to.x - from.x),
           y: Percentage.create(window.innerHeight, to.y - from.y),
