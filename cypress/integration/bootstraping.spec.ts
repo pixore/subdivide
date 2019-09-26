@@ -1,9 +1,7 @@
-import '../../cypress'
-
-const width = 500;
-const height = 500;
-
 context('Boostraping', () => {
+  const width = 500;
+  const height = 500;
+
   beforeEach(() => {
     cy.viewport(width, height);
     cy.visit('/simple.html');
@@ -16,7 +14,7 @@ context('Boostraping', () => {
 
     cy.get('.px-container .px-corner').should(($corners) => {
       expect($corners).to.have.length(4);
-    })
+    });
   });
 
   it('should cover all the view', () => {

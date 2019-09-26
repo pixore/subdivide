@@ -1,7 +1,7 @@
-const width = 500;
-const height = 500;
-
 context('Split', () => {
+  const width = 500;
+  const height = 500;
+
   beforeEach(() => {
     cy.viewport(width, height);
     cy.visit('/simple.html');
@@ -25,9 +25,20 @@ context('Split', () => {
           .trigger('mousemove', { clientX: 250, clientY: 30 })
           .trigger('mouseup', { clientX: 60, clientY: 30 });
 
-        cy.get('.px-container').should(($containers) => {
-          expect($containers).to.have.length(2);
-        });
+        cy.get('.px-container')
+          .should(($containers) => {
+            expect($containers).to.have.length(2);
+          })
+          .first()
+          .should(($container) => {
+            console.log($container);
+
+            expect($container.width()).to.have.length(500);
+          })
+          .next()
+          .should(($container) => {
+            expect($container.width()).to.have.length(500);
+          });
       });
     });
   });
