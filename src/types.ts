@@ -19,6 +19,7 @@ export interface ContainerData {
 }
 
 export interface ContainerDataUpdate {
+  id: Id,
   width?: number;
   height?: number;
   top?: number;
@@ -35,7 +36,7 @@ export interface NewContainerData {
 }
 
 export interface SplitArgs {
-  containerIndex: number;
+  containerId: number;
   from: FromCorner;
 }
 

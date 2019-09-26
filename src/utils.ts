@@ -1,7 +1,6 @@
 import Direction, { OptionalDirection } from './utils/Direction';
 import { FromCorner } from './types';
 
-
 interface Position {
   x: number;
   y: number;
@@ -48,10 +47,10 @@ const dragDirection = (
   }
 };
 
-const once = (fn: Function) => {
+const once = <R>(fn: (...args: any[]) => R) => {
   let called = false;
   let returnedValue;
-  return (...args) => {
+  return (...args: any[]): R => {
     if (!called) {
       called = true;
       returnedValue = fn(...args);

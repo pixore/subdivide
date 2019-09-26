@@ -11,7 +11,6 @@ interface Size {
   width: number;
   height: number;
 }
-
 interface SplitRatioPercentage {
   vertical: number;
   horizontal: number;

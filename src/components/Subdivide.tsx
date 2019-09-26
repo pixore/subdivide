@@ -6,6 +6,7 @@ import { dragDirection, once } from '../utils';
 import Hooks from '../hooks';
 import Config from '../contexts/Config';
 import Percentage from '../utils/Percentage';
+import Id from '../utils/Id';
 import Container from '../utils/Container';
 import { ContainerData, Emitter, SplitArgs, NewContainerData } from '../types';
 
@@ -15,27 +16,38 @@ interface PropTypes {
   component: Component;
 }
 
+interface Vector {
+  x: number;
+  y: number;
+}
+
+const addId = <T extends object>(id: Id, data: T): T & { id: Id } => {
+  (data as T & { id: Id }).id = id;
+  return data as T & { id: Id };
+};
+
 const Subdivide: React.FC<PropTypes> = (props) => {
   const { component } = props;
   const { splitRatio } = Config.useConfig();
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
 
-  const [list, actions] = Hooks.useContainers();
-  const listRef = React.useRef<ContainerData[]>(list);
+  const [map, actions] = Hooks.useContainers();
+  const listRef = React.useRef(map);
   const actionsRef = React.useRef(actions);
 
-  listRef.current = list;
+  listRef.current = map;
   actionsRef.current = actions;
 
   const split = (
-    containerIndex: number,
     container: ContainerData,
+    to: Vector,
     direction?: Direction,
-  ): number => {
+  ): Id => {
     const isVertical = Direction.isVertical(direction);
+    const { top, left } = container;
     const splitRatioPercentage = {
-      vertical: Percentage.create(window.innerHeight, splitRatio),
-      horizontal: Percentage.create(window.innerWidth, splitRatio),
+      vertical: Percentage.create(window.innerHeight, to.y - top),
+      horizontal: Percentage.create(window.innerWidth, to.x - left),
     };
 
     const updateData: ContainerData = {
@@ -61,23 +73,22 @@ const Subdivide: React.FC<PropTypes> = (props) => {
       ...Container.getPositionAfterSplitFrom(container, updateData, direction),
     };
 
-    console.log(updateData, newData);
+    actionsRef.current.update(updateData);
+    const id = actionsRef.current.add(newData);
 
-    actionsRef.current.update(containerIndex, updateData);
-    const index = actionsRef.current.push(newData);
-
-    return index;
+    return id;
   };
 
   React.useEffect(() => {
     const onStartSplit = (args: SplitArgs) => {
-      const { containerIndex, from } = args;
-      let direction: Direction | undefined;
-      let newContainerIndex: number | undefined;
+      const { containerId, from } = args;
 
-      const onceSplit = once(split);
+      let direction: Direction | undefined;
+      let newContainerId: number | undefined;
+
+      const onceSplit = once<Id>(split);
       const onMouseMove = (event: MouseEvent) => {
-        const container = listRef.current[containerIndex];
+        const container = listRef.current[containerId];
         const to = {
           x: event.clientX,
           y: event.clientY,
@@ -85,43 +96,40 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
         if (!direction) {
           direction = dragDirection(from, to, splitRatio);
-          if (direction) {
+          if (direction && !newContainerId) {
+            newContainerId = onceSplit(container, to, direction);
             from.x = to.x;
             from.y = to.y;
           }
           return;
         }
 
-        if (!newContainerIndex) {
-          newContainerIndex = onceSplit(containerIndex, container, direction);
+        if (!newContainerId) {
           return;
         }
 
-        const newContainer = listRef.current[newContainerIndex];
+        const newContainer = listRef.current[newContainerId];
         const delta = {
           x: Percentage.create(window.innerWidth, to.x - from.x),
           y: Percentage.create(window.innerHeight, to.y - from.y),
         };
 
-        console.log(
-          container,
-          listRef.current,
-          Container.getSizeAndPositionFromDelta(container, delta, direction),
-        );
-
-        actionsRef.current.update(
-          containerIndex,
-          Container.getSizeAndPositionFromDelta(container, delta, direction),
-        );
-
-        actionsRef.current.update(
-          newContainerIndex,
-          Container.getSizeAndPositionFromDelta(
-            newContainer,
-            delta,
-            Direction.getOpposite(direction),
+        const containersUpdate = [
+          addId(
+            containerId,
+            Container.getSizeAndPositionFromDelta(container, delta, direction),
           ),
-        );
+          addId(
+            newContainerId,
+            Container.getSizeAndPositionFromDelta(
+              newContainer,
+              delta,
+              Direction.getOpposite(direction),
+            ),
+          ),
+        ];
+
+        actionsRef.current.update(containersUpdate);
 
         if (direction) {
           from.x = to.x;
@@ -147,7 +155,8 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
   return (
     <>
-      {list.map((item, index) => {
+      {Object.keys(map).map((key, index) => {
+        const item = map[key];
         const { id } = item;
 
         return (

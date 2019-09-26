@@ -4,7 +4,19 @@ import Percentage from '../utils/Percentage';
 import Id from '../utils/Id';
 import { ContainerData, ContainerDataUpdate, NewContainerData } from '../types';
 
-const createInitialList = () => {
+interface ContainersActions {
+  add: (data: NewContainerData, id?: Id) => number;
+  update: (data: ContainerDataUpdate | ContainerDataUpdate[]) => void;
+  remove: (index: number) => void;
+}
+
+interface ContainersMap {
+  [id: number]: ContainerData;
+}
+
+type UseContainers = [ContainersMap, ContainersActions];
+
+const createInitialList = (): ContainersMap => {
   const { innerWidth: width, innerHeight: height } = window;
   const item = {
     id: Id.create(),
@@ -14,46 +26,82 @@ const createInitialList = () => {
     height: Percentage.create(height, height),
   };
 
-  return [item];
+  return {
+    [item.id]: item,
+  };
 };
 
-interface ContainersActions {
-  push: (data: NewContainerData, id?: Id) => number;
-  update: (index: number, data: ContainerDataUpdate) => void;
-  remove: (index: number) => void;
-}
-
-type UseContainers = [ContainerData[], ContainersActions];
-
 const useContainers = (): UseContainers => {
-  const [list, setList] = React.useState<ContainerData[]>(createInitialList());
+  const [map, setMap] = React.useState<ContainersMap>(createInitialList());
 
-  const push = (data: NewContainerData, id = Id.create()) => {
+  const add = (data: NewContainerData, id = Id.create()): Id => {
     const container: ContainerData = {
       id,
       ...data,
     };
-    const index = list.length;
-    setList((list) => list.concat(container));
 
-    return index;
+    setMap((map) => ({
+      ...map,
+      [id]: container,
+    }));
+
+    return id;
   };
 
-  const update = (index: number, data: ContainerDataUpdate) => {
-    setList((list) => List.updateItem(list, index, data));
+  const update = (data: ContainerDataUpdate | ContainerDataUpdate[]) => {
+    const getUpdatedContainer = (
+      map: ContainersMap,
+      data: ContainerDataUpdate,
+    ) => {
+      const { id } = data;
+      const container = map[id];
+      return {
+        ...container,
+        ...data,
+      };
+    };
+
+    setMap((map) => {
+      if (Array.isArray(data)) {
+        const containersToUpdate = data.reduce((partialMap, currentData) => {
+          const { id } = currentData;
+          // this is a new object, don't care if it's mutated here
+          partialMap[id] = getUpdatedContainer(map, currentData);
+
+          return partialMap;
+        }, {});
+
+        return {
+          ...map,
+          ...containersToUpdate,
+        };
+      }
+
+      const { id } = data;
+      return {
+        ...map,
+        [id]: getUpdatedContainer(map, data),
+      };
+    });
   };
 
-  const remove = (index: number) => {
-    setList((list) => List.removeItem(list, index));
+  const remove = (id: Id) => {
+    setMap((map) => {
+      const newMap = { ...map };
+      // this is a new object, don't care if it's mutated here
+      Reflect.deleteProperty(newMap, id);
+
+      return newMap;
+    });
   };
 
   const actions = {
-    push,
+    add,
     update,
     remove,
   };
 
-  return [list, actions];
+  return [map, actions];
 };
 
 const hooks = {

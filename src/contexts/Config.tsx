@@ -11,8 +11,8 @@ interface OptionalClassNames {
 }
 
 const defaultClassNames = {
-  corner: 'ps-corner',
-  container: 'ps-container',
+  corner: 'px-corner',
+  container: 'px-container',
 };
 
 const initialValue = {

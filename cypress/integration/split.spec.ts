@@ -31,13 +31,11 @@ context('Split', () => {
           })
           .first()
           .should(($container) => {
-            console.log($container);
-
-            expect($container.width()).to.have.length(500);
+            expect($container.width()).to.be.equal(250);
           })
           .next()
           .should(($container) => {
-            expect($container.width()).to.have.length(500);
+            expect($container.width()).to.be.equal(250);
           });
       });
     });

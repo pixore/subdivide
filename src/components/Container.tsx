@@ -13,7 +13,6 @@ interface PropTypes {
   emitter: Emitter;
   component: Component;
   id: Id;
-  index: number;
   height: number;
   width: number;
   top: number;
@@ -25,7 +24,7 @@ interface PropTypes {
 const Container: React.FC<PropTypes> = (props) => {
   const elementRef = React.useRef<HTMLDivElement>(null);
   const { container } = Config.useClassNames();
-  const { index, component: Comp, width, height, top, left, emitter } = props;
+  const { id, component: Comp, width, height, top, left, emitter } = props;
   const style: React.CSSProperties = {
     width: Percentage.toString(width),
     height: Percentage.toString(height),
@@ -35,7 +34,7 @@ const Container: React.FC<PropTypes> = (props) => {
 
   const onStartDrag = (fromCorner: FromCorner) => {
     emitter.emit('split', {
-      containerIndex: index,
+      containerId: id,
       from: fromCorner,
     });
   };
