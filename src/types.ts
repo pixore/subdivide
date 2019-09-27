@@ -16,6 +16,7 @@ export interface ContainerData {
   left: number;
   previous?: Id;
   next?: Id;
+  directionType?: Direction.DirectionType;
 }
 
 export interface ContainersMap {
@@ -23,13 +24,14 @@ export interface ContainersMap {
 }
 
 export interface ContainerDataUpdate {
-  id: Id,
+  id: Id;
   width?: number;
   height?: number;
   top?: number;
   left?: number;
   previous?: Id;
   next?: Id;
+  directionType?: Direction.DirectionType;
 }
 
 export interface NewContainerData {
@@ -38,6 +40,9 @@ export interface NewContainerData {
   height: number;
   top: number;
   left: number;
+  previous?: Id;
+  next?: Id;
+  directionType?: Direction.DirectionType;
 }
 
 export interface SplitArgs {

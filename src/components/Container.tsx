@@ -41,7 +41,7 @@ const Container: React.FC<PropTypes> = (props) => {
 
   return (
     <div ref={elementRef} className={container} style={style}>
-      <Comp />
+      <Comp id={id} />
       <Corner
         onStartDrag={onStartDrag}
         vertical={Direction.TOP}

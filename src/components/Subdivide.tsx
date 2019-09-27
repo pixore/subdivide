@@ -46,13 +46,27 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         if (!direction) {
           direction = dragDirection(from, to, splitRatio);
           if (direction) {
-
-            const { originContainer, newContainer } = onceSplit(container, to, direction);
+            const {
+              originContainer,
+              newContainer,
+              nextContainer,
+              previousContainer,
+            } = onceSplit(container, to, direction);
             newContainerId = newContainer.id;
-            actionsRef.current.batch([
+            const actions = [
               actionCreators.update(originContainer),
-              actionCreators.add(newContainer)
-            ]);
+              actionCreators.add(newContainer),
+            ];
+
+            if (nextContainer) {
+              actions.push(actionCreators.update(nextContainer));
+            }
+
+            if (previousContainer) {
+              actions.push(actionCreators.update(previousContainer));
+            }
+
+            actionsRef.current.batch(actions);
 
             from.x = to.x;
             from.y = to.y;
