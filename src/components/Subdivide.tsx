@@ -76,7 +76,6 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
             setDividers((dividers) => dividers.concat(divider));
 
-            newContainerId = newContainer.id;
             const actions = [
               actionCreators.update(originContainer),
               actionCreators.add(newContainer),
