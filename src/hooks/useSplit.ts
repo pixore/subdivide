@@ -1,5 +1,4 @@
 import React from 'react';
-import once from 'once';
 import Direction from '../utils/Direction';
 import Container from '../utils/Container';
 import Id from '../utils/Id';
@@ -62,8 +61,6 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
       const { containerId, from } = args;
 
       let direction: Direction | undefined;
-
-      const onceSplit = once(Container.split);
       const onMouseMove = (event: MouseEvent) => {
         const { containers, dividers } = layoutRef.current;
         const container = containers[containerId];
@@ -73,7 +70,7 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
         };
 
         if (direction) {
-          console.warn("This shouldn't happend");
+          console.warn("This shouldn't happen");
           return;
         }
 
@@ -83,7 +80,7 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
           return;
         }
 
-        const { originContainer, newContainer, divider } = onceSplit(
+        const { originContainer, newContainer, divider } = Container.split(
           container,
           to,
           direction,

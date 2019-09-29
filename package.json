@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/pixore/subdivide#readme",
   "dependencies": {
-    "once": "~1.4.0",
     "tiny-emitter": "^2.1.0"
   },
   "devDependencies": {
