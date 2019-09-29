@@ -65,57 +65,60 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
 
       const onceSplit = once(Container.split);
       const onMouseMove = (event: MouseEvent) => {
-        const {
-          current: { containers, dividers },
-        } = layoutRef;
+        const { containers, dividers } = layoutRef.current;
         const container = containers[containerId];
         const to = {
           x: event.clientX,
           y: event.clientY,
         };
 
-        if (!direction) {
-          direction = dragDirection(from, to, splitRatio);
-          if (direction) {
-            const { originContainer, newContainer, divider } = onceSplit(
-              container,
-              to,
-              direction,
-            );
-
-            const containersActions = [
-              actionCreators.containers.update(originContainer),
-              actionCreators.containers.add(newContainer),
-            ];
-
-            const dividersToUpdate = updateParentDividers(
-              newContainer.id,
-              container.id,
-              containers,
-              dividers as DividersMap,
-            );
-
-            actions.batch(
-              dividersToUpdate
-                .map((data) => actionCreators.dividers.update(data))
-                .concat(actionCreators.dividers.add(divider))
-                .concat(containersActions),
-            );
-
-            removeMouseListener(onMouseMove, onMouseUp);
-            emitter.emit('resize', {
-              previous: divider.previous,
-              next: divider.next,
-              dividerId: divider.id,
-              from: {
-                x: to.x,
-                y: to.y,
-                directionType: divider.directionType,
-              },
-            });
-          }
+        if (direction) {
+          console.warn("This shouldn't happend");
           return;
         }
+
+        direction = dragDirection(from, to, splitRatio);
+        if (!direction) {
+          // nothing to do here yet
+          return;
+        }
+
+        const { originContainer, newContainer, divider } = onceSplit(
+          container,
+          to,
+          direction,
+        );
+
+        const containersActions = [
+          actionCreators.containers.update(originContainer),
+          actionCreators.containers.add(newContainer),
+        ];
+
+        const dividersToUpdate = updateParentDividers(
+          newContainer.id,
+          container.id,
+          containers,
+          dividers as DividersMap,
+        );
+
+        actions.batch(
+          dividersToUpdate
+            .map((data) => actionCreators.dividers.update(data))
+            .concat(actionCreators.dividers.add(divider))
+            .concat(containersActions),
+        );
+
+        removeMouseListener(onMouseMove, onMouseUp);
+        emitter.emit('resize', {
+          previous: divider.previous,
+          next: divider.next,
+          dividerId: divider.id,
+          from: {
+            x: to.x,
+            y: to.y,
+            directionType: divider.directionType,
+          },
+        });
       };
 
       const onMouseUp = () => {

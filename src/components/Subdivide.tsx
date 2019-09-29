@@ -1,6 +1,6 @@
 import React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
-import Con from './Container';
+import Container from './Container';
 import Divider from './Divider';
 import useLayout from '../hooks/useLayout';
 import { Emitter } from '../types';
@@ -34,7 +34,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         const { id } = item;
 
         return (
-          <Con key={id} emitter={emitter} component={component} {...item} />
+          <Container key={id} emitter={emitter} component={component} {...item} />
         );
       })}
       {Object.keys(dividers).map((id) => {

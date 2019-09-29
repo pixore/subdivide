@@ -1,6 +1,12 @@
 import Direction from './utils/Direction';
 import Id from './utils/Id';
 
+export interface Group {
+  id: Id;
+  divider: Id;
+  items: Id[];
+}
+
 export interface FromCorner {
   vertical: Direction;
   horizontal: Direction;

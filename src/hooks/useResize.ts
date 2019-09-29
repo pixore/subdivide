@@ -18,9 +18,7 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
       const { from, dividerId, previous, next } = args;
 
       const onMouseMove = (event: MouseEvent) => {
-        const {
-          current: { dividers, containers },
-        } = layoutRef;
+        const { dividers, containers } = layoutRef.current;
         const divider = dividers[dividerId];
         const to = {
           x: event.clientX,
@@ -107,6 +105,7 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
 
       addMouseListener(onMouseMove, onMouseUp);
     };
+
     emitter.on('resize', onStartResize);
 
     return () => {
