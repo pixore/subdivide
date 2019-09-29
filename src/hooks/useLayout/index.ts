@@ -25,7 +25,7 @@ const initialState: State = {
   dividers: {},
 };
 
-type UseLayout = [
+export type UseLayout = [
   React.MutableRefObject<ReadOnlyState>,
   Actions,
   ActionsCreator,

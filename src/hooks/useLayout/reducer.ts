@@ -7,8 +7,6 @@ const reducer = (state: State, action: Action) => {
     return action.reduce(reducer, state);
   }
 
-  console.log(action.type, action.payload);
-
   return {
     containers: containers.reducer(state.containers, action),
     dividers: dividers.reducer(state.dividers, action),

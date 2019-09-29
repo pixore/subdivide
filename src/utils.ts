@@ -70,4 +70,27 @@ const resizeDirection = (
   return Direction.TOP;
 };
 
-export { dragDirection, resizeDirection };
+type EventHandler = (event: MouseEvent) => void;
+
+const addMouseListener = (
+  onMouseMove: EventHandler,
+  onMouseUp: EventHandler,
+) => {
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+};
+
+const removeMouseListener = (
+  onMouseMove: EventHandler,
+  onMouseUp: EventHandler,
+) => {
+  window.removeEventListener('mousemove', onMouseMove);
+  window.removeEventListener('mouseup', onMouseUp);
+};
+
+export {
+  dragDirection,
+  resizeDirection,
+  addMouseListener,
+  removeMouseListener,
+};
