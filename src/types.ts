@@ -8,6 +8,12 @@ export interface FromCorner {
   y: number;
 }
 
+export interface FromDivider {
+  directionType: Direction.DirectionType;
+  x: number;
+  y: number;
+}
+
 export interface ContainerData {
   id: Id;
   width: number;
@@ -34,8 +40,18 @@ export interface ContainerDataUpdate {
   directionType?: Direction.DirectionType;
 }
 
+export interface DividerData {
+  directionType: Direction.DirectionType;
+  previous: Id[];
+  next: Id[];
+  height: number;
+  width: number;
+  top: number;
+  left: number;
+}
+
 export interface NewContainerData {
-  id?: Id;
+  id: Id;
   width: number;
   height: number;
   top: number;
@@ -50,14 +66,21 @@ export interface SplitArgs {
   from: FromCorner;
 }
 
+export interface ResizeArgs {
+  previous: Id;
+  next: Id;
+  from: FromDivider;
+}
+
 interface Events {
   split: (args: SplitArgs) => void;
+  resize: (args: ResizeArgs) => void;
 }
 
 type Event = keyof Events;
 
 // inspired by https://github.com/andywer/typed-emitter
-type Args<T> = [T] extends [(...args: infer U) => any]
+type Args<T> = T extends (...args: infer U) => void
   ? U
   : [T] extends [void]
   ? []

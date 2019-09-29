@@ -19,3 +19,7 @@ body {
   position: absolute;
   overflow: hidden;
 }
+
+.px-divider {
+  position: absolute;
+}

@@ -1,5 +1,5 @@
 import Direction, { OptionalDirection } from './utils/Direction';
-import { FromCorner } from './types';
+import { FromCorner, FromDivider } from './types';
 
 interface Position {
   x: number;
@@ -47,4 +47,27 @@ const dragDirection = (
   }
 };
 
-export { dragDirection };
+const resizeDirection = (
+  from: FromDivider,
+  to: Position,
+  directionType: Direction.DirectionType,
+): Direction => {
+  const verticalDelta = to.y - from.y;
+  const horizontalDelta = to.x - from.x;
+
+  if (Direction.DirectionType.HORIZONTAL === directionType) {
+    if (horizontalDelta >= 0) {
+      return Direction.RIGHT;
+    }
+
+    return Direction.LEFT;
+  }
+
+  if (verticalDelta > 0) {
+    return Direction.BOTTOM;
+  }
+
+  return Direction.TOP;
+};
+
+export { dragDirection, resizeDirection };

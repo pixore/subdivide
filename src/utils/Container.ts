@@ -1,7 +1,12 @@
 import Direction from '../utils/Direction';
 import Percentage from './Percentage';
 import Id from './Id';
-import { ContainerData, NewContainerData, ContainerDataUpdate } from '../types';
+import {
+  ContainerData,
+  NewContainerData,
+  ContainerDataUpdate,
+  DividerData,
+} from '../types';
 
 interface OptionalSizeAndPosition {
   width?: number;
@@ -37,28 +42,29 @@ const toPixels = (container: ContainerData): ContainerData => {
 const getSizeAndPositionFromDelta = (
   container: ContainerData,
   delta: Delta,
-  direction?: Direction,
+  isPrevious: boolean,
+  direction: Direction,
 ): OptionalSizeAndPosition => {
   const { height, width, top, left } = container;
-  if (direction === Direction.TOP) {
-    return {
-      height: height + delta.y,
-    };
-  }
 
-  if (direction === Direction.BOTTOM) {
+  if (Direction.isVertical(direction)) {
+    if (isPrevious) {
+      return {
+        height: height + delta.y,
+      };
+    }
+
     return {
       top: top + delta.y,
       height: height - delta.y,
     };
   }
 
-  if (direction === Direction.LEFT) {
+  if (isPrevious) {
     return {
       width: width + delta.x,
     };
   }
-
   return {
     left: left + delta.x,
     width: width - delta.x,
@@ -182,6 +188,7 @@ interface SplitResult {
   newContainer: NewContainerData;
   nextContainer?: ContainerDataUpdate;
   previousContainer?: ContainerDataUpdate;
+  divider: DividerData;
 }
 
 const getDelta = (
@@ -211,9 +218,8 @@ const getAdjacentContainers = (
   direction: Direction,
 ): AdjacentContainerUpdate => {
   const { previous, next } = container;
-  const newDirectiontType = Direction.getType(direction);
-  const isSameDirectionType = newDirectiontType === container.directionType;
-  console.log(isSameDirectionType, Direction.isForward(direction));
+  const newDirectionType = Direction.getType(direction);
+  const isSameDirectionType = newDirectionType === container.directionType;
 
   if (Direction.isForward(direction)) {
     const update: AdjacentContainerUpdate = {
@@ -269,6 +275,51 @@ const getAdjacentContainers = (
   return update;
 };
 
+const getDivider = (
+  originContainer: ContainerData,
+  newContainer: NewContainerData,
+  direction: Direction,
+): DividerData => {
+  const directionType = Direction.getType(direction);
+  // const isSameDirectionType = directionType === originContainer.directionType;
+  const isVertical = Direction.isVertical(direction);
+
+  // if (isSameDirectionType) {
+  const previous = Direction.isForward(direction)
+    ? [newContainer.id]
+    : [originContainer.id];
+  const next = Direction.isForward(direction)
+    ? [originContainer.id]
+    : [newContainer.id];
+
+  if (isVertical) {
+    return {
+      directionType,
+      previous,
+      next,
+      width: originContainer.width,
+      height: 0,
+      left: originContainer.left,
+      top: Direction.isForward(direction)
+        ? newContainer.height + newContainer.top
+        : originContainer.height + originContainer.top,
+    };
+  }
+
+  return {
+    directionType,
+    previous,
+    next,
+    width: 0,
+    height: originContainer.height,
+    left: Direction.isForward(direction)
+      ? newContainer.width + newContainer.left
+      : originContainer.width + originContainer.top,
+    top: originContainer.top,
+  };
+  // }
+};
+
 const split = (
   container: ContainerData,
   to: Vector,
@@ -308,6 +359,7 @@ const split = (
     previousContainer,
     originContainer: updateData,
     newContainer: newData,
+    divider: getDivider(updateData, newData, direction),
   };
 };
 

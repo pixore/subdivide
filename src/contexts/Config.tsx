@@ -3,16 +3,19 @@ import * as React from 'react';
 interface ClassNames {
   corner: string;
   container: string;
+  divider: string;
 }
 
 interface OptionalClassNames {
   corner?: string;
   container?: string;
+  divider?: string;
 }
 
 const defaultClassNames = {
   corner: 'px-corner',
   container: 'px-container',
+  divider: 'px-divider',
 };
 
 const initialValue = {
@@ -46,12 +49,14 @@ const Provider: React.FC<PropTypes> = (props) => {
   const {
     corner = defaultClassNames.corner,
     container = defaultClassNames.container,
+    divider = defaultClassNames.divider,
   } = classNames;
 
   const value = {
     classNames: {
       corner,
       container,
+      divider,
     },
     cornerSize,
     splitRatio,

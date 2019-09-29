@@ -2,19 +2,38 @@ import React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
 import once from 'once';
 import Con from './Container';
+import Divider from './Divider';
 import Direction from '../utils/Direction';
-import { dragDirection } from '../utils';
+import { dragDirection, resizeDirection } from '../utils';
 import Hooks from '../hooks';
 import Config from '../contexts/Config';
 import Percentage from '../utils/Percentage';
 import Container from '../utils/Container';
-import { Emitter, SplitArgs } from '../types';
+import { Emitter, SplitArgs, DividerData, ResizeArgs } from '../types';
 
 type Component = React.ComponentType<any>;
 
 interface PropTypes {
   component: Component;
 }
+
+type EventHandler = (event: MouseEvent) => void;
+
+const addMouseListener = (
+  onMouseMove: EventHandler,
+  onMouseUp: EventHandler,
+) => {
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+};
+
+const removeMouseListener = (
+  onMouseMove: EventHandler,
+  onMouseUp: EventHandler,
+) => {
+  window.removeEventListener('mousemove', onMouseMove);
+  window.removeEventListener('mouseup', onMouseUp);
+};
 
 const Subdivide: React.FC<PropTypes> = (props) => {
   const { component } = props;
@@ -24,6 +43,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   const [map, actions, actionCreators] = Hooks.useContainers();
   const mapRef = React.useRef(map);
   const actionsRef = React.useRef(actions);
+  const [dividers, setDividers] = React.useState<DividerData[]>([]);
 
   mapRef.current = map;
   actionsRef.current = actions;
@@ -51,7 +71,11 @@ const Subdivide: React.FC<PropTypes> = (props) => {
               newContainer,
               nextContainer,
               previousContainer,
+              divider,
             } = onceSplit(container, to, direction);
+
+            setDividers((dividers) => dividers.concat(divider));
+
             newContainerId = newContainer.id;
             const actions = [
               actionCreators.update(originContainer),
@@ -68,56 +92,26 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
             actionsRef.current.batch(actions);
 
-            from.x = to.x;
-            from.y = to.y;
+            removeMouseListener(onMouseMove, onMouseUp);
+            emitter.emit('resize', {
+              previous: divider.previous[0],
+              next: divider.next[0],
+              from: {
+                x: to.x,
+                y: to.y,
+                directionType: divider.directionType,
+              },
+            });
           }
           return;
-        }
-
-        if (!newContainerId) {
-          return;
-        }
-
-        const newContainer = mapRef.current[newContainerId];
-
-        const delta = {
-          x: Percentage.create(window.innerWidth, to.x - from.x),
-          y: Percentage.create(window.innerHeight, to.y - from.y),
-        };
-
-        const originalContainerData = actionCreators.update(
-          Container.addId(
-            containerId,
-            Container.getSizeAndPositionFromDelta(container, delta, direction),
-          ),
-        );
-
-        const newContainerData = actionCreators.update(
-          Container.addId(
-            newContainerId,
-            Container.getSizeAndPositionFromDelta(
-              newContainer,
-              delta,
-              Direction.getOpposite(direction),
-            ),
-          ),
-        );
-
-        actionsRef.current.batch([originalContainerData, newContainerData]);
-
-        if (direction) {
-          from.x = to.x;
-          from.y = to.y;
         }
       };
 
       const onMouseUp = () => {
-        window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('mouseup', onMouseUp);
+        removeMouseListener(onMouseMove, onMouseUp);
       };
 
-      window.addEventListener('mousemove', onMouseMove);
-      window.addEventListener('mouseup', onMouseUp);
+      addMouseListener(onMouseMove, onMouseUp);
     };
 
     emitter.on('split', onStartSplit);
@@ -125,7 +119,79 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     return () => {
       emitter.off('split', onStartSplit);
     };
-  }, []);
+  }, [emitter]);
+
+  React.useEffect(() => {
+    const onStartResize = (args: ResizeArgs) => {
+      const { from } = args;
+
+      const onMouseMove = (event: MouseEvent) => {
+        const previous = mapRef.current[args.previous];
+        const next = mapRef.current[args.next];
+        const to = {
+          x: event.clientX,
+          y: event.clientY,
+        };
+
+        const direction = resizeDirection(from, to, from.directionType);
+
+        const delta = {
+          x: Percentage.create(window.innerWidth, to.x - from.x),
+          y: Percentage.create(window.innerHeight, to.y - from.y),
+        };
+
+        const isDeltaZero = Direction.isHorizontal(direction)
+          ? delta.x === 0
+          : delta.y === 0;
+
+        if (isDeltaZero) {
+          return;
+        }
+
+        const previousContainerData = actionCreators.update(
+          Container.addId(
+            previous.id,
+            Container.getSizeAndPositionFromDelta(
+              previous,
+              delta,
+              true,
+              direction,
+            ),
+          ),
+        );
+
+        const nextContainerData = actionCreators.update(
+          Container.addId(
+            next.id,
+            Container.getSizeAndPositionFromDelta(
+              next,
+              delta,
+              false,
+              direction,
+            ),
+          ),
+        );
+
+        console.log(nextContainerData.payload);
+
+        actionsRef.current.batch([previousContainerData, nextContainerData]);
+
+        from.x = to.x;
+        from.y = to.y;
+      };
+
+      const onMouseUp = () => {
+        removeMouseListener(onMouseMove, onMouseUp);
+      };
+
+      addMouseListener(onMouseMove, onMouseUp);
+    };
+    emitter.on('resize', onStartResize);
+
+    return () => {
+      emitter.off('resize', onStartResize);
+    };
+  }, [emitter]);
 
   return (
     <>
@@ -143,6 +209,9 @@ const Subdivide: React.FC<PropTypes> = (props) => {
           />
         );
       })}
+      {dividers.map((divider, index) => (
+        <Divider {...divider} emitter={emitter} key={index} />
+      ))}
     </>
   );
 };
