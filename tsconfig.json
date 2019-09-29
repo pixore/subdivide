@@ -19,7 +19,7 @@
     "lib": ["dom", "es2015", "es2016"],
     "declarationDir": "dist"
   },
-  "include": ["cypress.d.ts", "src/**/*", "cypress/**/*"],
+  "include": ["src/**/*", "cypress/**/*"],
   "exclude": [
     "node_modules",
     "dist",

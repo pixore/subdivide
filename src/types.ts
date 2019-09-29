@@ -16,8 +16,8 @@ export interface FromDivider {
 
 export interface ContainerData {
   id: Id;
-  parentDivider: Id;
-  parentContainer: Id;
+  parentDivider?: Id;
+  parentContainer?: Id;
   width: number;
   height: number;
   top: number;
@@ -69,19 +69,6 @@ export interface DividerDataUpdate {
   left?: number;
 }
 
-export interface NewContainerData {
-  id: Id;
-  parentDivider?: Id;
-  parentContainer?: Id;
-  width: number;
-  height: number;
-  top: number;
-  left: number;
-  previous?: Id;
-  next?: Id;
-  directionType?: Direction.DirectionType;
-}
-
 export interface SplitArgs {
   containerId: number;
   from: FromCorner;
@@ -115,4 +102,27 @@ export interface Emitter {
   off(event: Event, callback?: Events[Event]): this;
 }
 
-export type AddContainer = (data: NewContainerData) => Id;
+export type AddContainer = (data: ContainerData) => Id;
+export type Primitive =
+  | string
+  | number
+  | boolean
+  | bigint
+  | symbol
+  | undefined
+  | null;
+
+/** Like Readonly but recursive */
+export type DeepReadonly<T> = T extends Primitive
+  ? T
+  : T extends Function
+  ? T
+  : T extends Date
+  ? T
+  : T extends Map<infer K, infer V>
+  ? ReadonlyMap<K, V>
+  : T extends Set<infer U>
+  ? ReadonlySet<U>
+  : T extends {}
+  ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
+  : Readonly<T>;

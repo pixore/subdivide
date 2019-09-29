@@ -5,7 +5,7 @@ import Con from './Container';
 import Divider from './Divider';
 import Direction from '../utils/Direction';
 import { dragDirection, resizeDirection } from '../utils';
-import Hooks from '../hooks';
+import useLayout from '../hooks/useLayout';
 import Config from '../contexts/Config';
 import Percentage from '../utils/Percentage';
 import Id from '../utils/Id';
@@ -17,6 +17,7 @@ import {
   ContainersMap,
   DividersMap,
   DividerDataUpdate,
+  DividerData,
 } from '../types';
 
 type Component = React.ComponentType<any>;
@@ -57,12 +58,14 @@ const updateParentDividers = (
 
   const parentDivider = dividers[parentContainer.parentDivider];
 
-  const otherParentDividers = updateParentDividers(
-    childContainerId,
-    parentContainer.parentContainer,
-    containers,
-    dividers,
-  );
+  const otherParentDividers = parentContainer.parentContainer
+    ? updateParentDividers(
+        childContainerId,
+        parentContainer.parentContainer,
+        containers,
+        dividers,
+      )
+    : [];
 
   if (parentDivider.next.includes(parentContainerId)) {
     return otherParentDividers.concat([
@@ -86,17 +89,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   const { splitRatio } = Config.useConfig();
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
 
-  const [map, actions, actionCreators] = Hooks.useContainers();
-  const [
-    dividersRef,
-    dividersActions,
-    dividersActionCreators,
-  ] = Hooks.useDividers();
-  const mapRef = React.useRef(map);
-  const actionsRef = React.useRef(actions);
-
-  mapRef.current = map;
-  actionsRef.current = actions;
+  const [layoutRef, actions, actionCreators] = useLayout();
 
   React.useEffect(() => {
     const onStartSplit = (args: SplitArgs) => {
@@ -106,7 +99,10 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
       const onceSplit = once(Container.split);
       const onMouseMove = (event: MouseEvent) => {
-        const container = mapRef.current[containerId];
+        const {
+          current: { containers, dividers },
+        } = layoutRef;
+        const container = containers[containerId];
         const to = {
           x: event.clientX,
           y: event.clientY,
@@ -122,24 +118,23 @@ const Subdivide: React.FC<PropTypes> = (props) => {
             );
 
             const containersActions = [
-              actionCreators.update(originContainer),
-              actionCreators.add(newContainer),
+              actionCreators.containers.update(originContainer),
+              actionCreators.containers.add(newContainer),
             ];
 
             const dividersToUpdate = updateParentDividers(
               newContainer.id,
               container.id,
-              mapRef.current,
-              dividersRef.current,
+              containers,
+              dividers as DividersMap,
             );
 
-            dividersActions.batch(
+            actions.batch(
               dividersToUpdate
-                .map((data) => dividersActionCreators.update(data))
-                .concat(dividersActionCreators.add(divider)),
+                .map((data) => actionCreators.dividers.update(data))
+                .concat(actionCreators.dividers.add(divider))
+                .concat(containersActions),
             );
-
-            actionsRef.current.batch(containersActions);
 
             removeMouseListener(onMouseMove, onMouseUp);
 
@@ -177,8 +172,10 @@ const Subdivide: React.FC<PropTypes> = (props) => {
       const { from, dividerId, previous, next } = args;
 
       const onMouseMove = (event: MouseEvent) => {
-        const divider = dividersRef.current[dividerId];
-        const { current: map } = mapRef;
+        const {
+          current: { dividers, containers },
+        } = layoutRef;
+        const divider = dividers[dividerId];
         const to = {
           x: event.clientX,
           y: event.clientY,
@@ -200,8 +197,8 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         }
 
         const previousContainersData = previous.map((id: Id) => {
-          const container = map[id];
-          return actionCreators.update(
+          const container = containers[id];
+          return actionCreators.containers.update(
             Container.addId(
               container.id,
               Container.getSizeAndPositionFromDelta(
@@ -215,8 +212,8 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         });
 
         const nextContainersAction = next.map((id) => {
-          const container = map[id];
-          return actionCreators.update(
+          const container = containers[id];
+          return actionCreators.containers.update(
             Container.addId(
               container.id,
               Container.getSizeAndPositionFromDelta(
@@ -230,28 +227,28 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         });
 
         const { top, left } = Container.getSizeAndPositionFromDelta(
-          map[next[0]],
+          containers[next[0]],
           delta,
           false,
           direction,
         );
 
+        const dividerUpdate = {
+          ...(divider as DividerData),
+        };
+
         if (top) {
-          divider.top = top;
+          dividerUpdate.top = top;
         }
 
         if (left) {
-          divider.left = left;
+          dividerUpdate.left = left;
         }
 
-        const dividerUpdate = {
-          ...divider,
-        };
-
-        dividersActions.update(dividerUpdate);
-
-        actionsRef.current.batch(
-          previousContainersData.concat(nextContainersAction),
+        actions.batch(
+          previousContainersData
+            .concat(nextContainersAction)
+            .concat(actionCreators.dividers.update(dividerUpdate)),
         );
 
         from.x = to.x;
@@ -271,18 +268,22 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     };
   }, [emitter]);
 
+  const {
+    current: { dividers, containers },
+  } = layoutRef;
+
   return (
     <>
-      {Object.keys(map).map((key) => {
-        const item = map[key];
+      {Object.keys(containers).map((key) => {
+        const item = containers[key];
         const { id } = item;
 
         return (
           <Con key={id} emitter={emitter} component={component} {...item} />
         );
       })}
-      {Object.keys(dividersRef.current).map((id) => {
-        const divider = dividersRef.current[id];
+      {Object.keys(dividers).map((id) => {
+        const divider = dividers[id];
         return <Divider {...divider} emitter={emitter} key={divider.id} />;
       })}
     </>
