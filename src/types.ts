@@ -16,6 +16,8 @@ export interface FromDivider {
 
 export interface ContainerData {
   id: Id;
+  parentDivider: Id;
+  parentContainer: Id;
   width: number;
   height: number;
   top: number;
@@ -35,6 +37,8 @@ export interface DividersMap {
 
 export interface ContainerDataUpdate {
   id: Id;
+  parentDivider?: Id;
+  parentContainer?: Id;
   width?: number;
   height?: number;
   top?: number;
@@ -67,6 +71,8 @@ export interface DividerDataUpdate {
 
 export interface NewContainerData {
   id: Id;
+  parentDivider?: Id;
+  parentContainer?: Id;
   width: number;
   height: number;
   top: number;

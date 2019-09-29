@@ -186,8 +186,6 @@ interface Vector {
 interface SplitResult {
   originContainer: ContainerDataUpdate;
   newContainer: NewContainerData;
-  nextContainer?: ContainerDataUpdate;
-  previousContainer?: ContainerDataUpdate;
   divider: DividerData;
 }
 
@@ -206,10 +204,8 @@ const getDelta = (
 };
 
 interface AdjacentContainerUpdate {
-  previousContainer?: ContainerDataUpdate;
   newContainer: ContainerDataUpdate;
   originContainer: ContainerDataUpdate;
-  nextContainer?: ContainerDataUpdate;
   dividerId: Id;
 }
 
@@ -314,7 +310,7 @@ const split = (
 
   const adjacentsUpdate = getAdjacentContainers(container, id, direction);
 
-  const { nextContainer, previousContainer, dividerId } = adjacentsUpdate;
+  const { dividerId } = adjacentsUpdate;
 
   const updateData: ContainerData = {
     ...container,
@@ -326,6 +322,8 @@ const split = (
 
   const newData: NewContainerData = {
     id,
+    parentDivider: dividerId,
+    parentContainer: container.id,
     directionType: Direction.getType(direction),
     ...adjacentsUpdate.newContainer,
     ...getSizeAfterSplitFrom(updateData, initialSize, isVertical),
@@ -333,8 +331,6 @@ const split = (
   };
 
   return {
-    nextContainer,
-    previousContainer,
     originContainer: updateData,
     newContainer: newData,
     divider: getDivider(updateData, newData, direction, dividerId),

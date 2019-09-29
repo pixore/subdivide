@@ -10,7 +10,14 @@ import Config from '../contexts/Config';
 import Percentage from '../utils/Percentage';
 import Id from '../utils/Id';
 import Container from '../utils/Container';
-import { Emitter, SplitArgs, DividerData, ResizeArgs } from '../types';
+import {
+  Emitter,
+  SplitArgs,
+  ResizeArgs,
+  ContainersMap,
+  DividersMap,
+  DividerDataUpdate,
+} from '../types';
 
 type Component = React.ComponentType<any>;
 
@@ -36,13 +43,55 @@ const removeMouseListener = (
   window.removeEventListener('mouseup', onMouseUp);
 };
 
+const updateParentDividers = (
+  childContainerId: Id,
+  parentContainerId: Id,
+  containers: ContainersMap,
+  dividers: DividersMap,
+): DividerDataUpdate[] => {
+  const parentContainer = containers[parentContainerId];
+
+  if (!parentContainer.parentDivider) {
+    return [];
+  }
+
+  const parentDivider = dividers[parentContainer.parentDivider];
+
+  const otherParentDividers = updateParentDividers(
+    childContainerId,
+    parentContainer.parentContainer,
+    containers,
+    dividers,
+  );
+
+  if (parentDivider.next.includes(parentContainerId)) {
+    return otherParentDividers.concat([
+      {
+        id: parentDivider.id,
+        next: parentDivider.next.concat(childContainerId),
+      },
+    ]);
+  }
+
+  return otherParentDividers.concat([
+    {
+      id: parentDivider.id,
+      previous: parentDivider.previous.concat(childContainerId),
+    },
+  ]);
+};
+
 const Subdivide: React.FC<PropTypes> = (props) => {
   const { component } = props;
   const { splitRatio } = Config.useConfig();
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
 
   const [map, actions, actionCreators] = Hooks.useContainers();
-  const [dividersRef, dividersActions] = Hooks.useDividers();
+  const [
+    dividersRef,
+    dividersActions,
+    dividersActionCreators,
+  ] = Hooks.useDividers();
   const mapRef = React.useRef(map);
   const actionsRef = React.useRef(actions);
 
@@ -66,38 +115,38 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         if (!direction) {
           direction = dragDirection(from, to, splitRatio);
           if (direction) {
-            const {
-              originContainer,
-              newContainer,
-              nextContainer,
-              previousContainer,
-              divider,
-            } = onceSplit(container, to, direction);
+            const { originContainer, newContainer, divider } = onceSplit(
+              container,
+              to,
+              direction,
+            );
 
-            dividersActions.add(divider);
-
-            const actions = [
+            const containersActions = [
               actionCreators.update(originContainer),
               actionCreators.add(newContainer),
             ];
 
-            if (nextContainer) {
-              actions.push(actionCreators.update(nextContainer));
-            }
+            const dividersToUpdate = updateParentDividers(
+              newContainer.id,
+              container.id,
+              mapRef.current,
+              dividersRef.current,
+            );
 
-            if (previousContainer) {
-              actions.push(actionCreators.update(previousContainer));
-            }
+            dividersActions.batch(
+              dividersToUpdate
+                .map((data) => dividersActionCreators.update(data))
+                .concat(dividersActionCreators.add(divider)),
+            );
 
-            const dividerId = divider.id;
-
-            actionsRef.current.batch(actions);
+            actionsRef.current.batch(containersActions);
 
             removeMouseListener(onMouseMove, onMouseUp);
+
             emitter.emit('resize', {
               previous: divider.previous,
               next: divider.next,
-              dividerId,
+              dividerId: divider.id,
               from: {
                 x: to.x,
                 y: to.y,
