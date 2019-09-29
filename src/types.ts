@@ -69,6 +69,7 @@ export interface SplitArgs {
 export interface ResizeArgs {
   previous: Id;
   next: Id;
+  dividerIndex: number;
   from: FromDivider;
 }
 

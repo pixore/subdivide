@@ -4,18 +4,24 @@ interface ClassNames {
   corner: string;
   container: string;
   divider: string;
+  verticalDivider: string;
+  horizontalDivider: string;
 }
 
 interface OptionalClassNames {
   corner?: string;
   container?: string;
   divider?: string;
+  verticalDivider?: string;
+  horizontalDivider?: string;
 }
 
 const defaultClassNames = {
   corner: 'px-corner',
   container: 'px-container',
   divider: 'px-divider',
+  verticalDivider: 'px-divider--vertical',
+  horizontalDivider: 'px-divider--horizontal',
 };
 
 const initialValue = {
@@ -50,6 +56,8 @@ const Provider: React.FC<PropTypes> = (props) => {
     corner = defaultClassNames.corner,
     container = defaultClassNames.container,
     divider = defaultClassNames.divider,
+    verticalDivider = defaultClassNames.verticalDivider,
+    horizontalDivider = defaultClassNames.horizontalDivider,
   } = classNames;
 
   const value = {
@@ -57,6 +65,8 @@ const Provider: React.FC<PropTypes> = (props) => {
       corner,
       container,
       divider,
+      verticalDivider,
+      horizontalDivider,
     },
     cornerSize,
     splitRatio,

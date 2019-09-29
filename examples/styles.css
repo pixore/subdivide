@@ -23,3 +23,26 @@ body {
 .px-divider {
   position: absolute;
 }
+
+.px-divider--vertical {
+  cursor: row-resize;
+}
+.px-divider--vertical div {
+  height: 10px;
+  position: absolute;
+  left: 0;
+  top: -5px;
+  width: 100%;
+}
+
+.px-divider--horizontal {
+  cursor: col-resize;
+}
+
+.px-divider--horizontal div {
+  width: 10px;
+  position: absolute;
+  left: -5px;
+  top: 0;
+  height: 100%;
+}

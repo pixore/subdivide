@@ -15,6 +15,7 @@ interface PropTypes {
   height: number;
   directionType: Direction.DirectionType;
   emitter: Emitter;
+  index: number;
 }
 
 const Divider: React.FC<PropTypes> = (props) => {
@@ -27,8 +28,13 @@ const Divider: React.FC<PropTypes> = (props) => {
     next,
     directionType,
     emitter,
+    index,
   } = props;
-  const { divider } = Config.useClassNames();
+  const {
+    divider,
+    verticalDivider,
+    horizontalDivider,
+  } = Config.useClassNames();
   const style: React.CSSProperties = {
     top: Percentage.toString(top),
     left: Percentage.toString(left),
@@ -40,6 +46,7 @@ const Divider: React.FC<PropTypes> = (props) => {
     emitter.emit('resize', {
       previous: previous[0],
       next: next[0],
+      dividerIndex: index,
       from: {
         x: event.clientX,
         y: event.clientY,
@@ -48,8 +55,16 @@ const Divider: React.FC<PropTypes> = (props) => {
     });
   };
 
+  const classNames = `${divider} ${
+    directionType === Direction.DirectionType.HORIZONTAL
+      ? horizontalDivider
+      : verticalDivider
+  }`;
+
   return (
-    <div className={divider} onMouseDown={onMouseDown} style={style}></div>
+    <div className={classNames} onMouseDown={onMouseDown} style={style}>
+      <div></div>
+    </div>
   );
 };
 
