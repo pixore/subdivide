@@ -44,8 +44,8 @@ const Divider: React.FC<PropTypes> = (props) => {
 
   const onMouseDown = (event: React.MouseEvent) => {
     emitter.emit('resize', {
-      previous: previous[0],
-      next: next[0],
+      previous: previous,
+      next: next,
       dividerIndex: index,
       from: {
         x: event.clientX,

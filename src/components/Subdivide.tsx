@@ -8,6 +8,7 @@ import { dragDirection, resizeDirection } from '../utils';
 import Hooks from '../hooks';
 import Config from '../contexts/Config';
 import Percentage from '../utils/Percentage';
+import Id from '../utils/Id';
 import Container from '../utils/Container';
 import { Emitter, SplitArgs, DividerData, ResizeArgs } from '../types';
 
@@ -95,8 +96,8 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
             removeMouseListener(onMouseMove, onMouseUp);
             emitter.emit('resize', {
-              previous: divider.previous[0],
-              next: divider.next[0],
+              previous: divider.previous,
+              next: divider.next,
               dividerIndex,
               from: {
                 x: to.x,
@@ -125,11 +126,10 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
   React.useEffect(() => {
     const onStartResize = (args: ResizeArgs) => {
-      const { from, dividerIndex } = args;
+      const { from, dividerIndex, previous, next } = args;
 
       const onMouseMove = (event: MouseEvent) => {
-        const previous = mapRef.current[args.previous];
-        const next = mapRef.current[args.next];
+        const { current: map } = mapRef;
         const to = {
           x: event.clientX,
           y: event.clientY,
@@ -150,27 +150,41 @@ const Subdivide: React.FC<PropTypes> = (props) => {
           return;
         }
 
-        const previousContainerData = actionCreators.update(
-          Container.addId(
-            previous.id,
-            Container.getSizeAndPositionFromDelta(
-              previous,
-              delta,
-              true,
-              direction,
+        const previousContainersData = previous.map((id: Id) => {
+          const container = map[id];
+          return actionCreators.update(
+            Container.addId(
+              container.id,
+              Container.getSizeAndPositionFromDelta(
+                container,
+                delta,
+                true,
+                direction,
+              ),
             ),
-          ),
-        );
+          );
+        });
 
-        const nextContainerData = Container.getSizeAndPositionFromDelta(
-          next,
+        const nextContainersAction = next.map((id) => {
+          const container = map[id];
+          return actionCreators.update(
+            Container.addId(
+              container.id,
+              Container.getSizeAndPositionFromDelta(
+                container,
+                delta,
+                false,
+                direction,
+              ),
+            ),
+          );
+        });
+
+        const { top, left } = Container.getSizeAndPositionFromDelta(
+          map[next[0]],
           delta,
           false,
           direction,
-        );
-
-        const nextContainerAction = actionCreators.update(
-          Container.addId(next.id, nextContainerData),
         );
 
         // TODO: use reducer to storage the dividers
@@ -178,12 +192,12 @@ const Subdivide: React.FC<PropTypes> = (props) => {
           const divider = {
             ...dividers[dividerIndex],
           };
-          if (nextContainerData.top) {
-            divider.top = nextContainerData.top;
+          if (top) {
+            divider.top = top;
           }
 
-          if (nextContainerData.left) {
-            divider.left = nextContainerData.left;
+          if (left) {
+            divider.left = left;
           }
 
           return [
@@ -193,7 +207,9 @@ const Subdivide: React.FC<PropTypes> = (props) => {
           ];
         });
 
-        actionsRef.current.batch([previousContainerData, nextContainerAction]);
+        actionsRef.current.batch(
+          previousContainersData.concat(nextContainersAction),
+        );
 
         from.x = to.x;
         from.y = to.y;
