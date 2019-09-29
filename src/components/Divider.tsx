@@ -7,6 +7,7 @@ import Percentage from '../utils/Percentage';
 import { Emitter } from '../types';
 
 interface PropTypes {
+  id: number;
   previous: Id[];
   next: Id[];
   top: number;
@@ -15,11 +16,11 @@ interface PropTypes {
   height: number;
   directionType: Direction.DirectionType;
   emitter: Emitter;
-  index: number;
 }
 
 const Divider: React.FC<PropTypes> = (props) => {
   const {
+    id,
     top,
     left,
     width,
@@ -28,7 +29,6 @@ const Divider: React.FC<PropTypes> = (props) => {
     next,
     directionType,
     emitter,
-    index,
   } = props;
   const {
     divider,
@@ -44,9 +44,9 @@ const Divider: React.FC<PropTypes> = (props) => {
 
   const onMouseDown = (event: React.MouseEvent) => {
     emitter.emit('resize', {
-      previous: previous,
-      next: next,
-      dividerIndex: index,
+      previous,
+      next,
+      dividerId: id,
       from: {
         x: event.clientX,
         y: event.clientY,

@@ -42,10 +42,9 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
 
   const [map, actions, actionCreators] = Hooks.useContainers();
-  const [dividers, setDividers] = React.useState<DividerData[]>([]);
+  const [dividersRef, dividersActions] = Hooks.useDividers();
   const mapRef = React.useRef(map);
   const actionsRef = React.useRef(actions);
-  const dividersRef = React.useRef(dividers);
 
   mapRef.current = map;
   actionsRef.current = actions;
@@ -75,7 +74,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
               divider,
             } = onceSplit(container, to, direction);
 
-            setDividers((dividers) => dividers.concat(divider));
+            dividersActions.add(divider);
 
             const actions = [
               actionCreators.update(originContainer),
@@ -90,7 +89,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
               actions.push(actionCreators.update(previousContainer));
             }
 
-            const dividerIndex = dividersRef.current.length;
+            const dividerId = divider.id;
 
             actionsRef.current.batch(actions);
 
@@ -98,7 +97,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
             emitter.emit('resize', {
               previous: divider.previous,
               next: divider.next,
-              dividerIndex,
+              dividerId,
               from: {
                 x: to.x,
                 y: to.y,
@@ -126,9 +125,10 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
   React.useEffect(() => {
     const onStartResize = (args: ResizeArgs) => {
-      const { from, dividerIndex, previous, next } = args;
+      const { from, dividerId, previous, next } = args;
 
       const onMouseMove = (event: MouseEvent) => {
+        const divider = dividersRef.current[dividerId];
         const { current: map } = mapRef;
         const to = {
           x: event.clientX,
@@ -187,25 +187,19 @@ const Subdivide: React.FC<PropTypes> = (props) => {
           direction,
         );
 
-        // TODO: use reducer to storage the dividers
-        setDividers((dividers) => {
-          const divider = {
-            ...dividers[dividerIndex],
-          };
-          if (top) {
-            divider.top = top;
-          }
+        if (top) {
+          divider.top = top;
+        }
 
-          if (left) {
-            divider.left = left;
-          }
+        if (left) {
+          divider.left = left;
+        }
 
-          return [
-            ...dividers.slice(0, dividerIndex),
-            divider,
-            ...dividers.slice(dividerIndex + 1),
-          ];
-        });
+        const dividerUpdate = {
+          ...divider,
+        };
+
+        dividersActions.update(dividerUpdate);
 
         actionsRef.current.batch(
           previousContainersData.concat(nextContainersAction),
@@ -230,23 +224,18 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
   return (
     <>
-      {Object.keys(map).map((key, index) => {
+      {Object.keys(map).map((key) => {
         const item = map[key];
         const { id } = item;
 
         return (
-          <Con
-            key={id}
-            emitter={emitter}
-            component={component}
-            index={index}
-            {...item}
-          />
+          <Con key={id} emitter={emitter} component={component} {...item} />
         );
       })}
-      {dividers.map((divider, index) => (
-        <Divider {...divider} emitter={emitter} index={index} key={index} />
-      ))}
+      {Object.keys(dividersRef.current).map((id) => {
+        const divider = dividersRef.current[id];
+        return <Divider {...divider} emitter={emitter} key={divider.id} />;
+      })}
     </>
   );
 };

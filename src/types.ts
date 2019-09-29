@@ -29,6 +29,10 @@ export interface ContainersMap {
   [id: number]: ContainerData;
 }
 
+export interface DividersMap {
+  [id: number]: DividerData;
+}
+
 export interface ContainerDataUpdate {
   id: Id;
   width?: number;
@@ -41,6 +45,7 @@ export interface ContainerDataUpdate {
 }
 
 export interface DividerData {
+  id: Id;
   directionType: Direction.DirectionType;
   previous: Id[];
   next: Id[];
@@ -48,6 +53,16 @@ export interface DividerData {
   width: number;
   top: number;
   left: number;
+}
+
+export interface DividerDataUpdate {
+  id: Id;
+  previous?: Id[];
+  next?: Id[];
+  height?: number;
+  width?: number;
+  top?: number;
+  left?: number;
 }
 
 export interface NewContainerData {
@@ -69,7 +84,7 @@ export interface SplitArgs {
 export interface ResizeArgs {
   previous: Id[];
   next: Id[];
-  dividerIndex: number;
+  dividerId: Id;
   from: FromDivider;
 }
 

@@ -32,7 +32,7 @@ export interface Actions {
 export interface ActionsCreator {
   add: (data: NewContainerData, id?: Id) => Action;
   update: (data: ContainerDataUpdate) => Action;
-  remove: (id: Id) => void;
+  remove: (id: Id) => Action;
 }
 
 type UseContainers = [ContainersMap, Actions, ActionsCreator];

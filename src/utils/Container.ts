@@ -280,11 +280,9 @@ const getDivider = (
   newContainer: NewContainerData,
   direction: Direction,
 ): DividerData => {
+  const id = Id.create();
   const directionType = Direction.getType(direction);
-  // const isSameDirectionType = directionType === originContainer.directionType;
   const isVertical = Direction.isVertical(direction);
-
-  // if (isSameDirectionType) {
   const previous = Direction.isForward(direction)
     ? [newContainer.id]
     : [originContainer.id];
@@ -294,6 +292,7 @@ const getDivider = (
 
   if (isVertical) {
     return {
+      id,
       directionType,
       previous,
       next,
@@ -307,6 +306,7 @@ const getDivider = (
   }
 
   return {
+    id,
     directionType,
     previous,
     next,
@@ -317,7 +317,6 @@ const getDivider = (
       : originContainer.width + originContainer.top,
     top: originContainer.top,
   };
-  // }
 };
 
 const split = (
