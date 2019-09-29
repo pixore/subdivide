@@ -210,6 +210,7 @@ interface AdjacentContainerUpdate {
   newContainer: ContainerDataUpdate;
   originContainer: ContainerDataUpdate;
   nextContainer?: ContainerDataUpdate;
+  dividerId: Id;
 }
 
 const getAdjacentContainers = (
@@ -217,70 +218,48 @@ const getAdjacentContainers = (
   newId: Id,
   direction: Direction,
 ): AdjacentContainerUpdate => {
+  const dividerId = Id.create();
   const { previous, next } = container;
   const newDirectionType = Direction.getType(direction);
   const isSameDirectionType = newDirectionType === container.directionType;
 
   if (Direction.isForward(direction)) {
-    const update: AdjacentContainerUpdate = {
+    return {
+      dividerId,
       newContainer: {
         id: newId,
         previous: isSameDirectionType ? previous : undefined,
-        next: container.id,
+        next: dividerId,
       },
       originContainer: {
         id: container.id,
-        previous: newId,
+        previous: dividerId,
         next: isSameDirectionType ? next : undefined,
       },
     };
-
-    if (typeof previous === 'number') {
-      update.previousContainer = {
-        id: previous,
-        next: isSameDirectionType ? newId : undefined,
-      };
-    }
-
-    return update;
   }
 
-  const update: AdjacentContainerUpdate = {
+  return {
+    dividerId,
     originContainer: {
       id: container.id,
       previous: isSameDirectionType ? previous : undefined,
-      next: newId,
+      next: dividerId,
     },
     newContainer: {
       id: newId,
-      previous: container.id,
+      previous: dividerId,
       next,
     },
   };
-
-  if (typeof next === 'number') {
-    update.nextContainer = {
-      id: next,
-      previous: isSameDirectionType ? newId : undefined,
-    };
-  }
-
-  if (typeof previous === 'number' && !isSameDirectionType) {
-    update.previousContainer = {
-      id: previous,
-      next: undefined,
-    };
-  }
-
-  return update;
 };
 
 const getDivider = (
   originContainer: ContainerData,
   newContainer: NewContainerData,
   direction: Direction,
+  id: Id,
 ): DividerData => {
-  const id = Id.create();
   const directionType = Direction.getType(direction);
   const isVertical = Direction.isVertical(direction);
   const previous = Direction.isForward(direction)
@@ -335,7 +314,7 @@ const split = (
 
   const adjacentsUpdate = getAdjacentContainers(container, id, direction);
 
-  const { nextContainer, previousContainer } = adjacentsUpdate;
+  const { nextContainer, previousContainer, dividerId } = adjacentsUpdate;
 
   const updateData: ContainerData = {
     ...container,
@@ -358,7 +337,7 @@ const split = (
     previousContainer,
     originContainer: updateData,
     newContainer: newData,
-    divider: getDivider(updateData, newData, direction),
+    divider: getDivider(updateData, newData, direction, dividerId),
   };
 };
 
