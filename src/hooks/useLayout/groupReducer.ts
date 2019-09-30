@@ -1,27 +1,27 @@
 import Id from '../../utils/Id';
-import { ActionType, Action, DividersActions } from './types';
-import { DividersMap, DividerDataUpdate, DividerData } from '../../types';
+import { ActionType, Action, GroupsActions } from './types';
+import { Group, GroupUpdate, GroupsMap } from '../../types';
 const actionCreators = {
-  add: (data: DividerData) => ({
-    type: ActionType.ADD_DIVIDER,
-    payload: data as DividerData,
+  add: (data: Group) => ({
+    type: ActionType.ADD_GROUP,
+    payload: data as Group,
   }),
-  update: (data: DividerDataUpdate) => ({
-    type: ActionType.UPDATE_DIVIDER,
+  update: (data: GroupUpdate) => ({
+    type: ActionType.UPDATE_GROUP,
     payload: data,
   }),
   remove: (id: Id) => ({
-    type: ActionType.UPDATE_DIVIDER,
+    type: ActionType.UPDATE_GROUP,
     payload: id,
   }),
 };
 
 type Dispatch = (action: Action | Action[]) => void;
-const createActions = (dispatch: Dispatch): DividersActions => ({
-  add(data: DividerData) {
+const createActions = (dispatch: Dispatch): GroupsActions => ({
+  add(data: Group) {
     dispatch(actionCreators.add(data));
   },
-  update(data: DividerDataUpdate) {
+  update(data: GroupUpdate) {
     dispatch(actionCreators.update(data));
   },
   remove(id: Id) {
@@ -29,7 +29,7 @@ const createActions = (dispatch: Dispatch): DividersActions => ({
   },
 });
 
-const reducerAdd = (state: DividersMap, data: DividerData): DividersMap => {
+const reducerAdd = (state: GroupsMap, data: Group): GroupsMap => {
   const { id } = data;
   return {
     ...state,
@@ -37,10 +37,7 @@ const reducerAdd = (state: DividersMap, data: DividerData): DividersMap => {
   };
 };
 
-const reducerUpdate = (
-  state: DividersMap,
-  data: DividerDataUpdate,
-): DividersMap => {
+const reducerUpdate = (state: GroupsMap, data: GroupUpdate): GroupsMap => {
   const { id } = data;
   const container = state[id];
 
@@ -53,22 +50,22 @@ const reducerUpdate = (
   };
 };
 
-const reducerRemove = (state: DividersMap, id: Id): DividersMap => {
+const reducerRemove = (state: GroupsMap, id: Id): GroupsMap => {
   const newState = { ...state };
   // this is a new object, don't care if it's mutated here
   Reflect.deleteProperty(newState, id);
   return newState;
 };
 
-const reducer = (state: DividersMap, action: Action): DividersMap => {
+const reducer = (state: GroupsMap, action: Action): GroupsMap => {
   const { type, payload } = action;
 
   switch (type) {
-    case ActionType.ADD_DIVIDER:
-      return reducerAdd(state, payload as DividerData);
-    case ActionType.UPDATE_DIVIDER:
-      return reducerUpdate(state, payload as DividerDataUpdate);
-    case ActionType.REMOVE_DIVIDER:
+    case ActionType.ADD_GROUP:
+      return reducerAdd(state, payload as Group);
+    case ActionType.UPDATE_GROUP:
+      return reducerUpdate(state, payload as GroupUpdate);
+    case ActionType.REMOVE_GROUP:
       return reducerRemove(state, payload as Id);
   }
 

@@ -23,6 +23,7 @@ const createInitialContainer = (): ContainersMap => {
 const initialState: State = {
   containers: createInitialContainer(),
   dividers: {},
+  groups: {},
 };
 
 export type UseLayout = [
