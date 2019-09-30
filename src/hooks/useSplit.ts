@@ -5,6 +5,7 @@ import Config from '../contexts/Config';
 import { dragDirection, addMouseListener, removeMouseListener } from '../utils';
 import { UseLayout } from './useLayout';
 import { Emitter, SplitArgs } from '../types';
+import { Action } from './useLayout/types';
 
 const useSplit = (layout: UseLayout, emitter: Emitter) => {
   const { splitRatio } = Config.useConfig();
@@ -33,12 +34,36 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
           return;
         }
 
-        const { originContainer, newContainer, divider } = Container.split(
-          container.id,
-          layoutRef.current,
-          direction,
-          to,
-        );
+        const {
+          originContainer,
+          newContainer,
+          divider,
+          newGroup,
+          nextDividerUpdate,
+          previousDividerUpdate,
+          currentGroup,
+        } = Container.split(container.id, layoutRef.current, direction, to);
+
+        const groupByActions: Action[] = [];
+        if (newGroup) {
+          groupByActions.push(actionCreators.groups.add(newGroup));
+        }
+
+        if (currentGroup) {
+          groupByActions.push(actionCreators.groups.update(currentGroup));
+        }
+
+        if (nextDividerUpdate) {
+          groupByActions.push(
+            actionCreators.dividers.update(nextDividerUpdate),
+          );
+        }
+
+        if (previousDividerUpdate) {
+          groupByActions.push(
+            actionCreators.dividers.update(previousDividerUpdate),
+          );
+        }
 
         const containersActions = [
           actionCreators.containers.update(originContainer),
@@ -46,7 +71,9 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
         ];
 
         actions.batch(
-          containersActions.concat(actionCreators.dividers.add(divider)),
+          containersActions
+            .concat(actionCreators.dividers.add(divider))
+            .concat(groupByActions),
         );
 
         removeMouseListener(onMouseMove, onMouseUp);

@@ -1,7 +1,16 @@
 import Direction from '../utils/Direction';
 import Percentage from './Percentage';
 import Id from './Id';
-import { ContainerData, ContainerDataUpdate, DividerData } from '../types';
+import {
+  ContainerData,
+  ContainerDataUpdate,
+  DividerData,
+  Group,
+  GroupsMap,
+  DividersMap,
+  DividerDataUpdate,
+  GroupUpdate,
+} from '../types';
 import { ReadOnlyState } from '../hooks/useLayout/types';
 
 interface OptionalSizeAndPosition {
@@ -183,6 +192,10 @@ interface SplitResult {
   originContainer: ContainerDataUpdate;
   newContainer: ContainerData;
   divider: DividerData;
+  newGroup?: Group;
+  previousDividerUpdate?: DividerDataUpdate;
+  nextDividerUpdate?: DividerDataUpdate;
+  currentGroup?: GroupUpdate;
 }
 
 const getDelta = (
@@ -290,13 +303,86 @@ const getDivider = (
   };
 };
 
+const getNewGroup = (
+  originContainer: ContainerData,
+  newDividerId: Id,
+  directionType: Direction.DirectionType,
+): Group => {
+  const { width, height, top, left } = originContainer;
+  return {
+    id: Id.create(),
+    width,
+    height,
+    top,
+    left,
+    directionType,
+    dividers: [newDividerId],
+  };
+};
+
+interface GroupsUpdate {
+  newGroup?: Group;
+  previousDividerUpdate?: DividerDataUpdate;
+  nextDividerUpdate?: DividerDataUpdate;
+  currentGroup?: GroupUpdate;
+}
+
+const getGroupsUpdate = (
+  originContainer: ContainerData,
+  newDividerId: Id,
+  direction: Direction,
+  groups: GroupsMap,
+): GroupsUpdate => {
+  const directionType = Direction.getType(direction);
+  if (originContainer.group) {
+    const isSameDirectionType = directionType === originContainer.directionType;
+
+    if (isSameDirectionType) {
+      const currentGroup = groups[originContainer.group];
+      return {
+        currentGroup: {
+          id: originContainer.group,
+          dividers: currentGroup.dividers.concat(newDividerId),
+        },
+      };
+    }
+
+    const newGroup = getNewGroup(originContainer, newDividerId, directionType);
+    const previousDividerUpdate =
+      originContainer.previous !== undefined
+        ? {
+            id: originContainer.previous,
+            next: newGroup.id,
+          }
+        : undefined;
+
+    const nextDividerUpdate =
+      originContainer.next !== undefined
+        ? {
+            id: originContainer.next,
+            previous: newGroup.id,
+          }
+        : undefined;
+
+    return {
+      newGroup,
+      previousDividerUpdate,
+      nextDividerUpdate,
+    };
+  }
+  return {
+    newGroup: getNewGroup(originContainer, newDividerId, directionType),
+  };
+};
+
 const split = (
   originContainerId: Id,
   layout: ReadOnlyState,
   direction: Direction,
   to: Vector,
 ): SplitResult => {
-  const originContainer = layout.containers[originContainerId];
+  const { containers, groups } = layout;
+  const originContainer = containers[originContainerId];
   const id = Id.create();
   const isVertical = Direction.isVertical(direction);
   const delta = getDelta(originContainer, to, direction);
@@ -326,10 +412,29 @@ const split = (
     ...getPositionAfterSplitFrom(originContainer, updateData, direction),
   };
 
+  const newDivider = getDivider(updateData, newData, direction, dividerId);
+
+  const groupsUpdate = getGroupsUpdate(
+    originContainer,
+    newDivider.id,
+    direction,
+    groups as GroupsMap,
+  );
+
+  if (groupsUpdate.newGroup) {
+    updateData.group = groupsUpdate.newGroup.id;
+    newData.group = groupsUpdate.newGroup.id;
+  }
+
+  if (groupsUpdate.currentGroup) {
+    newData.group = groupsUpdate.currentGroup.id;
+  }
+
   return {
     originContainer: updateData,
     newContainer: newData,
-    divider: getDivider(updateData, newData, direction, dividerId),
+    divider: newDivider,
+    ...groupsUpdate,
   };
 };
 
