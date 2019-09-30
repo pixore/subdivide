@@ -3,22 +3,26 @@ import Direction from '../utils/Direction';
 import Container from '../utils/Container';
 import Percentage from '../utils/Percentage';
 import Id from '../utils/Id';
+import { UseLayout } from './useLayout';
 import {
   addMouseListener,
   removeMouseListener,
   resizeDirection,
 } from '../utils';
-import { UseLayout } from './useLayout';
+import { Action } from '../hooks/useLayout/types';
 import { DividerData, ResizeArgs, Emitter } from '../types';
 
 const useResize = (layout: UseLayout, emitter: Emitter) => {
   const [layoutRef, actions, actionCreators] = layout;
   React.useEffect(() => {
+    const isContainer = (id: Id) => Boolean(layoutRef.current.containers[id]);
+    const isGroup = (id: Id) => Boolean(layoutRef.current.groups[id]);
+    
     const onStartResize = (args: ResizeArgs) => {
       const { from, dividerId, previous, next } = args;
 
       const onMouseMove = (event: MouseEvent) => {
-        const { dividers, containers } = layoutRef.current;
+        const { dividers, containers, groups } = layoutRef.current;
         const divider = dividers[dividerId];
         const to = {
           x: event.clientX,
@@ -40,32 +44,41 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
           return;
         }
 
-        const previousContainerData = actionCreators.containers.update(
-          Container.addId(
-            previous,
-            Container.getSizeAndPositionFromDelta(
-              containers[previous],
-              delta,
-              true,
-              direction,
+        const actionsToDispatch: Action[] = []
+        if (isContainer(previous)) {
+          const previousContainerData = actionCreators.containers.update(
+            Container.addId(
+              previous,
+              Container.getSizeAndPositionFromDelta(
+                containers[previous],
+                delta,
+                true,
+                direction,
+              ),
             ),
-          ),
-        );
+          );
 
-        const nextContainerData = actionCreators.containers.update(
-          Container.addId(
-            next,
-            Container.getSizeAndPositionFromDelta(
-              containers[next],
-              delta,
-              false,
-              direction,
+          actionsToDispatch.push(previousContainerData);
+        }
+
+        if (isContainer(next)) {
+          const nextContainerData = actionCreators.containers.update(
+            Container.addId(
+              next,
+              Container.getSizeAndPositionFromDelta(
+                containers[next],
+                delta,
+                false,
+                direction,
+              ),
             ),
-          ),
-        );
+          );
+
+          actionsToDispatch.push(nextContainerData)
+        }
 
         const { top, left } = Container.getSizeAndPositionFromDelta(
-          containers[next],
+          isContainer(next) ? containers[next] : groups[next],
           delta,
           false,
           direction,
@@ -83,11 +96,9 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
           dividerUpdate.left = left;
         }
 
-        actions.batch([
-          previousContainerData,
-          nextContainerData,
-          actionCreators.dividers.update(dividerUpdate),
-        ]);
+        actionsToDispatch.push(actionCreators.dividers.update(dividerUpdate));
+
+        actions.batch(actionsToDispatch);
 
         from.x = to.x;
         from.y = to.y;
