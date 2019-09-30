@@ -4,7 +4,7 @@ import Container from '../utils/Container';
 import Config from '../contexts/Config';
 import { dragDirection, addMouseListener, removeMouseListener } from '../utils';
 import { UseLayout } from './useLayout';
-import { Group, Emitter, SplitArgs, DividersMap, GroupUpdate } from '../types';
+import { Emitter, SplitArgs } from '../types';
 
 const useSplit = (layout: UseLayout, emitter: Emitter) => {
   const { splitRatio } = Config.useConfig();

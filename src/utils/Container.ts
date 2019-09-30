@@ -255,11 +255,11 @@ const getDivider = (
   const directionType = Direction.getType(direction);
   const isVertical = Direction.isVertical(direction);
   const previous = Direction.isForward(direction)
-    ? [newContainer.id]
-    : [originContainer.id];
+    ? newContainer.id
+    : originContainer.id;
   const next = Direction.isForward(direction)
-    ? [originContainer.id]
-    : [newContainer.id];
+    ? originContainer.id
+    : newContainer.id;
 
   if (isVertical) {
     return {

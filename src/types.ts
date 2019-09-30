@@ -70,8 +70,8 @@ export interface ContainerDataUpdate {
 export interface DividerData {
   id: Id;
   directionType: Direction.DirectionType;
-  previous: Id[];
-  next: Id[];
+  previous: Id;
+  next: Id;
   height: number;
   width: number;
   top: number;
@@ -80,8 +80,8 @@ export interface DividerData {
 
 export interface DividerDataUpdate {
   id: Id;
-  previous?: Id[];
-  next?: Id[];
+  previous?: Id;
+  next?: Id;
   height?: number;
   width?: number;
   top?: number;
@@ -94,8 +94,8 @@ export interface SplitArgs {
 }
 
 export interface ResizeArgs {
-  previous: Id[];
-  next: Id[];
+  previous: Id;
+  next: Id;
   dividerId: Id;
   from: FromDivider;
 }

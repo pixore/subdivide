@@ -40,38 +40,32 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
           return;
         }
 
-        const previousContainersData = previous.map((id: Id) => {
-          const container = containers[id];
-          return actionCreators.containers.update(
-            Container.addId(
-              container.id,
-              Container.getSizeAndPositionFromDelta(
-                container,
-                delta,
-                true,
-                direction,
-              ),
+        const previousContainerData = actionCreators.containers.update(
+          Container.addId(
+            previous,
+            Container.getSizeAndPositionFromDelta(
+              containers[previous],
+              delta,
+              true,
+              direction,
             ),
-          );
-        });
+          ),
+        );
 
-        const nextContainersAction = next.map((id) => {
-          const container = containers[id];
-          return actionCreators.containers.update(
-            Container.addId(
-              container.id,
-              Container.getSizeAndPositionFromDelta(
-                container,
-                delta,
-                false,
-                direction,
-              ),
+        const nextContainerData = actionCreators.containers.update(
+          Container.addId(
+            next,
+            Container.getSizeAndPositionFromDelta(
+              containers[next],
+              delta,
+              false,
+              direction,
             ),
-          );
-        });
+          ),
+        );
 
         const { top, left } = Container.getSizeAndPositionFromDelta(
-          containers[next[0]],
+          containers[next],
           delta,
           false,
           direction,
@@ -89,11 +83,11 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
           dividerUpdate.left = left;
         }
 
-        actions.batch(
-          previousContainersData
-            .concat(nextContainersAction)
-            .concat(actionCreators.dividers.update(dividerUpdate)),
-        );
+        actions.batch([
+          previousContainerData,
+          nextContainerData,
+          actionCreators.dividers.update(dividerUpdate),
+        ]);
 
         from.x = to.x;
         from.y = to.y;

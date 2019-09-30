@@ -8,8 +8,8 @@ import { Emitter } from '../types';
 
 interface PropTypes {
   id: number;
-  previous: Id[];
-  next: Id[];
+  previous: Id;
+  next: Id;
   top: number;
   left: number;
   width: number;
