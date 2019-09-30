@@ -1,12 +1,8 @@
 import Direction from '../utils/Direction';
 import Percentage from './Percentage';
 import Id from './Id';
-import {
-  ContainerData,
-  NewContainerData,
-  ContainerDataUpdate,
-  DividerData,
-} from '../types';
+import { ContainerData, ContainerDataUpdate, DividerData } from '../types';
+import { ReadOnlyState } from '../hooks/useLayout/types';
 
 interface OptionalSizeAndPosition {
   width?: number;
@@ -18,7 +14,7 @@ interface Size {
   width: number;
   height: number;
 }
-interface SplitRatioPercentage {
+interface InitialSize {
   vertical: number;
   horizontal: number;
 }
@@ -73,38 +69,38 @@ const getSizeAndPositionFromDelta = (
 
 const getSizeAfterSplit = (
   container: ContainerData,
-  splitRatio: SplitRatioPercentage,
+  initialSize: InitialSize,
   isVertical: boolean,
 ): Size => {
   const { width, height } = container;
   if (isVertical) {
     return {
       width,
-      height: height - splitRatio.vertical,
+      height: height - initialSize.vertical,
     };
   }
 
   return {
-    width: width - splitRatio.horizontal,
+    width: width - initialSize.horizontal,
     height,
   };
 };
 
 const getSizeAfterSplitFrom = (
   container: ContainerData,
-  splitRatio: SplitRatioPercentage,
+  initialSize: InitialSize,
   isVertical: boolean,
 ): Size => {
   const { width, height } = container;
   if (isVertical) {
     return {
       width,
-      height: splitRatio.vertical,
+      height: initialSize.vertical,
     };
   }
 
   return {
-    width: splitRatio.horizontal,
+    width: initialSize.horizontal,
     height,
   };
 };
@@ -121,18 +117,18 @@ interface NewPosition {
 
 const getPositionAfterSplit = (
   container: ContainerData,
-  splitRatio: SplitRatioPercentage,
+  initialSize: InitialSize,
   direction?: Direction,
 ): UpdatePosition => {
   const { top, left } = container;
   if (direction === Direction.BOTTOM) {
     return {
-      top: top + splitRatio.vertical,
+      top: top + initialSize.vertical,
     };
   }
   if (direction === Direction.RIGHT) {
     return {
-      left: left + splitRatio.horizontal,
+      left: left + initialSize.horizontal,
     };
   }
 
@@ -185,7 +181,7 @@ interface Vector {
 
 interface SplitResult {
   originContainer: ContainerDataUpdate;
-  newContainer: NewContainerData;
+  newContainer: ContainerData;
   divider: DividerData;
 }
 
@@ -252,7 +248,7 @@ const getAdjacentContainers = (
 
 const getDivider = (
   originContainer: ContainerData,
-  newContainer: NewContainerData,
+  newContainer: ContainerData,
   direction: Direction,
   id: Id,
 ): DividerData => {
@@ -295,39 +291,39 @@ const getDivider = (
 };
 
 const split = (
-  container: ContainerData,
-  to: Vector,
+  originContainerId: Id,
+  layout: ReadOnlyState,
   direction: Direction,
+  to: Vector,
 ): SplitResult => {
+  const originContainer = layout.containers[originContainerId];
   const id = Id.create();
   const isVertical = Direction.isVertical(direction);
-  const delta = getDelta(container, to, direction);
+  const delta = getDelta(originContainer, to, direction);
 
   const initialSize = {
     horizontal: Percentage.create(window.innerWidth, delta.x),
     vertical: Percentage.create(window.innerHeight, delta.y),
   };
 
-  const adjacentsUpdate = getAdjacentContainers(container, id, direction);
+  const adjacentsUpdate = getAdjacentContainers(originContainer, id, direction);
 
   const { dividerId } = adjacentsUpdate;
 
   const updateData: ContainerData = {
-    ...container,
+    ...originContainer,
     directionType: Direction.getType(direction),
     ...adjacentsUpdate.originContainer,
-    ...getSizeAfterSplit(container, initialSize, isVertical),
-    ...getPositionAfterSplit(container, initialSize, direction),
+    ...getSizeAfterSplit(originContainer, initialSize, isVertical),
+    ...getPositionAfterSplit(originContainer, initialSize, direction),
   };
 
-  const newData: NewContainerData = {
+  const newData: ContainerData = {
     id,
-    parentDivider: dividerId,
-    parentContainer: container.id,
     directionType: Direction.getType(direction),
     ...adjacentsUpdate.newContainer,
     ...getSizeAfterSplitFrom(updateData, initialSize, isVertical),
-    ...getPositionAfterSplitFrom(container, updateData, direction),
+    ...getPositionAfterSplitFrom(originContainer, updateData, direction),
   };
 
   return {

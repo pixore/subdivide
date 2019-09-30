@@ -3,8 +3,21 @@ import Id from './utils/Id';
 
 export interface Group {
   id: Id;
-  divider: Id;
-  items: Id[];
+  directionType: Direction.DirectionType;
+  dividers: Id[];
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+}
+
+export interface GroupUpdate {
+  id: Id;
+  dividers?: Id[];
+  width?: number;
+  height?: number;
+  top?: number;
+  left?: number;
 }
 
 export interface FromCorner {
@@ -22,8 +35,7 @@ export interface FromDivider {
 
 export interface ContainerData {
   id: Id;
-  parentDivider?: Id;
-  parentContainer?: Id;
+  group?: Id;
   width: number;
   height: number;
   top: number;
@@ -40,11 +52,12 @@ export interface ContainersMap {
 export interface DividersMap {
   [id: number]: DividerData;
 }
+export interface GroupsMap {
+  [id: number]: Group;
+}
 
 export interface ContainerDataUpdate {
   id: Id;
-  parentDivider?: Id;
-  parentContainer?: Id;
   width?: number;
   height?: number;
   top?: number;

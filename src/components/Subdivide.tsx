@@ -3,7 +3,7 @@ import { TinyEmitter } from 'tiny-emitter';
 import Container from './Container';
 import Divider from './Divider';
 import useLayout from '../hooks/useLayout';
-import { Emitter } from '../types';
+import { Emitter, Group } from '../types';
 import useResize from '../hooks/useResize';
 import useSplit from '../hooks/useSplit';
 
@@ -23,9 +23,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   useResize(layout, emitter);
   useSplit(layout, emitter);
 
-  const {
-    current: { dividers, containers },
-  } = layoutRef;
+  const { dividers, containers } = layoutRef.current;
 
   return (
     <>
@@ -34,7 +32,12 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         const { id } = item;
 
         return (
-          <Container key={id} emitter={emitter} component={component} {...item} />
+          <Container
+            key={id}
+            emitter={emitter}
+            component={component}
+            {...item}
+          />
         );
       })}
       {Object.keys(dividers).map((id) => {
