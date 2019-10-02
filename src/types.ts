@@ -1,6 +1,11 @@
 import Direction from './utils/Direction';
 import Id from './utils/Id';
 
+export interface Vector {
+  x: number;
+  y: number;
+}
+
 export interface Group {
   id: Id;
   directionType: Direction.DirectionType;
