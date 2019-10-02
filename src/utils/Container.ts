@@ -1,19 +1,20 @@
 import Direction from '../utils/Direction';
 import Percentage from './Percentage';
 import Id from './Id';
+import { ReadOnlyState } from '../hooks/useLayout/types';
 import {
   ContainerData,
   ContainerDataUpdate,
   DividerData,
   Group,
   GroupsMap,
-  DividersMap,
   DividerDataUpdate,
   GroupUpdate,
+  Vector,
 } from '../types';
-import { ReadOnlyState } from '../hooks/useLayout/types';
 
 interface OptionalSizeAndPosition {
+  id: Id,
   width?: number;
   height?: number;
   top?: number;
@@ -44,22 +45,32 @@ const toPixels = (container: ContainerData): ContainerData => {
   };
 };
 
+interface SizeAndPosition {
+  id: Id;
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+}
+
 const getSizeAndPositionFromDelta = (
-  container: ContainerData,
+  item: SizeAndPosition,
   delta: Delta,
   isPrevious: boolean,
   direction: Direction,
 ): OptionalSizeAndPosition => {
-  const { height, width, top, left } = container;
+  const { id, height, width, top, left } = item;
 
   if (Direction.isVertical(direction)) {
     if (isPrevious) {
       return {
+        id,
         height: height + delta.y,
       };
     }
 
     return {
+      id,
       top: top + delta.y,
       height: height - delta.y,
     };
@@ -67,10 +78,12 @@ const getSizeAndPositionFromDelta = (
 
   if (isPrevious) {
     return {
+      id,
       width: width + delta.x,
     };
   }
   return {
+    id,
     left: left + delta.x,
     width: width - delta.x,
   };
@@ -182,11 +195,6 @@ const addId = <T extends object>(id: Id, data: T): T & { id: Id } => {
   (data as T & { id: Id }).id = id;
   return data as T & { id: Id };
 };
-
-interface Vector {
-  x: number;
-  y: number;
-}
 
 interface SplitResult {
   originContainer: ContainerDataUpdate;
