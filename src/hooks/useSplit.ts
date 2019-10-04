@@ -34,57 +34,30 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
           return;
         }
 
-        const {
-          originContainer,
-          newContainer,
-          divider,
-          newGroup,
-          nextDividerUpdate,
-          previousDividerUpdate,
-          currentGroup,
-        } = Container.split(container.id, layoutRef.current, direction, to);
+        const { originContainer, newContainer } = Container.split(
+          container.id,
+          layoutRef.current,
+          direction,
+          to,
+        );
 
         const groupByActions: Action[] = [];
-        if (newGroup) {
-          groupByActions.push(actionCreators.groups.add(newGroup));
-        }
-
-        if (currentGroup) {
-          groupByActions.push(actionCreators.groups.update(currentGroup));
-        }
-
-        if (nextDividerUpdate) {
-          groupByActions.push(
-            actionCreators.dividers.update(nextDividerUpdate),
-          );
-        }
-
-        if (previousDividerUpdate) {
-          groupByActions.push(
-            actionCreators.dividers.update(previousDividerUpdate),
-          );
-        }
 
         const containersActions = [
-          actionCreators.containers.update(originContainer),
-          actionCreators.containers.add(newContainer),
+          actionCreators.update(originContainer),
+          actionCreators.add(newContainer),
         ];
 
-        actions.batch(
-          containersActions
-            .concat(actionCreators.dividers.add(divider))
-            .concat(groupByActions),
-        );
+        actions.batch(containersActions.concat(groupByActions));
 
         removeMouseListener(onMouseMove, onMouseUp);
         emitter.emit('resize', {
-          previous: divider.previous,
-          next: divider.next,
-          dividerId: divider.id,
+          previous: originContainer.id,
+          next: newContainer.id,
           from: {
             x: to.x,
             y: to.y,
-            directionType: divider.directionType,
+            directionType: Direction.getType(direction),
           },
         });
       };
