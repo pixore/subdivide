@@ -6,25 +6,6 @@ export interface Vector {
   y: number;
 }
 
-export interface Group {
-  id: Id;
-  directionType: Direction.DirectionType;
-  dividers: Id[];
-  width: number;
-  height: number;
-  top: number;
-  left: number;
-}
-
-export interface GroupUpdate {
-  id: Id;
-  dividers?: Id[];
-  width?: number;
-  height?: number;
-  top?: number;
-  left?: number;
-}
-
 export interface FromCorner {
   vertical: Direction;
   horizontal: Direction;
@@ -40,7 +21,7 @@ export interface FromDivider {
 
 export interface ContainerData {
   id: Id;
-  group?: Id;
+  parent: Id;
   width: number;
   height: number;
   top: number;
@@ -57,10 +38,6 @@ export interface ContainersMap {
 export interface DividersMap {
   [id: number]: DividerData;
 }
-export interface GroupsMap {
-  [id: number]: Group;
-}
-
 export interface ContainerDataUpdate {
   id: Id;
   width?: number;
@@ -83,16 +60,6 @@ export interface DividerData {
   left: number;
 }
 
-export interface DividerDataUpdate {
-  id: Id;
-  previous?: Id;
-  next?: Id;
-  height?: number;
-  width?: number;
-  top?: number;
-  left?: number;
-}
-
 export interface SplitArgs {
   containerId: number;
   from: FromCorner;
@@ -101,7 +68,6 @@ export interface SplitArgs {
 export interface ResizeArgs {
   previous: Id;
   next: Id;
-  dividerId: Id;
   from: FromDivider;
 }
 
