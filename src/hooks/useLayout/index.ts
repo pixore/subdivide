@@ -9,6 +9,7 @@ const createInitialContainer = (): ContainersMap => {
   const { innerWidth: width, innerHeight: height } = window;
   const item = {
     id: Id.create(),
+    parent: -1,
     top: Percentage.create(height, 0),
     left: Percentage.create(width, 0),
     width: Percentage.create(width, width),
@@ -23,7 +24,6 @@ const createInitialContainer = (): ContainersMap => {
 const initialState: State = {
   containers: createInitialContainer(),
   dividers: {},
-  groups: {},
 };
 
 export type UseLayout = [
