@@ -3,11 +3,9 @@ import React from 'react';
 import Config from '../contexts/Config';
 import Corner from './Corner';
 import Direction from '../utils/Direction';
-import { FromCorner, Emitter } from '../types';
+import { FromCorner, Emitter, Component } from '../types';
 import Percentage from '../utils/Percentage';
 import Id from '../utils/Id';
-
-type Component = React.ComponentType<any>;
 
 interface PropTypes {
   emitter: Emitter;
@@ -41,7 +39,7 @@ const Container: React.FC<PropTypes> = (props) => {
 
   return (
     <div ref={elementRef} className={container} style={style}>
-      <Comp />
+      <Comp id={id} />
       <Corner
         onStartDrag={onStartDrag}
         vertical={Direction.TOP}

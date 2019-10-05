@@ -35,6 +35,15 @@ context('Split', () => {
           .should(($container) => {
             expect($container.width()).to.be.equal(250);
           });
+
+        cy.get('.px-divider').should(($divider) => {
+          const position = $divider.offset();
+          if (position) {
+            expect(position.left).to.be.equal(250);
+          } else {
+            expect.fail('position should be defined, check $divider');
+          }
+        });
       });
     });
 
@@ -65,6 +74,15 @@ context('Split', () => {
           .should(($container) => {
             expect($container.height()).to.be.equal(250);
           });
+
+        cy.get('.px-divider').should(($divider) => {
+          const position = $divider.offset();
+          if (position) {
+            expect(position.top).to.be.equal(250);
+          } else {
+            expect.fail('position should be defined, check $divider');
+          }
+        });
       });
     });
   });
@@ -97,6 +115,15 @@ context('Split', () => {
           .should(($container) => {
             expect($container.width()).to.be.equal(250);
           });
+
+        cy.get('.px-divider').should(($divider) => {
+          const position = $divider.offset();
+          if (position) {
+            expect(position.left).to.be.equal(250);
+          } else {
+            expect.fail('position should be defined, check $divider');
+          }
+        });
       });
     });
   });
@@ -129,6 +156,15 @@ context('Split', () => {
           .should(($container) => {
             expect($container.height()).to.be.equal(250);
           });
+
+        cy.get('.px-divider').should(($divider) => {
+          const position = $divider.offset();
+          if (position) {
+            expect(position.top).to.be.equal(250);
+          } else {
+            expect.fail('position should be defined, check $divider');
+          }
+        });
       });
     });
   });

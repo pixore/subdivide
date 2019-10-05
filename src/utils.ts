@@ -1,5 +1,5 @@
-import Direction, { OptionalDirection } from './utils/Direction';
-import { FromCorner } from './types';
+import Direction, { OptionalDirection, DirectionType } from './utils/Direction';
+import { FromCorner, FromDivider } from './types';
 
 interface Position {
   x: number;
@@ -47,17 +47,50 @@ const dragDirection = (
   }
 };
 
-const once = <R>(fn: (...args: any[]) => R) => {
-  let called = false;
-  let returnedValue;
-  return (...args: any[]): R => {
-    if (!called) {
-      called = true;
-      returnedValue = fn(...args);
+const resizeDirection = (
+  from: FromDivider,
+  to: Position,
+  directionType: DirectionType,
+): Direction => {
+  const verticalDelta = to.y - from.y;
+  const horizontalDelta = to.x - from.x;
+
+  if (DirectionType.HORIZONTAL === directionType) {
+    if (horizontalDelta >= 0) {
+      return Direction.RIGHT;
     }
 
-    return returnedValue;
-  };
+    return Direction.LEFT;
+  }
+
+  if (verticalDelta > 0) {
+    return Direction.BOTTOM;
+  }
+
+  return Direction.TOP;
 };
 
-export { dragDirection, once };
+type EventHandler = (event: MouseEvent) => void;
+
+const addMouseListener = (
+  onMouseMove: EventHandler,
+  onMouseUp: EventHandler,
+) => {
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+};
+
+const removeMouseListener = (
+  onMouseMove: EventHandler,
+  onMouseUp: EventHandler,
+) => {
+  window.removeEventListener('mousemove', onMouseMove);
+  window.removeEventListener('mouseup', onMouseUp);
+};
+
+export {
+  dragDirection,
+  resizeDirection,
+  addMouseListener,
+  removeMouseListener,
+};
