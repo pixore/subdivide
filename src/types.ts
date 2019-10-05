@@ -22,8 +22,8 @@ export interface FromDivider {
 export interface ContainerData {
   id: Id;
   parent: Id;
-  children: Id[],
-  directionType?: Direction.DirectionType,
+  children: Id[];
+  directionType?: Direction.DirectionType;
   splitRatio: number;
   isGroup: boolean;
   width: number;
@@ -37,13 +37,13 @@ export interface ContainersMap {
 }
 
 export interface DividersMap {
-  [id: number]: DividerData;
+  [id: string]: DividerData;
 }
 export interface ContainerDataUpdate {
   id: Id;
-  parent?: Id,
-  children?: Id[],
-  directionType?: Direction.DirectionType,
+  parent?: Id;
+  children?: Id[];
+  directionType?: Direction.DirectionType;
   splitRatio?: number;
   width?: number;
   height?: number;
@@ -52,7 +52,7 @@ export interface ContainerDataUpdate {
 }
 
 export interface DividerData {
-  id: Id;
+  id: string;
   directionType: Direction.DirectionType;
   previous: Id;
   next: Id;
