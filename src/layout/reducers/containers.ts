@@ -1,11 +1,9 @@
-import { ContainersMap, ContainerDataUpdate, ContainerData } from '../../types';
+import { ContainersMap, ContainerUpdate } from '../../types';
 import { Action, ActionType } from '../types';
 import Id from '../../utils/Id';
+import Container from '../../utils/Container';
 
-const reducerAdd = (
-  state: ContainersMap,
-  data: ContainerData,
-): ContainersMap => {
+const reducerAdd = (state: ContainersMap, data: Container): ContainersMap => {
   const { id } = data;
   return {
     ...state,
@@ -15,7 +13,7 @@ const reducerAdd = (
 
 const reducerUpdate = (
   state: ContainersMap,
-  data: ContainerDataUpdate,
+  data: ContainerUpdate,
 ): ContainersMap => {
   const { id } = data;
   const container = state[id];
@@ -44,9 +42,9 @@ const containersReducer = (
 
   switch (type) {
     case ActionType.ADD_CONTAINER:
-      return reducerAdd(state, payload as ContainerData);
+      return reducerAdd(state, payload as Container);
     case ActionType.UPDATE_CONTAINER:
-      return reducerUpdate(state, payload as ContainerDataUpdate);
+      return reducerUpdate(state, payload as ContainerUpdate);
     case ActionType.REMOVE_CONTAINER:
       return reducerRemove(state, payload as Id);
   }

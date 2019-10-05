@@ -1,9 +1,10 @@
 import React from 'react';
 import Id from '../../utils/Id';
 import Percentage from '../../utils/Percentage';
+import Container from '../../utils/Container';
 import reducer from '../reducers/main';
 import { actionCreators, createActions } from '../actions';
-import { ContainersMap, ContainerData, Emitter } from '../../types';
+import { ContainersMap, Emitter } from '../../types';
 import { State, Actions, ActionsCreator, ReadOnlyState } from '../types';
 import useResize from './useResize';
 import useSplit from './useSplit';
@@ -12,7 +13,7 @@ const rootId = Id.create();
 
 const createInitialContainer = (id: Id): ContainersMap => {
   const { innerWidth: width, innerHeight: height } = window;
-  const item: ContainerData = {
+  const item: Container = {
     id,
     parent: -1,
     isGroup: false,

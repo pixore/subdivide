@@ -1,13 +1,14 @@
-import { ContainerData, ContainerDataUpdate } from '../types';
+import { ContainerUpdate } from '../types';
 import { Action, ActionsCreator, ActionType, Actions } from './types';
 import Id from '../utils/Id';
+import Container from '../utils/Container';
 
 const actionCreators: ActionsCreator = {
-  add: (data: ContainerData) => ({
+  add: (data: Container) => ({
     type: ActionType.ADD_CONTAINER,
-    payload: data as ContainerData,
+    payload: data as Container,
   }),
-  update: (data: ContainerDataUpdate) => ({
+  update: (data: ContainerUpdate) => ({
     type: ActionType.UPDATE_CONTAINER,
     payload: data,
   }),
@@ -23,10 +24,10 @@ const actionCreators: ActionsCreator = {
 
 type Dispatch = (action: Action | Action[]) => void;
 const createActions = (dispatch: Dispatch): Actions => ({
-  add(data: ContainerData) {
+  add(data: Container) {
     dispatch(actionCreators.add(data));
   },
-  update(data: ContainerDataUpdate) {
+  update(data: ContainerUpdate) {
     dispatch(actionCreators.update(data));
   },
   remove(id: Id) {

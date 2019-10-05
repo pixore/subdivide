@@ -8,7 +8,7 @@ import {
   removeMouseListener,
 } from '../../utils';
 import { UseLayout } from './useLayout';
-import { Emitter, SplitArgs, ContainerData } from '../../types';
+import { Emitter, SplitArgs } from '../../types';
 import { Action } from '../types';
 
 const useSplit = (layout: UseLayout, emitter: Emitter) => {
@@ -21,7 +21,7 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
       let direction: Direction | undefined;
       const onMouseMove = (event: MouseEvent) => {
         const { containers } = layoutRef.current;
-        const container = containers[containerId] as ContainerData;
+        const container = containers[containerId] as Container;
         const to = {
           x: event.clientX,
           y: event.clientY,

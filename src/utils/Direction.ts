@@ -7,12 +7,12 @@ enum Direction {
 
 export type OptionalDirection = Direction | undefined;
 
-namespace Direction {
-  export enum DirectionType {
-    VERTICAL = 'VERTICAL',
-    HORIZONTAL = 'HORIZONTAL',
-  }
+export enum DirectionType {
+  VERTICAL = 'VERTICAL',
+  HORIZONTAL = 'HORIZONTAL',
+}
 
+namespace Direction {
   /**
    * I couldn't come up with a better name (programming ¯\_(ツ)_/¯) for this,
    * but this represent left and bottom directions which are the directions

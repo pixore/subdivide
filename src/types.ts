@@ -1,5 +1,6 @@
-import Direction from './utils/Direction';
+import Direction, { DirectionType } from './utils/Direction';
 import Id from './utils/Id';
+import Container from './utils/Container';
 
 export type Component = React.ComponentType<any>;
 
@@ -16,36 +17,23 @@ export interface FromCorner {
 }
 
 export interface FromDivider {
-  directionType: Direction.DirectionType;
+  directionType: DirectionType;
   x: number;
   y: number;
 }
 
-export interface ContainerData {
-  id: Id;
-  parent: Id;
-  children: Id[];
-  directionType?: Direction.DirectionType;
-  splitRatio: number;
-  isGroup: boolean;
-  width: number;
-  height: number;
-  top: number;
-  left: number;
-}
-
 export interface ContainersMap {
-  [id: number]: ContainerData;
+  [id: number]: Container;
 }
 
 export interface DividersMap {
-  [id: string]: DividerData;
+  [id: string]: Divider;
 }
-export interface ContainerDataUpdate {
+export interface ContainerUpdate {
   id: Id;
   parent?: Id;
   children?: Id[];
-  directionType?: Direction.DirectionType;
+  directionType?: DirectionType;
   splitRatio?: number;
   width?: number;
   height?: number;
@@ -53,9 +41,9 @@ export interface ContainerDataUpdate {
   left?: number;
 }
 
-export interface DividerData {
+export interface Divider {
   id: string;
-  directionType: Direction.DirectionType;
+  directionType: DirectionType;
   previous: Id;
   next: Id;
   height: number;
@@ -96,7 +84,7 @@ export interface Emitter {
   off(event: Event, callback?: Events[Event]): this;
 }
 
-export type AddContainer = (data: ContainerData) => Id;
+export type AddContainer = (data: Container) => Id;
 export type Primitive =
   | string
   | number

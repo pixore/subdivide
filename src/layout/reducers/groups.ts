@@ -1,18 +1,18 @@
-import { ContainerData, ContainerDataUpdate, ContainersMap } from '../../types';
+import { ContainerUpdate, ContainersMap } from '../../types';
 import { State, ActionType, Action } from '../types';
-import Direction from '../../utils/Direction';
+import { DirectionType } from '../../utils/Direction';
+import Container from '../../utils/Container';
 import Id from '../../utils/Id';
 
 const updateChildren = (
-  parent: ContainerData,
+  parent: Container,
   containers: ContainersMap,
 ): ContainersMap => {
   if (!parent.isGroup) {
     return containers;
   }
 
-  const isHorizontal =
-    parent.directionType === Direction.DirectionType.HORIZONTAL;
+  const isHorizontal = parent.directionType === DirectionType.HORIZONTAL;
 
   const { children } = parent;
   let { left, top } = parent;
@@ -60,7 +60,7 @@ const groupReducer = (state: State, action: Action): State => {
     return state;
   }
 
-  const containerUpdate = payload as ContainerDataUpdate;
+  const containerUpdate = payload as ContainerUpdate;
   const id = containerUpdate.id;
   const container = containers[id];
 

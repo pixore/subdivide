@@ -1,6 +1,7 @@
-import { ContainerData, DividersMap } from '../../types';
+import { DividersMap } from '../../types';
 import { State } from '../types';
-import Direction from '../../utils/Direction';
+import { DirectionType } from '../../utils/Direction';
+import Container from '../../utils/Container';
 import Id from '../../utils/Id';
 
 const dividersReducer = (state: State) => {
@@ -14,9 +15,9 @@ const dividersReducer = (state: State) => {
     };
   }
 
-  const getDividers = (group: ContainerData): DividersMap => {
+  const getDividers = (group: Container): DividersMap => {
     const { children, directionType } = group;
-    const isHorizontal = directionType === Direction.DirectionType.HORIZONTAL;
+    const isHorizontal = directionType === DirectionType.HORIZONTAL;
 
     return children.reduce<DividersMap>(
       (map, containerId: Id, index: number) => {

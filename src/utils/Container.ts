@@ -1,8 +1,21 @@
-import Direction from '../utils/Direction';
+import Direction, { DirectionType } from '../utils/Direction';
 import Percentage from './Percentage';
 import Id from './Id';
 import { ReadOnlyState } from '../layout/types';
-import { ContainerData, Vector, FromCorner } from '../types';
+import { Vector, FromCorner } from '../types';
+
+interface Container {
+  id: Id;
+  parent: Id;
+  children: Id[];
+  directionType?: DirectionType;
+  splitRatio: number;
+  isGroup: boolean;
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+}
 
 interface OptionalSizeAndPosition {
   id: Id;
@@ -20,7 +33,7 @@ interface Delta {
   y: number;
 }
 
-const toPixels = (container: ContainerData): ContainerData => {
+const toPixels = (container: Container): Container => {
   const { top, left, width, height } = container;
   return {
     ...container,
@@ -76,7 +89,7 @@ const getSizeAndPositionFromDelta = (
 };
 
 const getSizeAfterSplit = (
-  container: ContainerData,
+  container: Container,
   delta: Vector,
   direction: Direction,
 ): Size => {
@@ -98,7 +111,7 @@ const getSizeAfterSplit = (
 };
 
 const getSizeAfterSplitFrom = (
-  container: ContainerData,
+  container: Container,
   delta: Vector,
   direction: Direction,
 ): Size => {
@@ -130,7 +143,7 @@ interface NewPosition {
 }
 
 const getPositionAfterSplit = (
-  container: ContainerData,
+  container: Container,
   delta: Vector,
   direction?: Direction,
 ): UpdatePosition => {
@@ -151,8 +164,8 @@ const getPositionAfterSplit = (
 };
 
 const getPositionAfterSplitFrom = (
-  container: ContainerData,
-  updatedContainer: ContainerData,
+  container: Container,
+  updatedContainer: Container,
   direction?: Direction,
 ): NewPosition => {
   const { top, left } = container;
@@ -185,15 +198,15 @@ const getPositionAfterSplitFrom = (
 };
 
 interface SplitResult {
-  previous: ContainerData;
-  next: ContainerData;
-  parent: ContainerData;
+  previous: Container;
+  next: Container;
+  parent: Container;
   rootId?: Id;
 }
 
 const newGroupIsNeeded = (
   direction: Direction,
-  parent: ContainerData | undefined,
+  parent: Container | undefined,
 ) => {
   const directionType = Direction.getType(direction);
 
@@ -204,7 +217,7 @@ const newGroupIsNeeded = (
   return parent.directionType !== directionType;
 };
 
-const getDelta = (container: ContainerData, from: FromCorner, to: Vector) => {
+const getDelta = (container: Container, from: FromCorner, to: Vector) => {
   const { left, width, top, height } = Container.toPixels(container);
 
   return {
@@ -224,9 +237,9 @@ const createContainer = (
   direction: Direction,
   delta: Vector,
   splitRatio: number,
-  originContainer: ContainerData,
-  updatedOriginContainer: ContainerData,
-): ContainerData => {
+  originContainer: Container,
+  updatedOriginContainer: Container,
+): Container => {
   return {
     id,
     parent: updatedOriginContainer.parent,
@@ -272,13 +285,13 @@ const split = (
   delta: Vector,
 ): SplitResult => {
   const { containers, rootId } = layout;
-  const originContainer = containers[originContainerId] as ContainerData;
+  const originContainer = containers[originContainerId] as Container;
   const newContainerId = Id.create();
   const isForward = Direction.isForward(direction);
   const directionType = Direction.getType(direction);
 
-  const getParent = (container: ContainerData): ContainerData => {
-    const parent = containers[container.parent] as ContainerData;
+  const getParent = (container: Container): Container => {
+    const parent = containers[container.parent] as Container;
     if (newGroupIsNeeded(direction, parent)) {
       return {
         ...container,
@@ -316,7 +329,7 @@ const split = (
   const splitRatio =
     parent.id === originContainer.parent ? originContainer.splitRatio : 100;
 
-  const updateData: ContainerData = {
+  const updateData: Container = {
     ...originContainer,
     splitRatio: getSplitRatio(
       splitRatio,

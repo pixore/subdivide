@@ -9,13 +9,13 @@ import {
   resizeDirection,
 } from '../../utils';
 import { Action } from '../types';
-import { ResizeArgs, Emitter, Vector, ContainerData } from '../../types';
+import { ResizeArgs, Emitter, Vector } from '../../types';
 
 const useResize = (layout: UseLayout, emitter: Emitter) => {
   const [layoutRef, actions, actionCreators] = layout;
   React.useEffect(() => {
     const resizeItem = (
-      container: ContainerData,
+      container: Container,
       delta: Vector,
       direction: Direction,
       isPrevious: boolean,
@@ -37,17 +37,17 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
           isPrevious,
         ),
       };
-      const nextContainerData = actionCreators.update(containerData);
+      const nextContainer = actionCreators.update(containerData);
 
-      actionsToDispatch.push(nextContainerData);
+      actionsToDispatch.push(nextContainer);
 
       return actionsToDispatch;
     };
 
     const resize = (
-      parent: ContainerData,
-      previous: ContainerData,
-      next: ContainerData,
+      parent: Container,
+      previous: Container,
+      next: Container,
       direction: Direction,
       delta: Vector,
     ): Action[] => {
@@ -90,9 +90,9 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
         const parent = containers[previousContainer.parent];
 
         const actionsToDispatch = resize(
-          parent as ContainerData,
-          containers[previous] as ContainerData,
-          containers[next] as ContainerData,
+          parent as Container,
+          containers[previous] as Container,
+          containers[next] as Container,
           direction,
           delta,
         );

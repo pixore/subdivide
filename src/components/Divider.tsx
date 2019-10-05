@@ -1,7 +1,7 @@
 import React from 'react';
 import Config from '../contexts/Config';
 
-import Direction from '../utils/Direction';
+import { DirectionType } from '../utils/Direction';
 import Id from '../utils/Id';
 import Percentage from '../utils/Percentage';
 import { Emitter } from '../types';
@@ -14,7 +14,7 @@ interface PropTypes {
   left: number;
   width: number;
   height: number;
-  directionType: Direction.DirectionType;
+  directionType: DirectionType;
   emitter: Emitter;
 }
 
@@ -54,7 +54,7 @@ const Divider: React.FC<PropTypes> = (props) => {
   };
 
   const classNames = `${divider} ${
-    directionType === Direction.DirectionType.HORIZONTAL
+    directionType === DirectionType.HORIZONTAL
       ? horizontalDivider
       : verticalDivider
   }`;
