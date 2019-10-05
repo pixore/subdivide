@@ -287,13 +287,13 @@ const split = (
   delta: Vector,
 ): SplitResult => {
   const { containers, rootId } = layout;
-  const originContainer = containers[originContainerId] as Container;
+  const originContainer = containers[originContainerId];
   const newContainerId = Id.create();
   const isForward = Direction.isForward(direction);
   const directionType = Direction.getType(direction);
 
   const getParent = (container: Container): Container => {
-    const parent = containers[container.parent] as Container;
+    const parent = containers[container.parent];
     if (newGroupIsNeeded(direction, parent)) {
       return {
         ...container,

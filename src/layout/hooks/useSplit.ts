@@ -21,7 +21,7 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
       let direction: Direction | undefined;
       const onMouseMove = (event: MouseEvent) => {
         const { containers } = layoutRef.current;
-        const container = containers[containerId] as Container;
+        const container = containers[containerId];
         const to = {
           x: event.clientX,
           y: event.clientY,

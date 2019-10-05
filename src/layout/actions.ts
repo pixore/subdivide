@@ -6,7 +6,7 @@ import Container from '../utils/Container';
 const actionCreators: ActionsCreator = {
   add: (data: Container) => ({
     type: ActionType.ADD_CONTAINER,
-    payload: data as Container,
+    payload: data,
   }),
   update: (data: ContainerUpdate) => ({
     type: ActionType.UPDATE_CONTAINER,

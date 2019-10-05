@@ -90,9 +90,9 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
         const parent = containers[previousContainer.parent];
 
         const actionsToDispatch = resize(
-          parent as Container,
-          containers[previous] as Container,
-          containers[next] as Container,
+          parent,
+          containers[previous],
+          containers[next],
           direction,
           delta,
         );
