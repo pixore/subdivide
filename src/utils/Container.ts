@@ -1,7 +1,7 @@
 import Direction from '../utils/Direction';
 import Percentage from './Percentage';
 import Id from './Id';
-import { ReadOnlyState } from '../hooks/useLayout/types';
+import { ReadOnlyState } from '../layout/types';
 import { ContainerData, Vector, FromCorner } from '../types';
 
 interface OptionalSizeAndPosition {

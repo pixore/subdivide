@@ -1,15 +1,15 @@
 import React from 'react';
-import Direction from '../utils/Direction';
-import Container from '../utils/Container';
-import Percentage from '../utils/Percentage';
+import Direction from '../../utils/Direction';
+import Container from '../../utils/Container';
+import Percentage from '../../utils/Percentage';
 import { UseLayout } from './useLayout';
 import {
   addMouseListener,
   removeMouseListener,
   resizeDirection,
-} from '../utils';
-import { Action } from '../hooks/useLayout/types';
-import { ResizeArgs, Emitter, Vector, ContainerData } from '../types';
+} from '../../utils';
+import { Action } from '../types';
+import { ResizeArgs, Emitter, Vector, ContainerData } from '../../types';
 
 const useResize = (layout: UseLayout, emitter: Emitter) => {
   const [layoutRef, actions, actionCreators] = layout;

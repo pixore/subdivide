@@ -1,9 +1,10 @@
 import React from 'react';
 import Id from '../../utils/Id';
 import Percentage from '../../utils/Percentage';
-import reducer, { actionCreators, createActions } from './reducer';
+import reducer from '../reducers/main';
+import { actionCreators, createActions } from '../actions';
 import { ContainersMap, ContainerData } from '../../types';
-import { State, Actions, ActionsCreator, ReadOnlyState } from './types';
+import { State, Actions, ActionsCreator, ReadOnlyState } from '../types';
 
 const rootId = Id.create();
 
@@ -47,7 +48,5 @@ const useLayout = (): UseLayout => {
   return [stateRef, actions, actionCreators];
 };
 
-export {
-  initialState,
-}
+export { initialState };
 export default useLayout;

@@ -1,11 +1,15 @@
 import React from 'react';
-import Direction from '../utils/Direction';
-import Container from '../utils/Container';
-import Config from '../contexts/Config';
-import { dragDirection, addMouseListener, removeMouseListener } from '../utils';
+import Direction from '../../utils/Direction';
+import Container from '../../utils/Container';
+import Config from '../../contexts/Config';
+import {
+  dragDirection,
+  addMouseListener,
+  removeMouseListener,
+} from '../../utils';
 import { UseLayout } from './useLayout';
-import { Emitter, SplitArgs, ContainerData } from '../types';
-import { Action } from './useLayout/types';
+import { Emitter, SplitArgs, ContainerData } from '../../types';
+import { Action } from '../types';
 
 const useSplit = (layout: UseLayout, emitter: Emitter) => {
   const { splitRatio } = Config.useConfig();

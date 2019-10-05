@@ -2,10 +2,8 @@ import React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
 import Container from './Container';
 import Divider from './Divider';
-import useLayout, { UseLayout } from '../hooks/useLayout';
 import { Emitter } from '../types';
-import useResize from '../hooks/useResize';
-import useSplit from '../hooks/useSplit';
+import Layout from '../layout';
 
 type Component = React.ComponentType<any>;
 
@@ -16,12 +14,12 @@ interface PropTypes {
 const Subdivide: React.FC<PropTypes> = (props) => {
   const { component } = props;
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
-  const layout: UseLayout = useLayout();
+  const layout = Layout.useLayout();
 
   const [layoutRef] = layout;
 
-  useResize(layout, emitter);
-  useSplit(layout, emitter);
+  Layout.useResize(layout, emitter);
+  Layout.useSplit(layout, emitter);
 
   const { dividers, containers } = layoutRef.current;
 

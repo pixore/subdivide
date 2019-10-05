@@ -1,11 +1,11 @@
-import Id from '../../utils/Id';
+import Id from '../utils/Id';
 import {
   ContainerData,
   ContainerDataUpdate,
   ContainersMap,
   DividersMap,
   DeepReadonly,
-} from '../../types';
+} from '../types';
 
 export enum ActionType {
   ADD_CONTAINER = 'ADD_CONTAINER',
