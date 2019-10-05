@@ -1,5 +1,5 @@
 import { State, Action, Actions, ActionType, ActionsCreator } from './types';
-import { ContainerData, ContainerDataUpdate } from '../../types';
+import { ContainerData, ContainerDataUpdate, ContainersMap } from '../../types';
 import Id from '../../utils/Id';
 import * as containers from './containersReducer';
 
@@ -13,6 +13,18 @@ const rootReducer = (state: Id, action: Action): Id => {
 };
 
 const generateDividers = (state: State) => {
+  const { rootId, containers } = state;
+  const root = containers[rootId];
+
+  if (!root.isGroup) {
+    return {
+      ...state,
+      dividers: {},
+    };
+  }
+
+  const getDividerByGroup = (group: ContainerData) => {};
+
   return state;
 };
 
