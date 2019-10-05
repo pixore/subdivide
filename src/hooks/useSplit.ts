@@ -57,9 +57,24 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
           );
         }
 
-        if (parent.id === container.id) {
+        if (parent.id === container.parent) {
           actionsToDispatch.push(actionCreators.update(parent));
         } else {
+          if (container.parent !== -1) {
+            const originParent = containers[container.parent];
+            const index = originParent.children.indexOf(container.id);
+            const children = [
+              ...originParent.children.slice(0, index),
+              parent.id,
+              ...originParent.children.slice(index + 1),
+            ];
+            actionsToDispatch.push(
+              actionCreators.update({
+                ...originParent,
+                children,
+              }),
+            );
+          }
           actionsToDispatch.push(actionCreators.add(parent));
         }
 

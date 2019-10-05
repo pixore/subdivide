@@ -294,12 +294,8 @@ const split = (
     const index = parent.children.indexOf(originContainer.id);
     const children: Id[] = [...parent.children.slice(0, index)];
     if (isForward) {
-      console.log(newContainerId, originContainer.id);
-
       children.push(newContainerId, originContainer.id);
     } else {
-      console.log(originContainer.id, newContainerId);
-
       children.push(originContainer.id, newContainerId);
     }
     children.push(...parent.children.slice(index + 1));
