@@ -1,10 +1,10 @@
 import Direction, { DirectionType } from '../utils/Direction';
 import Percentage from './Percentage';
 import Id from './Id';
-import { ReadOnlyState } from '../layout/types';
-import { Vector, FromCorner } from '../types';
+import { State } from '../layout/types';
+import { Vector, FromCorner, DeepReadonly } from '../types';
 
-interface Container {
+interface MutableContainer {
   id: Id;
   parent: Id;
   children: Id[];
@@ -16,6 +16,8 @@ interface Container {
   top: number;
   left: number;
 }
+
+type Container = DeepReadonly<MutableContainer>;
 
 interface OptionalSizeAndPosition {
   id: Id;
@@ -280,7 +282,7 @@ const getSplitRatio = (
 
 const split = (
   originContainerId: Id,
-  layout: ReadOnlyState,
+  layout: State,
   direction: Direction,
   delta: Vector,
 ): SplitResult => {

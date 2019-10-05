@@ -5,7 +5,7 @@ import Container from '../../utils/Container';
 import reducer from '../reducers/main';
 import { actionCreators, createActions } from '../actions';
 import { ContainersMap, Emitter } from '../../types';
-import { State, Actions, ActionsCreator, ReadOnlyState } from '../types';
+import { State, Actions, ActionsCreator } from '../types';
 import useResize from './useResize';
 import useSplit from './useSplit';
 
@@ -37,7 +37,7 @@ const initialState: State = {
 };
 
 export type UseLayout = [
-  React.MutableRefObject<ReadOnlyState>,
+  React.MutableRefObject<State>,
   Actions,
   ActionsCreator,
 ];

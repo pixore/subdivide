@@ -23,23 +23,23 @@ export interface Action {
 
 export interface ActionsCreator {
   add: (data: Container) => Action;
-  update: (data: ContainerUpdate) => Action;
+  update: (data: ContainerUpdate | Container) => Action;
   updateRoot: (id: Id) => Action;
   remove: (id: Id) => Action;
 }
 
 export interface Actions {
   add: (data: Container) => void;
-  update: (data: ContainerUpdate) => void;
+  update: (data: ContainerUpdate | Container) => void;
   remove: (id: Id) => void;
   updateRoot: (id: Id) => void;
   batch: (actions: Action[]) => void;
 }
 
-export interface State {
+export interface MutableState {
   rootId: Id;
   containers: ContainersMap;
   dividers: DividersMap;
 }
 
-export type ReadOnlyState = DeepReadonly<State>;
+export type State = DeepReadonly<MutableState>;
