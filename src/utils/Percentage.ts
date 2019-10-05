@@ -13,7 +13,12 @@ const toPixels = (total: Pixel, value: Percentage): Pixel => {
   return (value * total) / 100;
 };
 
+const ofPercentage = (value: Percentage, total: Percentage): Percentage => {
+  return value * (100 / total);
+};
+
 const Percentage = {
+  ofPercentage,
   create,
   toString,
   toPixels,

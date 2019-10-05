@@ -2,14 +2,19 @@ import React from 'react';
 import Id from '../../utils/Id';
 import Percentage from '../../utils/Percentage';
 import reducer, { actionCreators, createActions } from './reducer';
-import { ContainersMap } from '../../types';
+import { ContainersMap, ContainerData } from '../../types';
 import { State, Actions, ActionsCreator, ReadOnlyState } from './types';
 
-const createInitialContainer = (): ContainersMap => {
+const rootId = Id.create();
+
+const createInitialContainer = (id: Id): ContainersMap => {
   const { innerWidth: width, innerHeight: height } = window;
-  const item = {
-    id: Id.create(),
+  const item: ContainerData = {
+    id,
     parent: -1,
+    isGroup: false,
+    children: [],
+    splitRatio: 100,
     top: Percentage.create(height, 0),
     left: Percentage.create(width, 0),
     width: Percentage.create(width, width),
@@ -22,7 +27,8 @@ const createInitialContainer = (): ContainersMap => {
 };
 
 const initialState: State = {
-  containers: createInitialContainer(),
+  rootId,
+  containers: createInitialContainer(rootId),
   dividers: {},
 };
 
@@ -41,4 +47,7 @@ const useLayout = (): UseLayout => {
   return [stateRef, actions, actionCreators];
 };
 
+export {
+  initialState,
+}
 export default useLayout;

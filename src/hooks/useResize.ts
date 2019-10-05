@@ -10,46 +10,55 @@ import {
   resizeDirection,
 } from '../utils';
 import { Action } from '../hooks/useLayout/types';
-import { ResizeArgs, Emitter, Vector } from '../types';
+import { ResizeArgs, Emitter, Vector, ContainerData } from '../types';
 
 const useResize = (layout: UseLayout, emitter: Emitter) => {
   const [layoutRef, actions, actionCreators] = layout;
   React.useEffect(() => {
     const resizeItem = (
-      itemId: Id,
+      container: ContainerData,
       delta: Vector,
       direction: Direction,
       isPrevious: boolean,
+      splitDelta: Vector,
     ): Action[] => {
       const actionsToDispatch: Action[] = [];
-      const { containers } = layoutRef.current;
 
-        const container = containers[itemId];
-        const containerData = Container.getSizeAndPositionFromDelta(
+      const containerData = {
+        ...Container.getSizeAndPositionFromDelta(
           container,
           delta,
           isPrevious,
           direction,
-        );
-        const nextContainerData = actionCreators.update(
-          containerData,
-        );
+        ),
+        splitRatio: Container.getSplitRatio(
+          container.splitRatio,
+          splitDelta,
+          direction,
+          isPrevious,
+        ),
+      };
+      const nextContainerData = actionCreators.update(containerData);
 
-        actionsToDispatch.push(nextContainerData);
+      actionsToDispatch.push(nextContainerData);
 
-        return actionsToDispatch
+      return actionsToDispatch;
     };
 
     const resize = (
-      previous: Id,
-      next: Id,
+      parent: ContainerData,
+      previous: ContainerData,
+      next: ContainerData,
       direction: Direction,
       delta: Vector,
     ): Action[] => {
-
+      const splitDelta: Vector = {
+        x: Percentage.ofPercentage(delta.x, parent.width),
+        y: Percentage.ofPercentage(delta.y, parent.height),
+      };
       return [
-        ...resizeItem(previous, delta, direction, true),
-        ...resizeItem(next, delta, direction, false),
+        ...resizeItem(previous, delta, direction, true, splitDelta),
+        ...resizeItem(next, delta, direction, false, splitDelta),
       ];
     };
 
@@ -57,6 +66,7 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
       const { from, previous, next } = args;
 
       const onMouseMove = (event: MouseEvent) => {
+        const { containers } = layoutRef.current;
         const to = {
           x: event.clientX,
           y: event.clientY,
@@ -77,9 +87,13 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
           return;
         }
 
+        const previousContainer = containers[previous];
+        const parent = containers[previousContainer.parent];
+
         const actionsToDispatch = resize(
-          previous,
-          next,
+          parent as ContainerData,
+          containers[previous] as ContainerData,
+          containers[next] as ContainerData,
           direction,
           delta,
         );

@@ -4,8 +4,9 @@ import Container from '../utils/Container';
 import Config from '../contexts/Config';
 import { dragDirection, addMouseListener, removeMouseListener } from '../utils';
 import { UseLayout } from './useLayout';
-import { Emitter, SplitArgs } from '../types';
+import { Emitter, SplitArgs, ContainerData } from '../types';
 import { Action } from './useLayout/types';
+import Percentage from '../utils/Percentage';
 
 const useSplit = (layout: UseLayout, emitter: Emitter) => {
   const { splitRatio } = Config.useConfig();
@@ -17,7 +18,7 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
       let direction: Direction | undefined;
       const onMouseMove = (event: MouseEvent) => {
         const { containers } = layoutRef.current;
-        const container = containers[containerId];
+        const container = containers[containerId] as ContainerData;
         const to = {
           x: event.clientX,
           y: event.clientY,
@@ -34,26 +35,44 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
           return;
         }
 
-        const { originContainer, newContainer } = Container.split(
+        const delta = Container.getDelta(container, from, to);
+
+        const { previous, next, rootId, parent } = Container.split(
           container.id,
           layoutRef.current,
           direction,
-          to,
+          delta,
         );
 
-        const groupByActions: Action[] = [];
+        const actionsToDispatch: Action[] = [];
+        if (previous.id === container.id) {
+          actionsToDispatch.push(
+            actionCreators.update(next),
+            actionCreators.add(previous),
+          );
+        } else {
+          actionsToDispatch.push(
+            actionCreators.update(previous),
+            actionCreators.add(next),
+          );
+        }
 
-        const containersActions = [
-          actionCreators.update(originContainer),
-          actionCreators.add(newContainer),
-        ];
+        if (parent.id === container.id) {
+          actionsToDispatch.push(actionCreators.update(parent));
+        } else {
+          actionsToDispatch.push(actionCreators.add(parent));
+        }
 
-        actions.batch(containersActions.concat(groupByActions));
+        if (typeof rootId === 'number') {
+          actionsToDispatch.push(actionCreators.updateRoot(rootId));
+        }
+
+        actions.batch(actionsToDispatch);
 
         removeMouseListener(onMouseMove, onMouseUp);
         emitter.emit('resize', {
-          previous: originContainer.id,
-          next: newContainer.id,
+          previous: previous.id,
+          next: next.id,
           from: {
             x: to.x,
             y: to.y,

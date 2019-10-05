@@ -2,14 +2,10 @@ import Direction from '../utils/Direction';
 import Percentage from './Percentage';
 import Id from './Id';
 import { ReadOnlyState } from '../hooks/useLayout/types';
-import {
-  ContainerData,
-  ContainerDataUpdate,
-  Vector,
-} from '../types';
+import { ContainerData, Vector, FromCorner } from '../types';
 
 interface OptionalSizeAndPosition {
-  id: Id,
+  id: Id;
   width?: number;
   height?: number;
   top?: number;
@@ -19,11 +15,6 @@ interface Size {
   width: number;
   height: number;
 }
-interface InitialSize {
-  vertical: number;
-  horizontal: number;
-}
-
 interface Delta {
   x: number;
   y: number;
@@ -86,38 +77,44 @@ const getSizeAndPositionFromDelta = (
 
 const getSizeAfterSplit = (
   container: ContainerData,
-  initialSize: InitialSize,
-  isVertical: boolean,
+  delta: Vector,
+  direction: Direction,
 ): Size => {
+  const isVertical = Direction.isVertical(direction);
+  const isForward = Direction.isForward(direction);
   const { width, height } = container;
+
   if (isVertical) {
     return {
       width,
-      height: height - initialSize.vertical,
+      height: isForward ? height - delta.y : height + delta.y,
     };
   }
 
   return {
-    width: width - initialSize.horizontal,
+    width: isForward ? width - delta.x : width + delta.x,
     height,
   };
 };
 
 const getSizeAfterSplitFrom = (
   container: ContainerData,
-  initialSize: InitialSize,
-  isVertical: boolean,
+  delta: Vector,
+  direction: Direction,
 ): Size => {
+  const isVertical = Direction.isVertical(direction);
+  const isForward = Direction.isForward(direction);
   const { width, height } = container;
+
   if (isVertical) {
     return {
       width,
-      height: initialSize.vertical,
+      height: isForward ? delta.y : -delta.y,
     };
   }
 
   return {
-    width: initialSize.horizontal,
+    width: isForward ? delta.x : -delta.x,
     height,
   };
 };
@@ -134,18 +131,19 @@ interface NewPosition {
 
 const getPositionAfterSplit = (
   container: ContainerData,
-  initialSize: InitialSize,
+  delta: Vector,
   direction?: Direction,
 ): UpdatePosition => {
   const { top, left } = container;
+
   if (direction === Direction.BOTTOM) {
     return {
-      top: top + initialSize.vertical,
+      top: top + delta.y,
     };
   }
   if (direction === Direction.RIGHT) {
     return {
-      left: left + initialSize.horizontal,
+      left: left + delta.x,
     };
   }
 
@@ -186,118 +184,162 @@ const getPositionAfterSplitFrom = (
   };
 };
 
-const addId = <T extends object>(id: Id, data: T): T & { id: Id } => {
-  (data as T & { id: Id }).id = id;
-  return data as T & { id: Id };
-};
-
 interface SplitResult {
-  originContainer: ContainerDataUpdate;
-  newContainer: ContainerData;
+  previous: ContainerData;
+  next: ContainerData;
+  parent: ContainerData;
+  rootId?: Id;
 }
 
-const getDelta = (
-  container: ContainerData,
-  to: Vector,
+const newGroupIsNeeded = (
   direction: Direction,
-): Vector => {
-  const { top, left, width, height } = toPixels(container);
-  const bottom = top + height;
-  const right = left + width;
-  return {
-    x: direction === Direction.LEFT ? right - to.x : to.x - left,
-    y: direction === Direction.TOP ? bottom - to.y : to.y - top,
-  };
-};
+  parent: ContainerData | undefined,
+) => {
+  const directionType = Direction.getType(direction);
 
-interface AdjacentContainerUpdate {
-  newContainer: ContainerDataUpdate;
-  originContainer: ContainerDataUpdate;
-}
-
-const getAdjacentContainers = (
-  container: ContainerData,
-  newId: Id,
-  direction: Direction,
-): AdjacentContainerUpdate => {
-  const { previous, next } = container;
-  const newDirectionType = Direction.getType(direction);
-  const isSameDirectionType = newDirectionType === container.directionType;
-
-  if (Direction.isForward(direction)) {
-    return {
-      newContainer: {
-        id: newId,
-        previous: isSameDirectionType ? previous : undefined,
-      },
-      originContainer: {
-        id: container.id,
-        next: isSameDirectionType ? next : undefined,
-      },
-    };
+  if (!parent) {
+    return true;
   }
 
+  return parent.directionType !== directionType;
+};
+
+const getDelta = (container: ContainerData, from: FromCorner, to: Vector) => {
+  const { left, width, top, height } = Container.toPixels(container);
+
   return {
-    originContainer: {
-      id: container.id,
-      previous: isSameDirectionType ? previous : undefined,
-    },
-    newContainer: {
-      id: newId,
-      next,
-    },
+    x: Percentage.create(
+      window.innerWidth,
+      from.horizontal === Direction.LEFT ? to.x - left : to.x - (left + width),
+    ),
+    y: Percentage.create(
+      window.innerHeight,
+      from.vertical === Direction.TOP ? to.y - top : to.y - (top + height),
+    ),
   };
 };
 
+const createContainer = (
+  id: Id,
+  direction: Direction,
+  delta: Vector,
+  splitRatio: number,
+  originContainer: ContainerData,
+  updatedOriginContainer: ContainerData,
+): ContainerData => {
+  return {
+    id,
+    parent: updatedOriginContainer.parent,
+    isGroup: false,
+    splitRatio,
+    children: [],
+    ...getSizeAfterSplitFrom(updatedOriginContainer, delta, direction),
+    ...getPositionAfterSplitFrom(
+      originContainer,
+      updatedOriginContainer,
+      direction,
+    ),
+  };
+};
+
+const getSplitRatio = (
+  splitRatio: number,
+  splitDelta: Vector,
+  direction: Direction,
+  isPrevious: boolean,
+) => {
+  const isVertical = Direction.isVertical(direction);
+
+  if (isPrevious) {
+    if (isVertical) {
+      return splitRatio + splitDelta.y;
+    }
+
+    return splitRatio + splitDelta.x;
+  }
+
+  if (isVertical) {
+    return splitRatio - splitDelta.y;
+  }
+
+  return splitRatio - splitDelta.x;
+};
 
 const split = (
   originContainerId: Id,
   layout: ReadOnlyState,
   direction: Direction,
-  to: Vector,
+  delta: Vector,
 ): SplitResult => {
-  const { containers } = layout;
-  const originContainer = containers[originContainerId];
-  const id = Id.create();
-  const parent = Id.create();
-  const isVertical = Direction.isVertical(direction);
-  const delta = getDelta(originContainer, to, direction);
+  const { containers, rootId } = layout;
+  const originContainer = containers[originContainerId] as ContainerData;
+  const newContainerId = Id.create();
+  const isForward = Direction.isForward(direction);
+  const directionType = Direction.getType(direction);
 
-  const initialSize = {
-    horizontal: Percentage.create(window.innerWidth, delta.x),
-    vertical: Percentage.create(window.innerHeight, delta.y),
+  const getParent = (container: ContainerData): ContainerData => {
+    const parent = containers[container.parent] as ContainerData;
+    if (newGroupIsNeeded(direction, parent)) {
+      return {
+        ...container,
+        id: Id.create(),
+        isGroup: true,
+        children: [container.id, newContainerId],
+        directionType,
+      };
+    }
+
+    return {
+      ...parent,
+      children: parent.children.concat(newContainerId),
+    };
   };
 
-  const adjacentsUpdate = getAdjacentContainers(originContainer, id, direction);
+  const parent = getParent(originContainer);
+
+  const splitDelta: Vector = {
+    x: Percentage.ofPercentage(delta.x, parent.width),
+    y: Percentage.ofPercentage(delta.y, parent.height),
+  };
+
+  const splitRatio =
+    parent.id === originContainer.parent ? originContainer.splitRatio : 100;
 
   const updateData: ContainerData = {
     ...originContainer,
-    directionType: Direction.getType(direction),
-    ...adjacentsUpdate.originContainer,
-    ...getSizeAfterSplit(originContainer, initialSize, isVertical),
-    ...getPositionAfterSplit(originContainer, initialSize, direction),
+    splitRatio: getSplitRatio(
+      splitRatio,
+      splitDelta,
+      direction,
+      isForward ? false : true,
+    ),
+    parent: parent.id,
+    ...getSizeAfterSplit(originContainer, delta, direction),
+    ...getPositionAfterSplit(originContainer, delta, direction),
   };
 
-  const newData: ContainerData = {
-    id,
-    parent,
-    directionType: Direction.getType(direction),
-    ...adjacentsUpdate.newContainer,
-    ...getSizeAfterSplitFrom(updateData, initialSize, isVertical),
-    ...getPositionAfterSplitFrom(originContainer, updateData, direction),
-  };
-
+  const newData = createContainer(
+    newContainerId,
+    direction,
+    delta,
+    getSplitRatio(0, splitDelta, direction, isForward ? true : false),
+    originContainer,
+    updateData,
+  );
 
   return {
-    originContainer: updateData,
-    newContainer: newData,
+    rootId: originContainer.id === rootId ? parent.id : undefined,
+    previous: isForward ? newData : updateData,
+    next: isForward ? updateData : newData,
+    parent,
   };
 };
 
 const Container = {
-  addId,
   split,
+  getDelta,
   toPixels,
+  getSplitRatio,
   getSizeAfterSplit,
   getSizeAfterSplitFrom,
   getPositionAfterSplit,

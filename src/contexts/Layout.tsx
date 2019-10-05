@@ -1,29 +1,21 @@
 import React from 'react';
+import { ReadOnlyState } from '../hooks/useLayout/types';
+import { initialState } from '../hooks/useLayout';
+import { ContainersMap, DividersMap, DeepReadonly } from '../types';
+import Id from 'src/utils/Id';
 
-interface LayoutState {
-  rootId: number;
+const LayoutState = React.createContext<ReadOnlyState>(initialState);
+
+interface PropTypes {
+  containers: DeepReadonly<ContainersMap>;
+  dividers: DeepReadonly<DividersMap>;
+  rootId: Id;
 }
 
-const initialState: LayoutState = {
-  rootId: 0,
-};
+const Provider: React.FC<PropTypes> = (props) => {
+  const { children, ...value } = props;
 
-const LayoutState = React.createContext<LayoutState>(initialState);
-const LayoutActions = React.createContext<{}>({});
-
-const Provider: React.FC = (props) => {
-  const { children } = props;
-  const [containerList, setContainerList] = React.useState<number[]>([0]);
-  const value = {
-    rootId: 0,
-    containerList,
-  };
-
-  return (
-    <LayoutActions.Provider value={{}}>
-      <LayoutState.Provider value={value}>{children}</LayoutState.Provider>;
-    </LayoutActions.Provider>
-  );
+  return <LayoutState.Provider value={value}>{children}</LayoutState.Provider>;
 };
 
 const useLayout = () => React.useContext(LayoutState);

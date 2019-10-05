@@ -20,7 +20,6 @@ interface PropTypes {
 
 const Divider: React.FC<PropTypes> = (props) => {
   const {
-    id,
     top,
     left,
     width,
@@ -46,7 +45,6 @@ const Divider: React.FC<PropTypes> = (props) => {
     emitter.emit('resize', {
       previous,
       next,
-      dividerId: id,
       from: {
         x: event.clientX,
         y: event.clientY,

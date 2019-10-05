@@ -27,6 +27,7 @@ body {
 .px-divider--vertical {
   cursor: row-resize;
 }
+
 .px-divider--vertical div {
   height: 10px;
   position: absolute;
