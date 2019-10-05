@@ -3,8 +3,10 @@ import Id from '../../utils/Id';
 import Percentage from '../../utils/Percentage';
 import reducer from '../reducers/main';
 import { actionCreators, createActions } from '../actions';
-import { ContainersMap, ContainerData } from '../../types';
+import { ContainersMap, ContainerData, Emitter } from '../../types';
 import { State, Actions, ActionsCreator, ReadOnlyState } from '../types';
+import useResize from './useResize';
+import useSplit from './useSplit';
 
 const rootId = Id.create();
 
@@ -39,13 +41,19 @@ export type UseLayout = [
   ActionsCreator,
 ];
 
-const useLayout = (): UseLayout => {
+const useLayout = (emitter: Emitter): UseLayout => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
   const stateRef: React.MutableRefObject<State> = React.useRef<State>(state);
 
   stateRef.current = state;
-  return [stateRef, actions, actionCreators];
+
+  const layout: UseLayout = [stateRef, actions, actionCreators];
+
+  useSplit(layout, emitter);
+  useResize(layout, emitter);
+
+  return layout;
 };
 
 export { initialState };

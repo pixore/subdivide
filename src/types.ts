@@ -1,6 +1,8 @@
 import Direction from './utils/Direction';
 import Id from './utils/Id';
 
+export type Component = React.ComponentType<any>;
+
 export interface Vector {
   x: number;
   y: number;
