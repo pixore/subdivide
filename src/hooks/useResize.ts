@@ -2,7 +2,6 @@ import React from 'react';
 import Direction from '../utils/Direction';
 import Container from '../utils/Container';
 import Percentage from '../utils/Percentage';
-import Id from '../utils/Id';
 import { UseLayout } from './useLayout';
 import {
   addMouseListener,

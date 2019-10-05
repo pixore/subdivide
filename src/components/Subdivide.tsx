@@ -6,8 +6,6 @@ import useLayout, { UseLayout } from '../hooks/useLayout';
 import { Emitter } from '../types';
 import useResize from '../hooks/useResize';
 import useSplit from '../hooks/useSplit';
-import Layout from '../contexts/Layout';
-import Id from '../utils/Id';
 
 type Component = React.ComponentType<any>;
 
@@ -28,7 +26,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   const { dividers, containers } = layoutRef.current;
 
   return (
-    <Layout.Provider {...layoutRef.current}>
+    <>
       {Object.keys(containers).reduce<React.ReactNode[]>(
         (elements, id: string) => {
           const container = containers[id];
@@ -52,7 +50,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         const divider = dividers[id];
         return <Divider {...divider} emitter={emitter} key={divider.id} />;
       })}
-    </Layout.Provider>
+    </>
   );
 };
 

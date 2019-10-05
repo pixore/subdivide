@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test:types": "tsc --noEmit",
     "start": "parcel examples/index.html",
     "cypress:open": "cypress open"
   },

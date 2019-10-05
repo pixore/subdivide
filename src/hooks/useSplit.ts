@@ -6,7 +6,6 @@ import { dragDirection, addMouseListener, removeMouseListener } from '../utils';
 import { UseLayout } from './useLayout';
 import { Emitter, SplitArgs, ContainerData } from '../types';
 import { Action } from './useLayout/types';
-import Percentage from '../utils/Percentage';
 
 const useSplit = (layout: UseLayout, emitter: Emitter) => {
   const { splitRatio } = Config.useConfig();

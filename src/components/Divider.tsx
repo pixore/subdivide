@@ -7,7 +7,7 @@ import Percentage from '../utils/Percentage';
 import { Emitter } from '../types';
 
 interface PropTypes {
-  id: number;
+  id: string;
   previous: Id;
   next: Id;
   top: number;
