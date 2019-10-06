@@ -52,6 +52,11 @@ export interface Divider {
   left: number;
 }
 
+export interface Corner {
+  vertical: Direction;
+  horizontal: Direction;
+}
+
 export interface SplitArgs {
   containerId: number;
   from: FromCorner;

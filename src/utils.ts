@@ -105,6 +105,7 @@ const removeMouseListener = (
 };
 
 export {
+  numberIsBetween,
   dragDirection,
   resizeDirection,
   addMouseListener,
