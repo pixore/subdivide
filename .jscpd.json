@@ -1,0 +1,11 @@
+{
+  "threshold": 0.7,
+  "ignore": [
+    "**/.cache/**",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/cypress/**",
+    "**/*.html"
+  ],
+  "absolute": true
+}
