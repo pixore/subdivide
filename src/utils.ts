@@ -26,6 +26,14 @@ const getHorizontalDelta = (
   }
 };
 
+const numberIsBetween = (
+  value: number,
+  top: number,
+  bottom: number,
+): boolean => {
+  return top > value && value > bottom;
+};
+
 const dragDirection = (
   from: FromCorner,
   to: Position,
@@ -34,17 +42,25 @@ const dragDirection = (
   const verticalDelta = getVerticalDelta(from.vertical, from.y, to.y);
   const horizontalDelta = getHorizontalDelta(from.horizontal, from.x, to.x);
 
-  if (verticalDelta > horizontalDelta) {
-    if (verticalDelta > splitRatio) {
+  if (
+    numberIsBetween(verticalDelta, splitRatio, -splitRatio) &&
+    numberIsBetween(horizontalDelta, splitRatio, -splitRatio)
+  ) {
+    return;
+  }
+
+  if (Math.abs(verticalDelta) > Math.abs(horizontalDelta)) {
+    if (verticalDelta > 0) {
       return Direction.getOpposite(from.vertical);
     }
-    return undefined;
-  } else {
-    if (horizontalDelta > splitRatio) {
-      return Direction.getOpposite(from.horizontal);
-    }
-    return undefined;
+    return from.vertical;
   }
+
+  if (horizontalDelta > 0) {
+    return Direction.getOpposite(from.horizontal);
+  }
+
+  return from.horizontal;
 };
 
 const resizeDirection = (

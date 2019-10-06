@@ -64,7 +64,7 @@ export interface ResizeArgs {
 }
 
 interface Events {
-  split: (args: SplitArgs) => void;
+  cornerDrag: (args: SplitArgs) => void;
   resize: (args: ResizeArgs) => void;
 }
 

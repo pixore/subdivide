@@ -31,7 +31,7 @@ const Container: React.FC<PropTypes> = (props) => {
   };
 
   const onStartDrag = (fromCorner: FromCorner) => {
-    emitter.emit('split', {
+    emitter.emit('cornerDrag', {
       containerId: id,
       from: fromCorner,
     });
