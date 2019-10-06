@@ -88,18 +88,18 @@ context('Split', () => {
   });
 
   describe('when top right corner is drag', () => {
-    describe('left', () => {
+    describe.only('left', () => {
       it('should split the container', () => {
         cy.get('.px-corner')
           .eq(1)
           .trigger('mousedown', 5, 35, { force: true });
         cy.window()
-          .trigger('mousemove', { clientX: 557, clientY: 30 })
-          .trigger('mousemove', { clientX: 556, clientY: 30 })
-          .trigger('mousemove', { clientX: 555, clientY: 30 })
-          .trigger('mousemove', { clientX: 540, clientY: 30 })
-          .trigger('mousemove', { clientX: 535, clientY: 30 })
-          .trigger('mousemove', { clientX: 532, clientY: 30 })
+          .trigger('mousemove', { clientX: 457, clientY: 30 })
+          .trigger('mousemove', { clientX: 456, clientY: 30 })
+          .trigger('mousemove', { clientX: 455, clientY: 30 })
+          .trigger('mousemove', { clientX: 440, clientY: 30 })
+          .trigger('mousemove', { clientX: 435, clientY: 30 })
+          .trigger('mousemove', { clientX: 432, clientY: 30 })
           .trigger('mousemove', { clientX: 250, clientY: 30 })
           .trigger('mouseup');
 
@@ -135,12 +135,12 @@ context('Split', () => {
           .eq(1)
           .trigger('mousedown', 5, 35, { force: true });
         cy.window()
-          .trigger('mousemove', { clientX: 30, clientY: 557 })
-          .trigger('mousemove', { clientX: 30, clientY: 556 })
-          .trigger('mousemove', { clientX: 30, clientY: 555 })
-          .trigger('mousemove', { clientX: 30, clientY: 540 })
-          .trigger('mousemove', { clientX: 30, clientY: 535 })
-          .trigger('mousemove', { clientX: 30, clientY: 532 })
+          .trigger('mousemove', { clientX: 30, clientY: 457 })
+          .trigger('mousemove', { clientX: 30, clientY: 456 })
+          .trigger('mousemove', { clientX: 30, clientY: 455 })
+          .trigger('mousemove', { clientX: 30, clientY: 440 })
+          .trigger('mousemove', { clientX: 30, clientY: 435 })
+          .trigger('mousemove', { clientX: 30, clientY: 432 })
           .trigger('mousemove', { clientX: 30, clientY: 250 })
           .trigger('mouseup');
 
