@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+import { State } from '../layout/types';
 
 interface ClassNames {
   corner: string;
@@ -31,12 +32,16 @@ const initialValue = {
 };
 
 export interface ConfigState {
+  onLayoutChange?: (state: State) => void;
+  initialState?: State,
   classNames: ClassNames;
   cornerSize: number;
   splitRatio: number;
 }
 
 interface PropTypes {
+  initialState?: State,
+  onLayoutChange?: (state: State) => void;
   classNames?: OptionalClassNames;
   cornerSize?: number;
   splitRatio?: number;
@@ -47,6 +52,8 @@ const ConfigContext = React.createContext<ConfigState>(initialValue);
 const Provider: React.FC<PropTypes> = (props) => {
   const {
     children,
+    initialState,
+    onLayoutChange,
     classNames = {},
     cornerSize = initialValue.cornerSize,
     splitRatio = initialValue.splitRatio,
@@ -61,6 +68,8 @@ const Provider: React.FC<PropTypes> = (props) => {
   } = classNames;
 
   const value = {
+    onLayoutChange,
+    initialState,
     classNames: {
       corner,
       container,
