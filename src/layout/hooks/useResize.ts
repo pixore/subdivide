@@ -7,6 +7,7 @@ import {
   addMouseListener,
   removeMouseListener,
   resizeDirection,
+  throttle,
 } from '../../utils';
 import { Action } from '../types';
 import { ResizeArgs, Emitter, Vector } from '../../types';
@@ -64,7 +65,7 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
     const onStartResize = (args: ResizeArgs) => {
       const { from, previous, next } = args;
 
-      const onMouseMove = (event: MouseEvent) => {
+      const onMouseMove = throttle((event: MouseEvent) => {
         const { containers } = layoutRef.current;
         const to = {
           x: event.clientX,
@@ -101,7 +102,7 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
 
         from.x = to.x;
         from.y = to.y;
-      };
+      });
 
       const onMouseUp = () => {
         removeMouseListener(onMouseMove, onMouseUp);
