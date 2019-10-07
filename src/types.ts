@@ -2,6 +2,15 @@ import Direction, { DirectionType } from './utils/Direction';
 import Id from './utils/Id';
 import Container from './utils/Container';
 
+export interface Overlay {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+  show: boolean;
+  direction: Direction;
+}
+
 export type Component = React.ComponentType<any>;
 
 export interface Vector {

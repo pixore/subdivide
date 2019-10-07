@@ -4,6 +4,7 @@ import Container from './Container';
 import Divider from './Divider';
 import { Emitter, Component } from '../types';
 import Layout from '../layout';
+import Overlay from './Overlay';
 
 interface PropTypes {
   component: Component;
@@ -16,7 +17,9 @@ const Subdivide: React.FC<PropTypes> = (props) => {
 
   const [layoutRef] = layout;
 
-  const { dividers, containers } = layoutRef.current;
+  const { dividers, containers, overlay } = layoutRef.current;
+
+  const overlayElement = overlay.show ? <Overlay {...overlay} /> : null;
 
   return (
     <>
@@ -43,6 +46,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         const divider = dividers[id];
         return <Divider {...divider} emitter={emitter} key={divider.id} />;
       })}
+      {overlayElement}
     </>
   );
 };

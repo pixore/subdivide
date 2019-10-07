@@ -217,9 +217,21 @@ const actionsFactory = (layout: UseLayout) => {
         const isNext = numberIsBetween(to.x, next.left + next.width, next.left);
         const isPrev = numberIsBetween(to.x, prev.left + prev.width, prev.left);
         if (isNext) {
-          console.log(next.id);
+          actions.showOverlay({
+            width: next.width,
+            height: next.height,
+            top: next.top,
+            left: next.left,
+            direction: Direction.LEFT,
+          });
         } else if (isPrev) {
-          console.log(prev.id);
+          actions.showOverlay({
+            width: prev.width,
+            height: prev.height,
+            top: prev.top,
+            left: prev.left,
+            direction: Direction.RIGHT,
+          });
         }
       }
     };
@@ -239,6 +251,8 @@ const actionsFactory = (layout: UseLayout) => {
           merge(next, prev);
         }
       }
+
+      actions.hideOverlay();
       removeMouseListener(onMouseMove, onMouseUp);
     };
 

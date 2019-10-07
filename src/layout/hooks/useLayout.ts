@@ -8,6 +8,7 @@ import { ContainersMap, Emitter } from '../../types';
 import { State, Actions, ActionsCreator } from '../types';
 import useResize from './useResize';
 import useSplit from './useSplit';
+import Direction from '../../utils/Direction';
 
 const rootId = Id.create();
 
@@ -34,6 +35,14 @@ const initialState: State = {
   rootId,
   containers: createInitialContainer(rootId),
   dividers: {},
+  overlay: {
+    width: 0,
+    height: 0,
+    left: 0,
+    top: 0,
+    direction: Direction.RIGHT,
+    show: false,
+  },
 };
 
 export type UseLayout = [
