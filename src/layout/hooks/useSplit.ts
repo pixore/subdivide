@@ -249,6 +249,11 @@ const actionsFactory = (layout: UseLayout) => {
       directionType,
     );
 
+    if (prev.isGroup || next.isGroup) {
+      console.warn('cannot be merged');
+      return;
+    }
+
     const onMouseMove = (event: MouseEvent) => {
       const to = getTo(event);
 
@@ -260,11 +265,11 @@ const actionsFactory = (layout: UseLayout) => {
       );
 
       if (isNext) {
-        showOverlay(next, getMergeDirection(directionType, isNext));
+        showOverlay(next, getMergeDirection(directionType, false));
       }
 
       if (isPrev) {
-        showOverlay(prev, getMergeDirection(directionType, isPrev));
+        showOverlay(prev, getMergeDirection(directionType, true));
       }
     };
 
