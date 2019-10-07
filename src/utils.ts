@@ -104,7 +104,25 @@ const removeMouseListener = (
   window.removeEventListener('mouseup', onMouseUp);
 };
 
+type AnyArgs = any[];
+type FunctionWithAnyArgs<T extends AnyArgs> = (...args: T) => any;
+
+const throttle = <T extends AnyArgs>(
+  fn: FunctionWithAnyArgs<T>,
+): FunctionWithAnyArgs<T> => {
+  let busy = false;
+  return (...args: T) => {
+    if (busy) return;
+    busy = true;
+    fn(...args);
+    requestAnimationFrame(() => {
+      busy = false;
+    });
+  };
+};
+
 export {
+  throttle,
   numberIsBetween,
   dragDirection,
   resizeDirection,
