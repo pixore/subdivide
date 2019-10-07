@@ -216,6 +216,7 @@ const actionsFactory = (layout: UseLayout) => {
       if (directionType === DirectionType.HORIZONTAL) {
         const isNext = numberIsBetween(to.x, next.left + next.width, next.left);
         const isPrev = numberIsBetween(to.x, prev.left + prev.width, prev.left);
+
         if (isNext) {
           actions.showOverlay({
             width: next.width,
@@ -233,6 +234,27 @@ const actionsFactory = (layout: UseLayout) => {
             direction: Direction.RIGHT,
           });
         }
+      } else {
+        const isNext = numberIsBetween(to.y, next.top + next.height, next.top);
+        const isPrev = numberIsBetween(to.y, prev.top + prev.height, prev.top);
+
+        if (isNext) {
+          actions.showOverlay({
+            width: next.width,
+            height: next.height,
+            top: next.top,
+            left: next.left,
+            direction: Direction.BOTTOM,
+          });
+        } else if (isPrev) {
+          actions.showOverlay({
+            width: prev.width,
+            height: prev.height,
+            top: prev.top,
+            left: prev.left,
+            direction: Direction.TOP,
+          });
+        }
       }
     };
 
@@ -245,6 +267,14 @@ const actionsFactory = (layout: UseLayout) => {
       if (directionType === DirectionType.HORIZONTAL) {
         const isNext = numberIsBetween(to.x, next.left + next.width, next.left);
         const isPrev = numberIsBetween(to.x, prev.left + prev.width, prev.left);
+        if (isNext) {
+          merge(prev, next);
+        } else if (isPrev) {
+          merge(next, prev);
+        }
+      } else {
+        const isNext = numberIsBetween(to.y, next.top + next.height, next.top);
+        const isPrev = numberIsBetween(to.y, prev.top + prev.height, prev.top);
         if (isNext) {
           merge(prev, next);
         } else if (isPrev) {
