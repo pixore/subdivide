@@ -5,6 +5,7 @@ import Divider from './Divider';
 import { Emitter, Component } from '../types';
 import Layout from '../layout';
 import Overlay from './Overlay';
+import Config from '../contexts/Config';
 
 interface PropTypes {
   component: Component;
@@ -13,7 +14,11 @@ interface PropTypes {
 const Subdivide: React.FC<PropTypes> = (props) => {
   const { component } = props;
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
-  const layout = Layout.useLayout(emitter);
+  const { onLayoutChange, initialState } = Config.useConfig();
+  const layout = Layout.useLayout(emitter, {
+    onLayoutChange,
+    initialState,
+  });
 
   const [layoutRef] = layout;
 
