@@ -9,6 +9,7 @@ import { State, Actions, ActionsCreator } from '../types';
 import useResize from './useResize';
 import useSplit from './useSplit';
 import Direction from '../../utils/Direction';
+import { throttle } from '../../utils';
 
 const rootId = Id.create();
 
@@ -31,7 +32,7 @@ const createInitialContainer = (id: Id): ContainersMap => {
   };
 };
 
-const initialState: State = {
+const defaultState: State = {
   rootId,
   containers: createInitialContainer(rootId),
   dividers: {},
@@ -51,14 +52,32 @@ export type UseLayout = [
   ActionsCreator,
 ];
 
-const useLayout = (emitter: Emitter): UseLayout => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-  const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
-  const stateRef: React.MutableRefObject<State> = React.useRef<State>(state);
+interface Options {
+  onLayoutChange?: (layout: State) => void;
+  initialState?: State;
+}
 
+const useLayout = (emitter: Emitter, options: Options = {}): UseLayout => {
+  const { onLayoutChange, initialState } = options;
+  const [state, dispatch] = React.useReducer(
+    reducer,
+    initialState || defaultState,
+  );
+  const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
+  const layoutChange = React.useMemo(
+    () => onLayoutChange && throttle(onLayoutChange),
+    [onLayoutChange],
+  );
+  const stateRef: React.MutableRefObject<State> = React.useRef<State>(state);
   stateRef.current = state;
 
   const layout: UseLayout = [stateRef, actions, actionCreators];
+
+  React.useEffect(() => {
+    if (layoutChange) {
+      layoutChange(state);
+    }
+  }, [state, layoutChange]);
 
   useSplit(layout, emitter);
   useResize(layout, emitter);
@@ -66,5 +85,4 @@ const useLayout = (emitter: Emitter): UseLayout => {
   return layout;
 };
 
-export { initialState };
 export default useLayout;
