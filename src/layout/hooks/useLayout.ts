@@ -1,6 +1,5 @@
 import React from 'react';
 import Id from '../../utils/Id';
-import Percentage from '../../utils/Percentage';
 import Container from '../../utils/Container';
 import reducer from '../reducers/main';
 import { actionCreators, createActions } from '../actions';
@@ -14,17 +13,16 @@ import { throttle } from '../../utils';
 const rootId = Id.create();
 
 const createInitialContainer = (id: Id): ContainersMap => {
-  const { innerWidth: width, innerHeight: height } = window;
   const item: Container = {
     id,
     parent: -1,
     isGroup: false,
     children: [],
     splitRatio: 100,
-    top: Percentage.create(height, 0),
-    left: Percentage.create(width, 0),
-    width: Percentage.create(width, width),
-    height: Percentage.create(height, height),
+    top: 0,
+    left: 0,
+    width: 100,
+    height: 100,
   };
 
   return {
