@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "generate:arrows": "ts-node -O '{\"module\": \"commonjs\"}' ./scripts/generate-arrows",
     "start": "parcel examples/index.html",
     "test:types": "tsc --noEmit",
     "test:duplication": "jscpd .",
@@ -34,10 +35,11 @@
     "cypress": "~3.4.1",
     "jscpd": "^2.0.16",
     "npm-run-all": "^4.1.5",
-    "parcel-bundler": "^1.12.3",
+    "parcel-bundler": "^1.12.4",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "start-server-and-test": "^1.10.4",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   }
 }
