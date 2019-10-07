@@ -31,6 +31,11 @@ const getPrevContainer = getAdjacentContainerFactory(-1);
 const actionsFactory = (layout: UseLayout) => {
   const [layoutRef, actions, actionCreators] = layout;
 
+  const getTo = (event: MouseEvent): Vector => ({
+    x: Percentage.create(window.innerWidth, event.clientX),
+    y: Percentage.create(window.innerHeight, event.clientY),
+  });
+
   const mergeAndRemoveParent = (from: Container, to: Container) => {
     const { containers } = layoutRef.current;
     const parent = containers[from.parent];
@@ -191,6 +196,43 @@ const actionsFactory = (layout: UseLayout) => {
     };
   };
 
+  const getMergePosition = (
+    directionType: DirectionType,
+    to: Vector,
+    next: Container,
+    prev: Container,
+  ) => {
+    if (directionType === DirectionType.HORIZONTAL) {
+      return {
+        isNext: numberIsBetween(to.x, next.left + next.width, next.left),
+        isPrev: numberIsBetween(to.x, prev.left + prev.width, prev.left),
+      };
+    }
+
+    return {
+      isNext: numberIsBetween(to.y, next.top + next.height, next.top),
+      isPrev: numberIsBetween(to.y, prev.top + prev.height, prev.top),
+    };
+  };
+
+  const getMergeDirection = (directionType: DirectionType, isPrev: boolean) => {
+    if (directionType === DirectionType.HORIZONTAL) {
+      return isPrev ? Direction.RIGHT : Direction.LEFT;
+    }
+
+    return isPrev ? Direction.TOP : Direction.BOTTOM;
+  };
+
+  const showOverlay = (container: Container, direction: Direction) => {
+    actions.showOverlay({
+      width: container.width,
+      height: container.height,
+      top: container.top,
+      left: container.left,
+      direction,
+    });
+  };
+
   const startMerge = (container: Container, corner: Corner) => {
     const { containers } = layoutRef.current;
     const parent = containers[container.parent];
@@ -208,78 +250,40 @@ const actionsFactory = (layout: UseLayout) => {
     );
 
     const onMouseMove = (event: MouseEvent) => {
-      const to = {
-        x: Percentage.create(window.innerWidth, event.clientX),
-        y: Percentage.create(window.innerHeight, event.clientY),
-      };
+      const to = getTo(event);
 
-      if (directionType === DirectionType.HORIZONTAL) {
-        const isNext = numberIsBetween(to.x, next.left + next.width, next.left);
-        const isPrev = numberIsBetween(to.x, prev.left + prev.width, prev.left);
+      const { isNext, isPrev } = getMergePosition(
+        directionType,
+        to,
+        next,
+        prev,
+      );
 
-        if (isNext) {
-          actions.showOverlay({
-            width: next.width,
-            height: next.height,
-            top: next.top,
-            left: next.left,
-            direction: Direction.LEFT,
-          });
-        } else if (isPrev) {
-          actions.showOverlay({
-            width: prev.width,
-            height: prev.height,
-            top: prev.top,
-            left: prev.left,
-            direction: Direction.RIGHT,
-          });
-        }
-      } else {
-        const isNext = numberIsBetween(to.y, next.top + next.height, next.top);
-        const isPrev = numberIsBetween(to.y, prev.top + prev.height, prev.top);
+      if (isNext) {
+        showOverlay(next, getMergeDirection(directionType, isNext));
+      }
 
-        if (isNext) {
-          actions.showOverlay({
-            width: next.width,
-            height: next.height,
-            top: next.top,
-            left: next.left,
-            direction: Direction.BOTTOM,
-          });
-        } else if (isPrev) {
-          actions.showOverlay({
-            width: prev.width,
-            height: prev.height,
-            top: prev.top,
-            left: prev.left,
-            direction: Direction.TOP,
-          });
-        }
+      if (isPrev) {
+        showOverlay(prev, getMergeDirection(directionType, isPrev));
       }
     };
 
     const onMouseUp = (event: MouseEvent) => {
-      const to = {
-        x: Percentage.create(window.innerWidth, event.clientX),
-        y: Percentage.create(window.innerHeight, event.clientY),
-      };
+      const to = getTo(event);
 
-      if (directionType === DirectionType.HORIZONTAL) {
-        const isNext = numberIsBetween(to.x, next.left + next.width, next.left);
-        const isPrev = numberIsBetween(to.x, prev.left + prev.width, prev.left);
-        if (isNext) {
-          merge(prev, next);
-        } else if (isPrev) {
-          merge(next, prev);
-        }
-      } else {
-        const isNext = numberIsBetween(to.y, next.top + next.height, next.top);
-        const isPrev = numberIsBetween(to.y, prev.top + prev.height, prev.top);
-        if (isNext) {
-          merge(prev, next);
-        } else if (isPrev) {
-          merge(next, prev);
-        }
+      const { isNext, isPrev } = getMergePosition(
+        directionType,
+        to,
+        next,
+        prev,
+      );
+
+      if (isNext) {
+        merge(prev, next);
+      }
+
+      if (isPrev) {
+        merge(next, prev);
       }
 
       actions.hideOverlay();
