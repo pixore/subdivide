@@ -1,8 +1,10 @@
 import Direction, { DirectionType } from '../utils/Direction';
 import Percentage from './Percentage';
+import Vector from './Vector';
+import Arr from './Arr';
 import Id from './Id';
 import { State } from '../layout/types';
-import { Vector, FromCorner, DeepReadonly } from '../types';
+import { FromCorner, DeepReadonly, Size } from '../types';
 
 interface MutableContainer {
   id: Id;
@@ -26,10 +28,7 @@ interface OptionalSizeAndPosition {
   top?: number;
   left?: number;
 }
-interface Size {
-  width: number;
-  height: number;
-}
+
 interface Delta {
   x: number;
   y: number;
@@ -280,6 +279,37 @@ const getSplitRatio = (
   return splitRatio - splitDelta.x;
 };
 
+const createGroup = (
+  container: Container,
+  directionType: DirectionType,
+  children: Id[],
+) => {
+  return {
+    ...container,
+    id: Id.create(),
+    isGroup: true,
+    children,
+    directionType,
+  };
+};
+
+const getSplitOrder = (
+  originContainerId: Id,
+  newContainerId: Id,
+  isForward: boolean,
+) => {
+  if (isForward) {
+    return {
+      prev: newContainerId,
+      next: originContainerId,
+    };
+  }
+  return {
+    prev: originContainerId,
+    next: newContainerId,
+  };
+};
+
 const split = (
   originContainerId: Id,
   layout: State,
@@ -292,28 +322,21 @@ const split = (
   const isForward = Direction.isForward(direction);
   const directionType = Direction.getType(direction);
 
+  const order = getSplitOrder(originContainerId, newContainerId, isForward);
+  const arrOrder = [order.prev, order.next];
+
   const getParent = (container: Container): Container => {
     const parent = containers[container.parent];
+
     if (newGroupIsNeeded(direction, parent)) {
-      return {
-        ...container,
-        id: Id.create(),
-        isGroup: true,
-        children: isForward
-          ? [newContainerId, container.id]
-          : [container.id, newContainerId],
-        directionType,
-      };
+      return createGroup(container, directionType, arrOrder);
     }
 
-    const index = parent.children.indexOf(originContainer.id);
-    const children: Id[] = [...parent.children.slice(0, index)];
-    if (isForward) {
-      children.push(newContainerId, originContainer.id);
-    } else {
-      children.push(originContainer.id, newContainerId);
-    }
-    children.push(...parent.children.slice(index + 1));
+    const children = Arr.replaceItem(
+      parent.children,
+      originContainer.id,
+      arrOrder,
+    );
 
     return {
       ...parent,
@@ -322,23 +345,16 @@ const split = (
   };
 
   const parent = getParent(originContainer);
-
-  const splitDelta: Vector = {
-    x: Percentage.ofPercentage(delta.x, parent.width),
-    y: Percentage.ofPercentage(delta.y, parent.height),
-  };
+  console.log(parent);
+  
+  const splitDelta = Vector.ofPercentage(delta, Vector.fromSize(parent));
 
   const splitRatio =
     parent.id === originContainer.parent ? originContainer.splitRatio : 100;
 
   const updateData: Container = {
     ...originContainer,
-    splitRatio: getSplitRatio(
-      splitRatio,
-      splitDelta,
-      direction,
-      isForward ? false : true,
-    ),
+    splitRatio: getSplitRatio(splitRatio, splitDelta, direction, !isForward),
     parent: parent.id,
     ...getSizeAfterSplit(originContainer, delta, direction),
     ...getPositionAfterSplit(originContainer, delta, direction),
@@ -348,7 +364,7 @@ const split = (
     newContainerId,
     direction,
     delta,
-    getSplitRatio(0, splitDelta, direction, isForward ? true : false),
+    getSplitRatio(0, splitDelta, direction, isForward),
     originContainer,
     updateData,
   );
