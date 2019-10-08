@@ -1,10 +1,11 @@
 import React from 'react';
 import Direction, { DirectionType } from '../../utils/Direction';
 import Id from '../../utils/Id';
+import Vector from '../../utils/Vector';
 import Container from '../../utils/Container';
 import Config from '../../contexts/Config';
 import { UseLayout } from './useLayout';
-import { Emitter, SplitArgs, Vector, Corner, ContainersMap } from '../../types';
+import { Emitter, SplitArgs, Corner, ContainersMap } from '../../types';
 import { Action } from '../types';
 import {
   dragDirection,
@@ -31,10 +32,13 @@ const getPrevContainer = getAdjacentContainerFactory(-1);
 const actionsFactory = (layout: UseLayout) => {
   const [layoutRef, actions, actionCreators] = layout;
 
-  const getTo = (event: MouseEvent): Vector => ({
-    x: Percentage.create(window.innerWidth, event.clientX),
-    y: Percentage.create(window.innerHeight, event.clientY),
-  });
+  const getTo = (event: MouseEvent): Vector => {
+    const { layout }= layoutRef.current;
+    return {
+      x: Percentage.create(layout.width, event.clientX),
+      y: Percentage.create(layout.height, event.clientY),
+    }
+  };
 
   const mergeAndRemoveParent = (from: Container, to: Container) => {
     const { containers } = layoutRef.current;
