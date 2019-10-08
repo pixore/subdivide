@@ -6,6 +6,7 @@ import { Emitter, Component, LayoutUpdate } from '../types';
 import Layout from '../layout';
 import Overlay from './Overlay';
 import Config from '../contexts/Config';
+import Id from '../utils/Id';
 
 interface PropTypes {
   component: Component;
@@ -38,9 +39,18 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     layoutUpdate.height = height || innerHeight;
     layoutUpdate.top = top || 0;
     layoutUpdate.left = left || 0;
+    
 
     actions.updateLayout(layoutUpdate);
   }, [width, height, top, left]);
+
+  React.useEffect(() => {
+    if (initialState) {
+      Object.keys(initialState.containers).forEach((id) => {
+        Id.addId(Number(id));
+      })
+    }
+  }, []);
 
   return (
     <>
