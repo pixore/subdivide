@@ -1,4 +1,4 @@
-import { ContainerUpdate, Overlay } from '../types';
+import { ContainerUpdate, Overlay, LayoutUpdate } from '../types';
 import {
   Action,
   ActionsCreator,
@@ -34,6 +34,10 @@ const actionCreators: ActionsCreator = {
     type: ActionType.HIDE_OVERLAY,
     payload: -1,
   }),
+  updateLayout: (data: ContainerUpdate) => ({
+    type: ActionType.UPDATE_LAYOUT,
+    payload: data,
+  }),
 };
 
 type Dispatch = (action: Action | Action[]) => void;
@@ -49,6 +53,9 @@ const createActions = (dispatch: Dispatch): Actions => ({
   },
   updateRoot(id: Id) {
     dispatch(actionCreators.updateRoot(id));
+  },
+  updateLayout(data: LayoutUpdate) {
+    dispatch(actionCreators.updateLayout(data));
   },
   batch(actions: Action[]) {
     dispatch(actions);

@@ -42,6 +42,12 @@ const defaultState: State = {
     direction: Direction.RIGHT,
     show: false,
   },
+  layout: {
+    width: 100,
+    height: 100,
+    top: 0,
+    left: 0,
+  }
 };
 
 export type UseLayout = [
@@ -50,7 +56,7 @@ export type UseLayout = [
   ActionsCreator,
 ];
 
-interface Options {
+export interface Options {
   onLayoutChange?: (layout: State) => void;
   initialState?: State;
 }

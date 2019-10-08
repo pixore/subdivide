@@ -2,6 +2,25 @@ import Direction, { DirectionType } from './utils/Direction';
 import Id from './utils/Id';
 import Container from './utils/Container';
 
+export interface Size {
+  width: number;
+  height: number;
+}
+
+export interface Layout {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+export interface LayoutUpdate {
+  top?: number;
+  left?: number;
+  width?: number;
+  height?: number;
+}
+
 export interface Overlay {
   top: number;
   left: number;
@@ -12,11 +31,6 @@ export interface Overlay {
 }
 
 export type Component = React.ComponentType<any>;
-
-export interface Vector {
-  x: number;
-  y: number;
-}
 
 export interface FromCorner {
   vertical: Direction;
