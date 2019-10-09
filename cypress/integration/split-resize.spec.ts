@@ -4,7 +4,13 @@ context('Split', () => {
 
   beforeEach(() => {
     cy.viewport(width, height);
-    cy.visit('/simple.html');
+    cy.visit('/simple.html', {
+      onBeforeLoad: (contentWindow) => {
+        cy.stub(contentWindow, 'requestAnimationFrame').callsFake((fn) => {
+          fn();
+        });
+      },
+    });
   });
 
   describe('when top left corner is drag', () => {
