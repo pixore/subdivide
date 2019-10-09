@@ -14,22 +14,22 @@
       "parent": 2,
       "isGroup": false,
       "children": [],
-      "splitRatio": 50.09898464207346,
+      "splitRatio": 50,
       "top": 0,
       "left": 0,
-      "width": 50.09898464207346,
+      "width": 50,
       "height": 100
     },
     "1": {
       "id": 1,
-      "parent": 6,
+      "parent": 4,
       "isGroup": false,
-      "splitRatio": 50.47354216752899,
+      "splitRatio": 50,
       "children": [],
-      "width": 25.186810028708162,
-      "height": 51.02249488752557,
-      "top": 48.977505112474454,
-      "left": 74.81318997129193
+      "width": 50,
+      "height": 50,
+      "top": 0,
+      "left": 50
     },
     "2": {
       "id": 2,
@@ -45,148 +45,56 @@
     },
     "3": {
       "id": 3,
-      "parent": 4,
+      "parent": 6,
       "isGroup": false,
-      "splitRatio": 48.977505112474454,
+      "splitRatio": 50,
       "children": [],
-      "width": 49.90101535792651,
-      "height": 48.977505112474454,
-      "top": 0,
-      "left": 50.09898464207346
+      "width": 25,
+      "height": 50,
+      "top": 50,
+      "left": 75
     },
     "4": {
       "id": 4,
       "parent": 2,
       "isGroup": true,
-      "splitRatio": 49.90101535792651,
-      "children": [3, 6],
-      "width": 49.90101535792651,
+      "splitRatio": 50,
+      "children": [1, 6],
+      "width": 50,
       "height": 100,
       "top": 0,
-      "left": 50.09898464207346,
+      "left": 50,
       "directionType": "VERTICAL"
     },
     "5": {
       "id": 5,
-      "parent": 8,
+      "parent": 6,
       "isGroup": false,
-      "splitRatio": 49.09819639278569,
+      "splitRatio": 50,
       "children": [],
-      "width": 24.71420532921835,
-      "height": 25.051124744376285,
-      "top": 74.94887525562358,
-      "left": 50.09898464207346
+      "width": 25,
+      "height": 50,
+      "top": 50,
+      "left": 50
     },
     "6": {
       "id": 6,
       "parent": 4,
       "isGroup": true,
-      "splitRatio": 51.022494887525575,
-      "children": [8, 1],
-      "width": 49.90101535792651,
-      "height": 51.02249488752557,
-      "top": 48.977505112474454,
-      "left": 50.09898464207346,
-      "directionType": "HORIZONTAL"
-    },
-    "7": {
-      "id": 7,
-      "parent": 14,
-      "isGroup": false,
-      "splitRatio": 47.91666666666673,
-      "children": [],
-      "width": 6.055650635666893,
-      "height": 13.218403442033,
-      "top": 61.73047181359075,
-      "left": 68.75753933562494
-    },
-    "8": {
-      "id": 8,
-      "parent": 6,
-      "isGroup": true,
-      "splitRatio": 49.52645783247101,
-      "children": [10, 5],
-      "width": 24.71420532921835,
-      "height": 51.02249488752557,
-      "top": 48.977505112474454,
-      "left": 50.09898464207346,
-      "directionType": "VERTICAL"
-    },
-    "9": {
-      "id": 9,
-      "parent": 10,
-      "isGroup": false,
-      "splitRatio": 48.86390470933897,
-      "children": [],
-      "width": 12.07632574173963,
-      "height": 25.971370143149304,
-      "top": 48.977505112474454,
-      "left": 50.09898464207346
-    },
-    "10": {
-      "id": 10,
-      "parent": 8,
-      "isGroup": true,
-      "splitRatio": 50.901803607214354,
-      "children": [9, 12],
-      "width": 24.71420532921835,
-      "height": 25.971370143149304,
-      "top": 48.977505112474454,
-      "left": 50.09898464207346,
-      "directionType": "HORIZONTAL"
-    },
-    "11": {
-      "id": 11,
-      "parent": 12,
-      "isGroup": false,
-      "splitRatio": 49.10394265232966,
-      "children": [],
-      "width": 12.637879587478718,
-      "height": 12.752966701116302,
-      "top": 48.977505112474454,
-      "left": 62.17531038381311
-    },
-    "12": {
-      "id": 12,
-      "parent": 10,
-      "isGroup": true,
-      "splitRatio": 51.13609529066103,
-      "children": [11, 14],
-      "width": 12.637879587478718,
-      "height": 25.971370143149304,
-      "top": 48.977505112474454,
-      "left": 62.17531038381311,
-      "directionType": "VERTICAL"
-    },
-    "13": {
-      "id": 13,
-      "parent": 14,
-      "isGroup": false,
-      "splitRatio": 52.08333333333327,
-      "children": [],
-      "width": 6.582228951811825,
-      "height": 13.218403442033,
-      "top": 61.73047181359075,
-      "left": 62.17531038381311
-    },
-    "14": {
-      "id": 14,
-      "parent": 12,
-      "isGroup": true,
-      "splitRatio": 50.89605734767033,
-      "children": [13, 7],
-      "width": 12.637879587478718,
-      "height": 13.218403442033,
-      "top": 61.73047181359075,
-      "left": 62.17531038381311,
+      "splitRatio": 50,
+      "children": [5, 3],
+      "width": 50,
+      "height": 50,
+      "top": 50,
+      "left": 50,
       "directionType": "HORIZONTAL"
     }
   },
-  "layout": { "width": 834, "height": 978, "top": 0, "left": 0 },
+  "layout": { "width": 1680, "height": 904, "top": 0, "left": 0 },
   "dividers": {
     "0-4": {
       "id": "0-4",
-      "left": 50.09898464207346,
+      "left": 50,
       "top": 0,
       "directionType": "HORIZONTAL",
       "previous": 0,
@@ -194,65 +102,25 @@
       "width": 0,
       "height": 100
     },
-    "3-6": {
-      "id": "3-6",
-      "left": 50.09898464207346,
-      "top": 48.977505112474454,
+    "1-6": {
+      "id": "1-6",
+      "left": 50,
+      "top": 50,
       "directionType": "VERTICAL",
-      "previous": 3,
+      "previous": 1,
       "next": 6,
-      "width": 49.90101535792651,
+      "width": 50,
       "height": 0
     },
-    "9-12": {
-      "id": "9-12",
-      "left": 62.17531038381311,
-      "top": 48.977505112474454,
+    "5-3": {
+      "id": "5-3",
+      "left": 75,
+      "top": 50,
       "directionType": "HORIZONTAL",
-      "previous": 9,
-      "next": 12,
+      "previous": 5,
+      "next": 3,
       "width": 0,
-      "height": 25.971370143149304
-    },
-    "11-14": {
-      "id": "11-14",
-      "left": 62.17531038381311,
-      "top": 61.73047181359075,
-      "directionType": "VERTICAL",
-      "previous": 11,
-      "next": 14,
-      "width": 12.637879587478718,
-      "height": 0
-    },
-    "13-7": {
-      "id": "13-7",
-      "left": 68.75753933562494,
-      "top": 61.73047181359075,
-      "directionType": "HORIZONTAL",
-      "previous": 13,
-      "next": 7,
-      "width": 0,
-      "height": 13.218403442033
-    },
-    "10-5": {
-      "id": "10-5",
-      "left": 50.09898464207346,
-      "top": 74.94887525562358,
-      "directionType": "VERTICAL",
-      "previous": 10,
-      "next": 5,
-      "width": 24.71420532921835,
-      "height": 0
-    },
-    "8-1": {
-      "id": "8-1",
-      "left": 74.81318997129193,
-      "top": 48.977505112474454,
-      "directionType": "HORIZONTAL",
-      "previous": 8,
-      "next": 1,
-      "width": 0,
-      "height": 51.02249488752557
+      "height": 50
     }
   }
 }
