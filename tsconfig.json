@@ -17,7 +17,8 @@
     "baseUrl": ".",
     "typeRoots": ["./node_modules/@types"],
     "lib": ["dom", "es2015", "es2016"],
-    "declarationDir": "dist"
+    "declarationDir": "dist",
+    "resolveJsonModule": true
   },
   "include": ["src/**/*", "cypress/**/*"],
   "exclude": [
