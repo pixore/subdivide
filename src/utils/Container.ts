@@ -85,16 +85,20 @@ const getSizeAfterSplit = (
   const isVertical = Direction.isVertical(direction);
   const isForward = Direction.isForward(direction);
   const { width, height } = container;
+  const sizeVector = Vector.fromSize(container);
+  const newSize = isForward
+    ? Vector.subtract(sizeVector, delta)
+    : Vector.add(sizeVector, delta);
 
   if (isVertical) {
     return {
       width,
-      height: isForward ? height - delta.y : height + delta.y,
+      height: newSize.y,
     };
   }
 
   return {
-    width: isForward ? width - delta.x : width + delta.x,
+    width: newSize.x,
     height,
   };
 };
@@ -107,16 +111,17 @@ const getSizeAfterSplitFrom = (
   const isVertical = Direction.isVertical(direction);
   const isForward = Direction.isForward(direction);
   const { width, height } = container;
+  const newSize = isForward ? delta : Vector.invert(delta);
 
   if (isVertical) {
     return {
       width,
-      height: isForward ? delta.y : -delta.y,
+      height: newSize.y,
     };
   }
 
   return {
-    width: isForward ? delta.x : -delta.x,
+    width: newSize.x,
     height,
   };
 };
@@ -159,7 +164,7 @@ const getPositionAfterSplitFrom = (
 ): NewPosition => {
   const { top, left } = container;
   const { height, width } = updatedContainer;
-  if (direction === Direction.BOTTOM) {
+  if (direction === Direction.BOTTOM || direction === Direction.RIGHT) {
     return {
       top,
       left,
@@ -170,13 +175,6 @@ const getPositionAfterSplitFrom = (
     return {
       top: top + height,
       left: left,
-    };
-  }
-
-  if (direction === Direction.RIGHT) {
-    return {
-      top,
-      left,
     };
   }
 
@@ -327,15 +325,20 @@ const split = (
   };
 
   const parent = getParent(originContainer);
+  const isNewParent = parent.id !== originContainer.parent;
 
   const splitDelta = Vector.ofPercentage(delta, Vector.fromSize(parent));
 
-  const splitRatio =
-    parent.id === originContainer.parent ? originContainer.splitRatio : 100;
+  const baseSplitRatio = isNewParent ? 100 : originContainer.splitRatio;
 
   const updateData: Container = {
     ...originContainer,
-    splitRatio: getSplitRatio(splitRatio, splitDelta, direction, !isForward),
+    splitRatio: getSplitRatio(
+      baseSplitRatio,
+      splitDelta,
+      direction,
+      !isForward,
+    ),
     parent: parent.id,
     ...getSizeAfterSplit(originContainer, delta, direction),
     ...getPositionAfterSplit(originContainer, delta, direction),
