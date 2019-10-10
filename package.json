@@ -1,9 +1,13 @@
 {
-  "name": "subdivide",
+  "name": "@pixore/subdivide",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "types": "index.js",
   "scripts": {
+    "clean": "rm -rf dist && rm -rf .cache",
+    "prebuild": "npm run clean",
+    "build": "tsc",
     "generate:arrows": "ts-node -O '{\"module\": \"commonjs\"}' ./scripts/generate-arrows",
     "start": "parcel examples/index.html",
     "test:types": "tsc --noEmit",
