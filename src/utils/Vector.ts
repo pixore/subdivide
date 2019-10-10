@@ -14,21 +14,21 @@ const fromSize = (size: Size): Vector => ({
 const fromPosition = (position: Position): Vector => ({
   x: position.left,
   y: position.top,
-})
+});
 
 const add = (vector1: Vector, vector2: Vector) => {
   return {
     x: vector1.x + vector2.x,
     y: vector1.y + vector2.y,
-  }
-}
+  };
+};
 
 const subtract = (vector1: Vector, vector2: Vector) => {
   return {
     x: vector1.x - vector2.x,
     y: vector1.y - vector2.y,
-  }
-}
+  };
+};
 
 const fromPercentage = (
   vector: Vector,
@@ -46,9 +46,15 @@ const ofPercentage = (delta1: Vector, delta2: Vector) => ({
   y: Percentage.ofPercentage(delta1.y, delta2.y),
 });
 
+const invert = (vector: Vector): Vector => ({
+  x: -vector.x,
+  y: -vector.y,
+});
+
 const Vector = {
   add,
-  sustract,
+  subtract,
+  invert,
   fromPosition,
   fromPercentage,
   fromSize,
