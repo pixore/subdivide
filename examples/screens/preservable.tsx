@@ -18,8 +18,6 @@ const getInitialState = () => {
 const App: React.FC = () => {
   const initialState = React.useMemo(() => getInitialState(), []);
 
-  console.log(initialState);
-
   const onLayoutChange = (state) => {
     localStorage.setItem('state', JSON.stringify(state));
   };
