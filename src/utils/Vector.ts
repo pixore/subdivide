@@ -23,6 +23,13 @@ const add = (vector1: Vector, vector2: Vector) => {
   }
 }
 
+const sustract = (vector1: Vector, vector2: Vector) => {
+  return {
+    x: vector1.x - vector2.x,
+    y: vector1.y - vector2.y,
+  }
+}
+
 const fromPercentage = (
   vector: Vector,
   totalX: number,
@@ -40,8 +47,9 @@ const ofPercentage = (delta1: Vector, delta2: Vector) => ({
 });
 
 const Vector = {
-  fromPosition,
   add,
+  sustract,
+  fromPosition,
   fromPercentage,
   fromSize,
   ofPercentage,
