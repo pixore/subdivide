@@ -11,6 +11,8 @@ context('Resize', () => {
         });
       },
     });
+
+    return cy.wait(100);
   });
 
   it('should resize', () => {

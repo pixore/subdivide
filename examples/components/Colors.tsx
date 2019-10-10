@@ -31,7 +31,7 @@ interface PropTypes {
 const Colors: React.FC<PropTypes> = (props) => {
   const [color, setColor] = React.useState(() => getRandomColor());
   const style: React.CSSProperties = {
-    background: color,
+    // background: color,
     ...defaultStyle,
   };
 
