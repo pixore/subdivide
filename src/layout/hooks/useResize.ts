@@ -24,6 +24,7 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
       splitDelta: Vector,
     ): Action[] => {
       const actionsToDispatch: Action[] = [];
+      const parent = layoutRef.current.containers[container.parent];
 
       const containerData = {
         ...Container.getSizeAndPositionFromDelta(
@@ -39,6 +40,23 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
           isPrevious,
         ),
       };
+
+      const exceedsParent =
+        (containerData.width && parent.width < containerData.width) ||
+        (containerData.height && parent.height < containerData.height) ||
+        (containerData.top && parent.top > containerData.top) ||
+        (containerData.left && parent.left > containerData.left);
+ 
+      const sizeOrPositionIsNegative =
+        (containerData.width && 0 > containerData.width) ||
+        (containerData.height && 0 > containerData.height) ||
+        (containerData.top && 0 > containerData.top) ||
+        (containerData.left && 0 > containerData.left);
+
+      if (exceedsParent || sizeOrPositionIsNegative) {
+        return [];
+      }
+
       const nextContainer = actionCreators.update(containerData);
 
       actionsToDispatch.push(nextContainer);
