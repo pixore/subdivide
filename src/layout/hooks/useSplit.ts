@@ -33,11 +33,11 @@ const actionsFactory = (layout: UseLayout) => {
   const [layoutRef, actions, actionCreators] = layout;
 
   const getTo = (event: MouseEvent): Vector => {
-    const { layout }= layoutRef.current;
+    const { layout } = layoutRef.current;
     return {
       x: Percentage.create(layout.width, event.clientX),
       y: Percentage.create(layout.height, event.clientY),
-    }
+    };
   };
 
   const mergeAndRemoveParent = (from: Container, to: Container) => {
@@ -318,12 +318,18 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
 
       let direction: Direction | undefined;
       const onMouseMove = (event: MouseEvent) => {
-        const { containers } = layoutRef.current;
+        const { containers, layout } = layoutRef.current;
         const container = containers[containerId];
         const to = {
           x: event.clientX,
           y: event.clientY,
         };
+
+        const percentageTo = Vector.fromPercentage(
+          Vector.add(to, Vector.fromPosition(layout)),
+          layout.width,
+          layout.height,
+        );
 
         if (direction) {
           console.warn("This shouldn't happen");
@@ -356,7 +362,7 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
             horizontal: from.horizontal,
           });
         } else if (isSplit) {
-          const delta = Container.getDelta(container, from, to);
+          const delta = Container.getDelta(container, from, percentageTo);
           const { previous, next } = split(containerId, delta, direction);
 
           removeMouseListener(onMouseMove, onMouseUp);

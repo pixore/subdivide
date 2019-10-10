@@ -3,7 +3,7 @@ import Id from '../../utils/Id';
 import Container from '../../utils/Container';
 import reducer from '../reducers/main';
 import { actionCreators, createActions } from '../actions';
-import { Emitter } from '../../types';
+import { Emitter, LayoutUpdate } from '../../types';
 import { State, Actions, ActionsCreator } from '../types';
 import useResize from './useResize';
 import useSplit from './useSplit';
@@ -39,10 +39,10 @@ const createDefaultState = (): State => {
       show: false,
     },
     layout: {
-      width: 100,
-      height: 100,
       top: 0,
       left: 0,
+      width: 100,
+      height: 100,
     },
   };
 };
@@ -58,14 +58,75 @@ export type UseLayout = [
 export interface Options {
   onLayoutChange?: (layout: State) => void;
   initialState?: State;
+  size?: {
+    width?: number;
+    height?: number;
+  };
+  position?: {
+    top?: number;
+    left?: number;
+  };
 }
 
-const useLayout = (emitter: Emitter, options: Options = {}): UseLayout => {
+const defaultOptions = {
+  size: {},
+};
+
+const mergeOptionsWithInitialState = (
+  state: State,
+  options: Options,
+): State => {
+  const { size = {}, position = {} } = options;
+  const { height, width } = size;
+  const { top, left } = position;
+
+  const layoutUpdate: LayoutUpdate = {};
+
+  if (height) {
+    layoutUpdate.height = height;
+  }
+
+  if (width) {
+    layoutUpdate.width = width;
+  }
+
+  if (left) {
+    layoutUpdate.left = left;
+  }
+
+  if (top) {
+    layoutUpdate.top = top;
+  }
+
+  return {
+    ...state,
+    layout: {
+      ...state.layout,
+      ...layoutUpdate,
+    },
+  };
+};
+
+const getInitialState = (
+  initialState: State | undefined,
+  options: Options,
+): State => {
+  return mergeOptionsWithInitialState(initialState || defaultState, options);
+};
+
+const useLayout = (
+  emitter: Emitter,
+  options: Options = defaultOptions,
+): UseLayout => {
   const { onLayoutChange, initialState } = options;
+
   const [state, dispatch] = React.useReducer(
     reducer,
-    initialState || defaultState,
+    getInitialState(initialState, options),
   );
+  const { size = {}, position = {} } = options;
+  const { height, width } = size;
+  const { top, left } = position;
   const actions = React.useMemo(() => createActions(dispatch), [dispatch]);
   const layoutChange = React.useMemo(
     () => onLayoutChange && throttle(onLayoutChange),
@@ -82,10 +143,55 @@ const useLayout = (emitter: Emitter, options: Options = {}): UseLayout => {
     }
   }, [state, layoutChange]);
 
+  React.useEffect(() => {
+    const layoutUpdate: LayoutUpdate = {};
+    if (!top) {
+      layoutUpdate.top = top;
+    }
+
+    if (!width) {
+      layoutUpdate.left = left;
+    }
+    actions.updateLayout(layoutUpdate);
+  }, [top, left]);
+
+  React.useEffect(() => {
+    if (height && width) {
+      return;
+    }
+
+    const getLayoutUpdate = () => {
+      const { innerHeight, innerWidth } = window;
+      const layoutUpdate: LayoutUpdate = {};
+
+      if (!height) {
+        layoutUpdate.height = innerHeight;
+      }
+
+      if (!width) {
+        layoutUpdate.width = innerWidth;
+      }
+
+      return layoutUpdate;
+    };
+
+    const onResize = () => {
+      actions.updateLayout(getLayoutUpdate());
+    };
+
+    console.log(getLayoutUpdate());
+
+    actions.updateLayout(getLayoutUpdate());
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, [height, width]);
+
   useSplit(layout, emitter);
   useResize(layout, emitter);
 
   return layout;
 };
-export { createDefaultState }
+export { createDefaultState };
 export default useLayout;

@@ -2,7 +2,7 @@ import React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
 import Container from './Container';
 import Divider from './Divider';
-import { Emitter, Component, LayoutUpdate } from '../types';
+import { Emitter, Component } from '../types';
 import Layout from '../layout';
 import Overlay from './Overlay';
 import Config from '../contexts/Config';
@@ -19,41 +19,41 @@ interface PropTypes {
 const Subdivide: React.FC<PropTypes> = (props) => {
   const { component, width, height, top, left } = props;
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
-  const { onLayoutChange, initialState } = Config.useConfig();
+  const { onLayoutChange, initialState, classNames } = Config.useConfig();
   const layout = Layout.useLayout(emitter, {
     onLayoutChange,
     initialState,
+    size: {
+      width,
+      height,
+    },
+    position: {
+      top,
+      left,
+    },
   });
 
-  const [layoutRef, actions] = layout;
+  const [layoutRef] = layout;
 
   const { dividers, containers, overlay } = layoutRef.current;
 
   const overlayElement = overlay.show ? <Overlay {...overlay} /> : null;
 
   React.useEffect(() => {
-    const { innerWidth, innerHeight } = window;
-    const layoutUpdate: LayoutUpdate = {};
-
-    layoutUpdate.width = width || innerWidth;
-    layoutUpdate.height = height || innerHeight;
-    layoutUpdate.top = top || 0;
-    layoutUpdate.left = left || 0;
-    
-
-    actions.updateLayout(layoutUpdate);
-  }, [width, height, top, left]);
-
-  React.useEffect(() => {
     if (initialState) {
       Object.keys(initialState.containers).forEach((id) => {
         Id.addId(Number(id));
-      })
+      });
     }
   }, []);
 
+  const style: React.CSSProperties = {
+    width: layoutRef.current.layout.width,
+    height: layoutRef.current.layout.height,
+  };
+
   return (
-    <>
+    <div style={style} className={classNames.layout}>
       {Object.keys(containers).reduce<React.ReactNode[]>(
         (elements, id: string) => {
           const container = containers[id];
@@ -78,7 +78,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
         return <Divider {...divider} emitter={emitter} key={divider.id} />;
       })}
       {overlayElement}
-    </>
+    </div>
   );
 };
 

@@ -75,21 +75,29 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
 
         const direction = resizeDirection(from, to, from.directionType);
 
-        const delta = {
-          x: Percentage.create(layout.width, to.x - from.x),
-          y: Percentage.create(layout.height, to.y - from.y),
+        const deltaMouse = {
+          x: to.x - from.x,
+          y: to.y - from.y,
         };
 
         const isDeltaZero = Direction.isHorizontal(direction)
-          ? delta.x === 0
-          : delta.y === 0;
+          ? deltaMouse.x === 0
+          : deltaMouse.y === 0;
 
         if (isDeltaZero) {
           return;
         }
 
+        console.log(Vector.add(deltaMouse, Vector.fromPosition(layout)), Vector.fromPosition(layout));
+        
+
         const previousContainer = containers[previous];
         const parent = containers[previousContainer.parent];
+        const delta = Vector.fromPercentage(
+          deltaMouse,
+          layout.width,
+          layout.height,
+        );
 
         const actionsToDispatch = resize(
           parent,

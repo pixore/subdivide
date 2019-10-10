@@ -2,6 +2,7 @@ import React from 'react';
 import { State } from '../layout/types';
 
 interface ClassNames {
+  layout: string;
   corner: string;
   container: string;
   divider: string;
@@ -10,6 +11,7 @@ interface ClassNames {
 }
 
 interface OptionalClassNames {
+  layout?: string;
   corner?: string;
   container?: string;
   divider?: string;
@@ -18,6 +20,7 @@ interface OptionalClassNames {
 }
 
 const defaultClassNames = {
+  layout: 'px-layout',
   corner: 'px-corner',
   container: 'px-container',
   divider: 'px-divider',
@@ -33,14 +36,14 @@ const initialValue = {
 
 export interface ConfigState {
   onLayoutChange?: (state: State) => void;
-  initialState?: State,
+  initialState?: State;
   classNames: ClassNames;
   cornerSize: number;
   splitRatio: number;
 }
 
 interface PropTypes {
-  initialState?: State,
+  initialState?: State;
   onLayoutChange?: (state: State) => void;
   classNames?: OptionalClassNames;
   cornerSize?: number;
@@ -60,6 +63,7 @@ const Provider: React.FC<PropTypes> = (props) => {
   } = props;
 
   const {
+    layout = defaultClassNames.layout,
     corner = defaultClassNames.corner,
     container = defaultClassNames.container,
     divider = defaultClassNames.divider,
@@ -71,6 +75,7 @@ const Provider: React.FC<PropTypes> = (props) => {
     onLayoutChange,
     initialState,
     classNames: {
+      layout,
       corner,
       container,
       divider,

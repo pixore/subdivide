@@ -38,7 +38,7 @@ const Overlay: React.FC<PropTypes> = (props) => {
     left: Percentage.toString(left),
     width: Percentage.toString(width),
     height: Percentage.toString(height),
-    background: 'rgba(0, 0 , 0, 0.2)',
+    background: 'rgba(0, 0 , 0, 0.4)',
   };
 
   return (
@@ -50,7 +50,7 @@ const Overlay: React.FC<PropTypes> = (props) => {
         viewBox="0 0 100 100"
         preserveAspectRatio={`${align} meet`}
       >
-        <path d={path} stroke="transparent" fill="rgba(255, 255 , 255, 0.1)" />
+        <path d={path} stroke="transparent" fill="rgba(255, 255 , 255, 0.5)" />
       </svg>
     </div>
   );

@@ -1,5 +1,4 @@
 import Direction, { DirectionType } from '../utils/Direction';
-import Percentage from './Percentage';
 import Vector from './Vector';
 import Arr from './Arr';
 import Id from './Id';
@@ -33,17 +32,6 @@ interface Delta {
   x: number;
   y: number;
 }
-
-const toPixels = (container: Container): Container => {
-  const { top, left, width, height } = container;
-  return {
-    ...container,
-    top: Percentage.toPixels(window.innerHeight, top),
-    left: Percentage.toPixels(window.innerWidth, left),
-    width: Percentage.toPixels(window.innerWidth, width),
-    height: Percentage.toPixels(window.innerHeight, height),
-  };
-};
 
 interface SizeAndPosition {
   id: Id;
@@ -219,17 +207,11 @@ const newGroupIsNeeded = (
 };
 
 const getDelta = (container: Container, from: FromCorner, to: Vector) => {
-  const { left, width, top, height } = Container.toPixels(container);
+  const { left, width, top, height } = container;
 
   return {
-    x: Percentage.create(
-      window.innerWidth,
-      from.horizontal === Direction.LEFT ? to.x - left : to.x - (left + width),
-    ),
-    y: Percentage.create(
-      window.innerHeight,
-      from.vertical === Direction.TOP ? to.y - top : to.y - (top + height),
-    ),
+    x: from.horizontal === Direction.LEFT ? to.x - left : to.x - (left + width),
+    y: from.vertical === Direction.TOP ? to.y - top : to.y - (top + height),
   };
 };
 
@@ -345,8 +327,7 @@ const split = (
   };
 
   const parent = getParent(originContainer);
-  console.log(parent);
-  
+
   const splitDelta = Vector.ofPercentage(delta, Vector.fromSize(parent));
 
   const splitRatio =
@@ -380,7 +361,6 @@ const split = (
 const Container = {
   split,
   getDelta,
-  toPixels,
   getSplitRatio,
   getSizeAfterSplit,
   getSizeAfterSplitFrom,

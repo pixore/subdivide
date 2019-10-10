@@ -7,6 +7,11 @@ export interface Size {
   height: number;
 }
 
+export interface Position {
+  left: number;
+  top: number;
+}
+
 export interface Layout {
   top: number;
   left: number;
