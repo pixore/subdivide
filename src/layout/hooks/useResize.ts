@@ -75,10 +75,7 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
 
         const direction = resizeDirection(from, to, from.directionType);
 
-        const deltaMouse = {
-          x: to.x - from.x,
-          y: to.y - from.y,
-        };
+        const deltaMouse = Vector.subtract(to, from);
 
         const isDeltaZero = Direction.isHorizontal(direction)
           ? deltaMouse.x === 0
@@ -87,9 +84,6 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
         if (isDeltaZero) {
           return;
         }
-
-        console.log(Vector.add(deltaMouse, Vector.fromPosition(layout)), Vector.fromPosition(layout));
-        
 
         const previousContainer = containers[previous];
         const parent = containers[previousContainer.parent];
