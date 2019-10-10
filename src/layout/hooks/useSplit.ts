@@ -326,7 +326,7 @@ const useSplit = (layout: UseLayout, emitter: Emitter) => {
         };
 
         const percentageTo = Vector.fromPercentage(
-          Vector.add(to, Vector.fromPosition(layout)),
+          Vector.subtract(to, Vector.fromPosition(layout)),
           layout.width,
           layout.height,
         );
