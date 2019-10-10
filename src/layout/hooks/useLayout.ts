@@ -119,7 +119,6 @@ const useLayout = (
   options: Options = defaultOptions,
 ): UseLayout => {
   const { onLayoutChange, initialState } = options;
-
   const [state, dispatch] = React.useReducer(
     reducer,
     getInitialState(initialState, options),
@@ -136,7 +135,7 @@ const useLayout = (
   stateRef.current = state;
 
   const layout: UseLayout = [stateRef, actions, actionCreators];
-
+    
   React.useEffect(() => {
     if (layoutChange) {
       layoutChange(state);
@@ -145,11 +144,11 @@ const useLayout = (
 
   React.useEffect(() => {
     const layoutUpdate: LayoutUpdate = {};
-    if (!top) {
+    if (typeof top === 'number') {
       layoutUpdate.top = top;
     }
 
-    if (!width) {
+    if (typeof width === 'number') {
       layoutUpdate.left = left;
     }
     actions.updateLayout(layoutUpdate);
@@ -178,8 +177,6 @@ const useLayout = (
     const onResize = () => {
       actions.updateLayout(getLayoutUpdate());
     };
-
-    console.log(getLayoutUpdate());
 
     actions.updateLayout(getLayoutUpdate());
     window.addEventListener('resize', onResize);
