@@ -23,7 +23,7 @@ const add = (vector1: Vector, vector2: Vector) => {
   }
 }
 
-const sustract = (vector1: Vector, vector2: Vector) => {
+const subtract = (vector1: Vector, vector2: Vector) => {
   return {
     x: vector1.x - vector2.x,
     y: vector1.y - vector2.y,
