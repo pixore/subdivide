@@ -1,6 +1,8 @@
-import * as React from 'react';
+import React from 'react';
+import { State } from '../layout/types';
 
 interface ClassNames {
+  layout: string;
   corner: string;
   container: string;
   divider: string;
@@ -9,6 +11,7 @@ interface ClassNames {
 }
 
 interface OptionalClassNames {
+  layout?: string;
   corner?: string;
   container?: string;
   divider?: string;
@@ -17,6 +20,7 @@ interface OptionalClassNames {
 }
 
 const defaultClassNames = {
+  layout: 'px-layout',
   corner: 'px-corner',
   container: 'px-container',
   divider: 'px-divider',
@@ -31,12 +35,16 @@ const initialValue = {
 };
 
 export interface ConfigState {
+  onLayoutChange?: (state: State) => void;
+  initialState?: State;
   classNames: ClassNames;
   cornerSize: number;
   splitRatio: number;
 }
 
 interface PropTypes {
+  initialState?: State;
+  onLayoutChange?: (state: State) => void;
   classNames?: OptionalClassNames;
   cornerSize?: number;
   splitRatio?: number;
@@ -47,12 +55,15 @@ const ConfigContext = React.createContext<ConfigState>(initialValue);
 const Provider: React.FC<PropTypes> = (props) => {
   const {
     children,
+    initialState,
+    onLayoutChange,
     classNames = {},
     cornerSize = initialValue.cornerSize,
     splitRatio = initialValue.splitRatio,
   } = props;
 
   const {
+    layout = defaultClassNames.layout,
     corner = defaultClassNames.corner,
     container = defaultClassNames.container,
     divider = defaultClassNames.divider,
@@ -61,7 +72,10 @@ const Provider: React.FC<PropTypes> = (props) => {
   } = classNames;
 
   const value = {
+    onLayoutChange,
+    initialState,
     classNames: {
+      layout,
       corner,
       container,
       divider,

@@ -1,13 +1,19 @@
 {
-  "name": "subdivide",
+  "name": "@pixore/subdivide",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "types": "index.js",
   "scripts": {
-    "test:types": "tsc --noEmit",
+    "clean": "rm -rf dist && rm -rf .cache",
+    "prebuild": "yarn clean",
+    "build": "tsc",
+    "generate:arrows": "ts-node -O '{\"module\": \"commonjs\"}' ./scripts/generate-arrows",
     "start": "parcel examples/index.html",
+    "test:types": "tsc --noEmit",
+    "test:duplication": "jscpd .",
     "test:cy": "start-server-and-test start http://localhost:1234 cy:run",
-    "test": "npm run test:types && npm run test:cy",
+    "test": "run-s test:types test:duplication test:cy",
     "cy:run": "cypress run",
     "cy:open": "cypress open"
   },
@@ -15,9 +21,12 @@
     "type": "git",
     "url": "git+https://github.com/pixore/subdivide.git"
   },
+  "files": [
+    "dist"
+  ],
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/pixore/subdivide/issues"
   },
@@ -30,11 +39,14 @@
     "@types/once": "~1.4.0",
     "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
-    "cypress": "^3.4.1",
-    "parcel-bundler": "^1.12.3",
+    "cypress": "~3.4.1",
+    "jscpd": "^2.0.16",
+    "npm-run-all": "^4.1.5",
+    "parcel-bundler": "^1.12.4",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "start-server-and-test": "^1.10.4",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   }
 }

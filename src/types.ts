@@ -2,12 +2,40 @@ import Direction, { DirectionType } from './utils/Direction';
 import Id from './utils/Id';
 import Container from './utils/Container';
 
-export type Component = React.ComponentType<any>;
-
-export interface Vector {
-  x: number;
-  y: number;
+export interface Size {
+  width: number;
+  height: number;
 }
+
+export interface Position {
+  left: number;
+  top: number;
+}
+
+export interface Layout {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+export interface LayoutUpdate {
+  top?: number;
+  left?: number;
+  width?: number;
+  height?: number;
+}
+
+export interface Overlay {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+  show: boolean;
+  direction: Direction;
+}
+
+export type Component = React.ComponentType<any>;
 
 export interface FromCorner {
   vertical: Direction;
@@ -52,6 +80,11 @@ export interface Divider {
   left: number;
 }
 
+export interface Corner {
+  vertical: Direction;
+  horizontal: Direction;
+}
+
 export interface SplitArgs {
   containerId: number;
   from: FromCorner;
@@ -64,7 +97,7 @@ export interface ResizeArgs {
 }
 
 interface Events {
-  split: (args: SplitArgs) => void;
+  cornerDrag: (args: SplitArgs) => void;
   resize: (args: ResizeArgs) => void;
 }
 
