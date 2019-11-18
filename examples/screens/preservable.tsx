@@ -1,10 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Subdivide from '../../src';
-import Config from '../../src/contexts/Config';
+import Subdivide, { Config, useContainer, LayoutState } from '../../src';
 import Color from '../components/Color';
-import { State } from '../../src/layout/types';
-import { useContainer } from '../../src/components/Container';
 
 interface PropTypes {
   id: number;
@@ -25,7 +22,7 @@ const Panel: React.FC<PropTypes> = (props) => {
 const getInitialState = () => {
   try {
     const json = localStorage.getItem('state');
-    return JSON.parse(json) as State;
+    return JSON.parse(json) as LayoutState;
   } catch (error) {
     return undefined;
   }
@@ -34,7 +31,7 @@ const getInitialState = () => {
 const App: React.FC = () => {
   const initialState = React.useMemo(() => getInitialState(), []);
 
-  const onLayoutChange = (state: State) => {
+  const onLayoutChange = (state: LayoutState) => {
     localStorage.setItem('state', JSON.stringify(state));
   };
 

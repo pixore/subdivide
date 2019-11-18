@@ -1,8 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import Subdivide from '../../src';
-import Config from '../../src/contexts/Config';
+import Subdivide, { Config } from '../../src';
 import ColorPane from '../components/ColorPane';
 import initialState from './initial-state.json';
 
