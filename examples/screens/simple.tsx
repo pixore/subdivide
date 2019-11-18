@@ -2,10 +2,10 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import Subdivide from '../../src';
-import Colors from '../components/Colors';
+import ColorPane from '../components/ColorPane';
 
 const App: React.FC = () => {
-  return <Subdivide component={Colors} />;
+  return <Subdivide component={ColorPane} />;
 };
 
 render(<App />, document.getElementById('root'));

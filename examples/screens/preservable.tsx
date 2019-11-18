@@ -1,10 +1,26 @@
 import React from 'react';
 import { render } from 'react-dom';
-
 import Subdivide from '../../src';
 import Config from '../../src/contexts/Config';
-import Colors from '../components/Colors';
+import Color from '../components/Color';
 import { State } from '../../src/layout/types';
+import { useContainer } from '../../src/components/Container';
+
+interface PropTypes {
+  id: number;
+}
+
+const Panel: React.FC<PropTypes> = (props) => {
+  const { id, setState, state } = useContainer();
+  const onChange = (color: string) => {
+    setState(color);
+  };
+  return (
+    <Color onChange={onChange} initial={state as string}>
+      {id}
+    </Color>
+  );
+};
 
 const getInitialState = () => {
   try {
@@ -18,7 +34,7 @@ const getInitialState = () => {
 const App: React.FC = () => {
   const initialState = React.useMemo(() => getInitialState(), []);
 
-  const onLayoutChange = (state) => {
+  const onLayoutChange = (state: State) => {
     localStorage.setItem('state', JSON.stringify(state));
   };
 
@@ -27,7 +43,7 @@ const App: React.FC = () => {
       initialState={initialState}
       onLayoutChange={onLayoutChange}
     >
-      <Subdivide component={Colors} />
+      <Subdivide component={Panel} />
     </Config.Provider>
   );
 };

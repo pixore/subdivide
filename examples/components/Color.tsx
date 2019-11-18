@@ -25,23 +25,29 @@ const defaultStyle: React.CSSProperties = {
 };
 
 interface PropTypes {
-  id: number;
+  initial?: string;
+  onChange?: (color: string) => void;
 }
 
-const Colors: React.FC<PropTypes> = (props) => {
-  const [color, setColor] = React.useState(() => getRandomColor());
+const Color: React.FC<PropTypes> = (props) => {
+  const { children, initial, onChange } = props;
+  const [color, setColor] = React.useState<string>(
+    () => initial || getRandomColor(),
+  );
   const style: React.CSSProperties = {
-    // background: color,
+    background: color,
     ...defaultStyle,
   };
+
+  React.useEffect(() => onChange(color), [color]);
 
   const onClick = () => setColor(getRandomColor());
 
   return (
     <div style={style} onClick={onClick}>
-      <span style={spanStyle}>{props.id}</span>
+      <span style={spanStyle}>{children}</span>
     </div>
   );
 };
 
-export default Colors;
+export default Color;
