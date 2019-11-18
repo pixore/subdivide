@@ -67,6 +67,7 @@ export interface ContainerUpdate {
   height?: number;
   top?: number;
   left?: number;
+  state?: unknown;
 }
 
 export interface Divider {
@@ -118,26 +119,3 @@ export interface Emitter {
 }
 
 export type AddContainer = (data: Container) => Id;
-export type Primitive =
-  | string
-  | number
-  | boolean
-  | bigint
-  | symbol
-  | undefined
-  | null;
-
-/** Like Readonly but recursive */
-export type DeepReadonly<T> = T extends Primitive
-  ? T
-  : T extends Function
-  ? T
-  : T extends Date
-  ? T
-  : T extends Map<infer K, infer V>
-  ? ReadonlyMap<K, V>
-  : T extends Set<infer U>
-  ? ReadonlySet<U>
-  : T extends {}
-  ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
-  : Readonly<T>;

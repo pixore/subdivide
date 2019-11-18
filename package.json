@@ -32,7 +32,8 @@
   },
   "homepage": "https://github.com/pixore/subdivide#readme",
   "dependencies": {
-    "tiny-emitter": "^2.1.0"
+    "tiny-emitter": "^2.1.0",
+    "utility-types": "^3.10.0"
   },
   "devDependencies": {
     "@pixore/prettier-config": "0.0.2",
@@ -47,6 +48,6 @@
     "react-dom": "^16.10.2",
     "start-server-and-test": "^1.10.4",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "typescript": "3.7"
   }
 }

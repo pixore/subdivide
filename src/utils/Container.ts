@@ -1,9 +1,10 @@
+import { DeepReadonly } from 'utility-types';
 import Direction, { DirectionType } from '../utils/Direction';
 import Vector from './Vector';
 import Arr from './Arr';
 import Id from './Id';
 import { State } from '../layout/types';
-import { FromCorner, DeepReadonly, Size } from '../types';
+import { FromCorner, Size } from '../types';
 
 interface MutableContainer {
   id: Id;
@@ -16,6 +17,7 @@ interface MutableContainer {
   height: number;
   top: number;
   left: number;
+  state?: unknown;
 }
 
 type Container = DeepReadonly<MutableContainer>;

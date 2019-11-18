@@ -1,3 +1,4 @@
+import { DeepReadonly } from 'utility-types';
 import Id from '../utils/Id';
 import Direction from '../utils/Direction';
 import Container from '../utils/Container';
@@ -5,7 +6,6 @@ import {
   ContainerUpdate,
   ContainersMap,
   DividersMap,
-  DeepReadonly,
   Overlay,
   Layout,
   LayoutUpdate,
