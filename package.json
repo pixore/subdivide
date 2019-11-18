@@ -1,11 +1,10 @@
 {
   "name": "@pixore/subdivide",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "types": "index.js",
+  "version": "0.0.1",
+  "description": "Layout system inspired by blender's subdive layout",
+  "main": "dist/index.js",
   "scripts": {
-    "clean": "rm -rf dist && rm -rf .cache",
+    "clean": "rm -rf dist && rm -rf .cache & rm tsconfig.tsbuildinfo",
     "prebuild": "yarn clean",
     "build": "tsc",
     "generate:arrows": "ts-node -O '{\"module\": \"commonjs\"}' ./scripts/generate-arrows",
@@ -15,7 +14,8 @@
     "test:cy": "start-server-and-test start http://localhost:1234 cy:run",
     "test": "run-s test:types test:duplication test:cy",
     "cy:run": "cypress run",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "prepack": "yarn build"
   },
   "repository": {
     "type": "git",
