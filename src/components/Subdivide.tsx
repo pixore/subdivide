@@ -33,7 +33,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     },
   });
 
-  const [layoutRef] = layout;
+  const [layoutRef, actions] = layout;
 
   const { dividers, containers, overlay } = layoutRef.current;
 
@@ -52,6 +52,13 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     height: layoutRef.current.layout.height,
   };
 
+  const setContainerState = (id: Id, state: unknown) => {
+    actions.update({
+      id,
+      state,
+    });
+  };
+
   return (
     <div style={style} className={classNames.layout}>
       {Object.keys(containers).reduce<React.ReactNode[]>(
@@ -65,6 +72,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
           return elements.concat(
             <Container
               key={id}
+              setState={setContainerState}
               emitter={emitter}
               component={component}
               {...container}

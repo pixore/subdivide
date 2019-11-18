@@ -17,12 +17,36 @@ interface PropTypes {
   left: number;
   previous?: number;
   next?: number;
+  state?: unknown;
+  setState: (id: Id, state: unknown) => void;
 }
+
+interface State {
+  id: number;
+  setState: (state: unknown) => void;
+  state: unknown;
+}
+
+const Context = React.createContext<State>({
+  id: -1,
+  setState: () => undefined,
+  state: {},
+});
 
 const Container: React.FC<PropTypes> = (props) => {
   const elementRef = React.useRef<HTMLDivElement>(null);
   const { container } = Config.useClassNames();
-  const { id, component: Comp, width, height, top, left, emitter } = props;
+  const {
+    id,
+    component: Comp,
+    width,
+    height,
+    top,
+    left,
+    emitter,
+    state,
+    setState,
+  } = props;
   const style: React.CSSProperties = {
     width: Percentage.toString(width),
     height: Percentage.toString(height),
@@ -37,9 +61,19 @@ const Container: React.FC<PropTypes> = (props) => {
     });
   };
 
+  const value = {
+    id,
+    setState: (state: unknown) => {
+      setState(id, state);
+    },
+    state,
+  };
+
   return (
     <div ref={elementRef} className={container} style={style}>
-      <Comp id={id} />
+      <Context.Provider value={value}>
+        <Comp />
+      </Context.Provider>
       <Corner
         onStartDrag={onStartDrag}
         vertical={Direction.TOP}
@@ -63,5 +97,9 @@ const Container: React.FC<PropTypes> = (props) => {
     </div>
   );
 };
+
+const useContainer = () => React.useContext(Context);
+
+export { useContainer };
 
 export default Container;
