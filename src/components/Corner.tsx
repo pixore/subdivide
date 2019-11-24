@@ -49,7 +49,10 @@ const Corner: React.FC<PropTypes> = (props) => {
   const { vertical, horizontal, onStartDrag } = props;
   const { cornerSize } = Config.useConfig();
   const { corner } = Config.useClassNames();
-  const style = {
+  const style: CSSProperties = {
+    position: 'absolute',
+    transform: 'rotate(45deg)',
+    zIndex: 2,
     ...getPosition(cornerSize, vertical, horizontal),
     width: cornerSize,
     height: cornerSize,

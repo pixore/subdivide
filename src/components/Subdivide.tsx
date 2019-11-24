@@ -20,7 +20,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   const { component, width, height, top, left } = props;
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
   const { onLayoutChange, initialState, classNames } = Config.useConfig();
-  const layout = Layout.useLayout(emitter, {
+  const [layoutRef, actions] = Layout.useLayout(emitter, {
     onLayoutChange,
     initialState,
     size: {
@@ -33,9 +33,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     },
   });
 
-  const [layoutRef, actions] = layout;
-
-  const { dividers, containers, overlay } = layoutRef.current;
+  const { dividers, containers, overlay, layout } = layoutRef.current;
 
   const overlayElement = overlay.show ? <Overlay {...overlay} /> : null;
 
@@ -48,8 +46,9 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   }, []);
 
   const style: React.CSSProperties = {
-    width: layoutRef.current.layout.width,
-    height: layoutRef.current.layout.height,
+    width: layout.width || '100%',
+    height: layout.height || '100%',
+    position: 'absolute',
   };
 
   const setContainerState = (id: Id, state: unknown) => {

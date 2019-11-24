@@ -48,6 +48,8 @@ const Container: React.FC<PropTypes> = (props) => {
     setState,
   } = props;
   const style: React.CSSProperties = {
+    position: 'absolute',
+    overflow: 'hidden',
     width: Percentage.toString(width),
     height: Percentage.toString(height),
     top: Percentage.toString(top),

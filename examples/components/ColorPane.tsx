@@ -1,12 +1,9 @@
 import * as React from 'react';
 import Color from './Color';
+import { useContainer } from '../../src';
 
-interface PropTypes {
-  id: number;
-}
-
-const ColorPane: React.FC<PropTypes> = (props) => {
-  const { id } = props;
+const ColorPane: React.FC = () => {
+  const { id } = useContainer();
 
   return <Color>{id}</Color>;
 };

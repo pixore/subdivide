@@ -29,8 +29,10 @@ interface PropTypes {
   onChange?: (color: string) => void;
 }
 
+const noop = () => undefined;
+
 const Color: React.FC<PropTypes> = (props) => {
-  const { children, initial, onChange } = props;
+  const { children, initial, onChange = noop } = props;
   const [color, setColor] = React.useState<string>(
     () => initial || getRandomColor(),
   );

@@ -9,54 +9,27 @@
 body {
   margin: 0;
   padding: 0;
-  background: black;
 }
 
 .px-corner {
-  position: absolute;
-  transform: rotate(45deg);
   cursor: grab;
-  z-index: 2;
 }
 
-.px-layout {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
+/* .px-layout {
+} */
 
 .px-container {
-  position: absolute;
-  overflow: hidden;
   outline: 1px solid;
 }
 
-.px-divider {
-  position: absolute;
-}
+/* .px-divider {
+  
+} */
 
 .px-divider--vertical {
   cursor: row-resize;
 }
 
-.px-divider--vertical div {
-  height: 10px;
-  position: absolute;
-  left: 0;
-  top: -5px;
-  width: 100%;
-}
-
 .px-divider--horizontal {
   cursor: col-resize;
-}
-
-.px-divider--horizontal div {
-  width: 10px;
-  position: absolute;
-  left: -5px;
-  top: 0;
-  height: 100%;
 }

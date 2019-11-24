@@ -18,6 +18,24 @@ interface PropTypes {
   emitter: Emitter;
 }
 
+const getBarStyle = (isHorizontal: boolean): React.CSSProperties => {
+  if (isHorizontal) {
+    return {
+      top: 0,
+      width: 10,
+      left: -5,
+      height: '100%',
+    };
+  }
+
+  return {
+    left: 0,
+    height: 10,
+    top: -5,
+    width: '100%',
+  };
+};
+
 const Divider: React.FC<PropTypes> = (props) => {
   const {
     top,
@@ -34,7 +52,9 @@ const Divider: React.FC<PropTypes> = (props) => {
     verticalDivider,
     horizontalDivider,
   } = Config.useClassNames();
+  const isHorizontal = directionType === DirectionType.HORIZONTAL;
   const style: React.CSSProperties = {
+    position: 'absolute',
     top: Percentage.toString(top),
     left: Percentage.toString(left),
     width: Percentage.toString(width),
@@ -59,9 +79,14 @@ const Divider: React.FC<PropTypes> = (props) => {
       : verticalDivider
   }`;
 
+  const barStyle: React.CSSProperties = {
+    position: 'absolute',
+    ...getBarStyle(isHorizontal),
+  };
+
   return (
     <div className={classNames} onMouseDown={onMouseDown} style={style}>
-      <div></div>
+      <div style={barStyle}></div>
     </div>
   );
 };
