@@ -4,7 +4,7 @@
     "outDir": "dist",
     "composite": true,
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "jsx": "react",
     "strictNullChecks": true,
     "moduleResolution": "node",
