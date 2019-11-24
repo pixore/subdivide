@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Direction from '../utils/Direction';
 import Percentage from '../utils/Percentage';
 

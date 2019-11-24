@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
 import Container from './Container';
 import Divider from './Divider';

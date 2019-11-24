@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Id from '../../utils/Id';
 import Container from '../../utils/Container';
 import reducer from '../reducers/main';
@@ -135,7 +135,7 @@ const useLayout = (
   stateRef.current = state;
 
   const layout: UseLayout = [stateRef, actions, actionCreators];
-    
+
   React.useEffect(() => {
     if (layoutChange) {
       layoutChange(state);

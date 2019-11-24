@@ -8,7 +8,7 @@
     "jsx": "react",
     "strictNullChecks": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": false,

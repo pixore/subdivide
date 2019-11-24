@@ -1,8 +1,10 @@
-import React, { CSSProperties } from 'react';
+import * as React from 'react';
 import Config from '../contexts/Config';
 
 import { FromCorner } from '../types';
 import Direction from '../utils/Direction';
+
+type CSSProperties = React.CSSProperties;
 
 interface PropTypes {
   vertical: Direction;

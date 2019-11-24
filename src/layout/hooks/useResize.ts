@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Direction from '../../utils/Direction';
 import Container from '../../utils/Container';
 import Percentage from '../../utils/Percentage';
@@ -46,7 +46,7 @@ const useResize = (layout: UseLayout, emitter: Emitter) => {
         (containerData.height && parent.height < containerData.height) ||
         (containerData.top && parent.top > containerData.top) ||
         (containerData.left && parent.left > containerData.left);
- 
+
       const sizeOrPositionIsNegative =
         (containerData.width && 0 > containerData.width) ||
         (containerData.height && 0 > containerData.height) ||

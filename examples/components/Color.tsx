@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 const getRandomColorPart = (): number => Math.floor(Math.random() * 200);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Config from '../contexts/Config';
 
 import { DirectionType } from '../utils/Direction';
