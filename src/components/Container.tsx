@@ -65,9 +65,12 @@ const Container: React.FC<PropTypes> = (props) => {
 
   const value = {
     id,
-    setState: (state: unknown) => {
-      setState(id, state);
-    },
+    setState: React.useCallback(
+      (state: unknown) => {
+        setState(id, state);
+      },
+      [setState],
+    ),
     state,
   };
 

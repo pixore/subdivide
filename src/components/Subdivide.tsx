@@ -51,12 +51,15 @@ const Subdivide: React.FC<PropTypes> = (props) => {
     position: 'absolute',
   };
 
-  const setContainerState = (id: Id, state: unknown) => {
-    actions.update({
-      id,
-      state,
-    });
-  };
+  const setContainerState = React.useCallback(
+    (id: Id, state: unknown) => {
+      actions.update({
+        id,
+        state,
+      });
+    },
+    [actions],
+  );
 
   return (
     <div style={style} className={classNames.layout}>
