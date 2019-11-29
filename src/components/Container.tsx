@@ -25,6 +25,7 @@ interface State {
   id: number;
   setState: (state: unknown) => void;
   state: unknown;
+  stats?: DOMRect;
 }
 
 const Context = React.createContext<State>({
@@ -34,6 +35,7 @@ const Context = React.createContext<State>({
 });
 
 const Container: React.FC<PropTypes> = (props) => {
+  const [stats, setStats] = React.useState();
   const elementRef = React.useRef<HTMLDivElement>(null);
   const { container } = Config.useClassNames();
   const {
@@ -56,6 +58,21 @@ const Container: React.FC<PropTypes> = (props) => {
     left: Percentage.toString(left),
   };
 
+  React.useEffect(() => {
+    const saveStats = () => {
+      if (!elementRef.current) {
+        return;
+      }
+      setStats(elementRef.current.getBoundingClientRect());
+    };
+
+    saveStats();
+
+    window.addEventListener('resize', saveStats);
+
+    return () => window.removeEventListener('resize', saveStats);
+  }, [width, height, top, left]);
+
   const onStartDrag = (fromCorner: FromCorner) => {
     emitter.emit('cornerDrag', {
       containerId: id,
@@ -72,6 +89,7 @@ const Container: React.FC<PropTypes> = (props) => {
       [setState],
     ),
     state,
+    stats,
   };
 
   return (
