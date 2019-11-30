@@ -1,6 +1,6 @@
 {
   "name": "@pixore/subdivide",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Layout system inspired by blender's subdive layout",
   "main": "dist/index.js",
   "scripts": {

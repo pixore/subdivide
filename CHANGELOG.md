@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/pixore/subdivide/compare/v0.0.5...v0.0.6) (2019-11-30)
+
+
+### Bug Fixes
+
+* **container:** wait to update the stats ([7beaa69](https://github.com/pixore/subdivide/commit/7beaa69af1fcee4238171ec2e98717da1a404822))
+
 ### 0.0.5 (2019-11-30)
 
 
