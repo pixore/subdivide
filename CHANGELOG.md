@@ -1,0 +1,54 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### 0.0.5 (2019-11-30)
+
+
+### Features
+
+* **config:** support custom initialState ([0129c40](https://github.com/pixore/subdivide/commit/0129c4098d6aa6cb2c2c1beefd7307f208f26a1f))
+* **container:** create container utils ([e1cd68a](https://github.com/pixore/subdivide/commit/e1cd68af217b616670dd426a783942ec1e12e36c))
+* **container:** provide stats about the container ([3b8d812](https://github.com/pixore/subdivide/commit/3b8d81206f0288e883ff4b7544155bd7a02d315e))
+* **container:** support custom state for each container ([265516a](https://github.com/pixore/subdivide/commit/265516a96920d48136826721e0f7a97bd80a6892))
+* **general:** create basic subdivide system ([7cacbc8](https://github.com/pixore/subdivide/commit/7cacbc81fca4295fdc5fd1442710241d956d3d86))
+* **hooks:** Stop using useState, instead use useReducer  ([6b0096c](https://github.com/pixore/subdivide/commit/6b0096c504b0cac7e4c62f083a282386f4552969))
+* **id:** create id utils ([f1157b3](https://github.com/pixore/subdivide/commit/f1157b342d25fc95a9af6e530915a4cda37fe12f))
+* **ids:** check for used ids ([f56a76f](https://github.com/pixore/subdivide/commit/f56a76f8029155f194c05f4cef2f50a7e7b7f307))
+* **layout:** create layout reducer ([131f54e](https://github.com/pixore/subdivide/commit/131f54e42c7d1f32e6133b2365742326ef9d02fa))
+* **layout:** generate dividers ([52c50a1](https://github.com/pixore/subdivide/commit/52c50a1f3cd1892d6939eeb1b0ba91cc4ae01a49))
+* **layout:** implement custom initial state ([f8658a2](https://github.com/pixore/subdivide/commit/f8658a255076db9e01e370768bc0473b7f5ead68))
+* **layout:** stop using window size directly ([ce2fe2b](https://github.com/pixore/subdivide/commit/ce2fe2bf53702380ebb44d712b5444ef26494fba))
+* **layout:** support custom initial state ([4e4cf1b](https://github.com/pixore/subdivide/commit/4e4cf1b345ab448bfd91e20bc358d4ef3556b937))
+* **layout:** support custom position and size ([66827b2](https://github.com/pixore/subdivide/commit/66827b239a771c0d4c23041def4d5318ece98aee))
+* **layout:** support custom size and position ([c4ecfff](https://github.com/pixore/subdivide/commit/c4ecfff7fc172533d6fc351464962f2bbd5887aa))
+* **list:** create list utils ([983acf3](https://github.com/pixore/subdivide/commit/983acf329442fe372a991fac388cdce919e1d6f9))
+* **merge:** add basic merge implementation ([57318b6](https://github.com/pixore/subdivide/commit/57318b6a301d24bff9e2876a5e33def5e083e496))
+* **merge:** create overlay component ([75ca75b](https://github.com/pixore/subdivide/commit/75ca75b0e2d0a8246d972604d208f8c610a1767e))
+* **merge:** merge until the drag is ended ([f17210f](https://github.com/pixore/subdivide/commit/f17210f168cc67e682f8e51acee200fe72f1a27a))
+* **merge:** show merge indication using an overlay ([7180817](https://github.com/pixore/subdivide/commit/7180817c6a7281e9f3cb2c88cc1a0867d1d03a84))
+* **merge:** support vertical merge ([a85b57e](https://github.com/pixore/subdivide/commit/a85b57e7e04309f8b3399fd55b23f3a27d619360))
+* **overlay:** create arrow generator ([32548e0](https://github.com/pixore/subdivide/commit/32548e0c42f596bcef03d3c8c1bb36977d0f03af))
+* **percentage:** create percentage utils ([2bc88bf](https://github.com/pixore/subdivide/commit/2bc88bffeb7f4865f7f754ef40b1b4e493ec6be7))
+* **render:** avoid unnecessary render for users ([9037244](https://github.com/pixore/subdivide/commit/90372440e8a4a70f927f6e6d315bdcc4f433c4ea))
+* **resize:** use throttle when resizing ([c1af064](https://github.com/pixore/subdivide/commit/c1af06405b29bdd063692e654394f8ab3ca4ba06))
+* **styles:** add essential styles in the components ([3e52b50](https://github.com/pixore/subdivide/commit/3e52b508d1ac4298c38b0539a0ff6dcd16bbf9af))
+* **utils:** create array utils ([7a6253f](https://github.com/pixore/subdivide/commit/7a6253f9a6ddb85c0aa17914fcf842fad5606211))
+* **utils:** create throttle function ([25d0f33](https://github.com/pixore/subdivide/commit/25d0f331f7151d5366957911a97961bdab0b9b7e))
+* **vector:** add sustract function ([94cb5a9](https://github.com/pixore/subdivide/commit/94cb5a9ac4330074170b72d94c58a72a01af6d19))
+* **vector:** add util functions ([c594019](https://github.com/pixore/subdivide/commit/c5940192cbd1efbd60a838896368e01db165271c))
+* **vector:** create invert function ([974dbdb](https://github.com/pixore/subdivide/commit/974dbdb622dd7372a53fd9cf6e7cb1c8c82f1d6c))
+* **vector:** create Vector type ([8eecb0c](https://github.com/pixore/subdivide/commit/8eecb0cdd897ab8ad58a6b8cc9564379a6d401ec))
+
+
+### Bug Fixes
+
+* **example:** fix typo ([d92b8fa](https://github.com/pixore/subdivide/commit/d92b8fa6e6a13eb6b8fa638c2fbdcbb4eb9496da))
+* **example:** fix typo ([746b300](https://github.com/pixore/subdivide/commit/746b300cab50cc860dabaac0d06c1074c66d89b9))
+* **ids:** check for used ids ([95de185](https://github.com/pixore/subdivide/commit/95de1854ada3ad2ee9c612be24ad62ebd3590359))
+* **imports:** fix react imports ([f224f65](https://github.com/pixore/subdivide/commit/f224f652bed400b4f467e12d8f5687985d057f6f))
+* **layout:** update top and left correctly ([1b6fc85](https://github.com/pixore/subdivide/commit/1b6fc8528b62b4361be9629cb13fa5b59d299125))
+* **merge:** avoid merge to group containers ([83a30b7](https://github.com/pixore/subdivide/commit/83a30b7a6f0b6bf52a4a562532b02ffb3e0fe3cc))
+* **resize:** check size and position ([cb21254](https://github.com/pixore/subdivide/commit/cb21254c744f433c4b1e38bd4ccc319356d6772e))
+* **split:** fix left and up split directions ([f4867d1](https://github.com/pixore/subdivide/commit/f4867d19cc4541a46aa835d5bbd4fde357fb5df5))
+* **typo:** fix typo ([26e6f82](https://github.com/pixore/subdivide/commit/26e6f826699fe283c36db6098f44581d841337e5))
