@@ -66,7 +66,8 @@ const Container: React.FC<PropTypes> = (props) => {
       setStats(elementRef.current.getBoundingClientRect());
     };
 
-    saveStats();
+    // wait to have the final size
+    setTimeout(() => saveStats(), 100);
 
     window.addEventListener('resize', saveStats);
 
