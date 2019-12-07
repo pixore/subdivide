@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/pixore/subdivide/compare/v0.0.6...v0.0.7) (2019-12-07)
+
+
+### Features
+
+* **position:** add selfPosition prop ([0fc01ae](https://github.com/pixore/subdivide/commit/0fc01aebba484c740a64878f10d25550f04eee0e))
+
+
+### Bug Fixes
+
+* **size:** fix size when using custom position ([c708af1](https://github.com/pixore/subdivide/commit/c708af13c181f15e4d7b2b61419c2f4aa70c4bc5))
+
 ### [0.0.6](https://github.com/pixore/subdivide/compare/v0.0.5...v0.0.6) (2019-11-30)
 
 
