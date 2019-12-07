@@ -46,6 +46,8 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   }, []);
 
   const style: React.CSSProperties = {
+    top: layout.top,
+    left: layout.left,
     width: layout.width || '100%',
     height: layout.height || '100%',
     position: 'absolute',

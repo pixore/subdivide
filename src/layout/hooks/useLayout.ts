@@ -114,6 +114,14 @@ const getInitialState = (
   return mergeOptionsWithInitialState(initialState || defaultState, options);
 };
 
+const getSizeBaseOnPosition = (maxSize: number, position?: number) => {
+  if (typeof position === 'number') {
+    return maxSize - position;
+  }
+
+  return maxSize;
+};
+
 const useLayout = (
   emitter: Emitter,
   options: Options = defaultOptions,
@@ -164,11 +172,11 @@ const useLayout = (
       const layoutUpdate: LayoutUpdate = {};
 
       if (!height) {
-        layoutUpdate.height = innerHeight;
+        layoutUpdate.height = getSizeBaseOnPosition(innerHeight, top);
       }
 
       if (!width) {
-        layoutUpdate.width = innerWidth;
+        layoutUpdate.width = getSizeBaseOnPosition(innerWidth, left);
       }
 
       return layoutUpdate;
@@ -183,7 +191,7 @@ const useLayout = (
     return () => {
       window.removeEventListener('resize', onResize);
     };
-  }, [height, width]);
+  }, [height, width, top, left]);
 
   useSplit(layout, emitter);
   useResize(layout, emitter);

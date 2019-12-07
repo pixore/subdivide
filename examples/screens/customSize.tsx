@@ -6,7 +6,7 @@ import ColorPane from '../components/ColorPane';
 
 const App: React.FC = () => {
   return (
-    <div style={{ position: 'relative', left: 30, top: 30 }}>
+    <>
       <Subdivide
         component={ColorPane}
         width={600}
@@ -14,7 +14,8 @@ const App: React.FC = () => {
         top={30}
         left={30}
       />
-    </div>
+      <Subdivide component={ColorPane} top={30} left={700} />
+    </>
   );
 };
 
