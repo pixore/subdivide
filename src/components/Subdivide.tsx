@@ -14,10 +14,11 @@ interface PropTypes {
   height?: number;
   top?: number;
   left?: number;
+  selfPosition?: boolean;
 }
 
 const Subdivide: React.FC<PropTypes> = (props) => {
-  const { component, width, height, top, left } = props;
+  const { component, width, height, top, left, selfPosition = true } = props;
   const emitter = React.useMemo(() => new TinyEmitter() as Emitter, []);
   const { onLayoutChange, initialState, classNames } = Config.useConfig();
   const [layoutRef, actions] = Layout.useLayout(emitter, {
@@ -46,12 +47,15 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   }, []);
 
   const style: React.CSSProperties = {
-    top: layout.top,
-    left: layout.left,
     width: layout.width || '100%',
     height: layout.height || '100%',
     position: 'absolute',
   };
+
+  if (selfPosition) {
+    style.top = layout.top;
+    style.left = layout.left;
+  }
 
   const setContainerState = React.useCallback(
     (id: Id, state: unknown) => {
