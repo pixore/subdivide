@@ -1,4 +1,3 @@
-import { DeepReadonly } from 'utility-types';
 import Direction, { DirectionType } from '../utils/Direction';
 import Vector from './Vector';
 import Arr from './Arr';
@@ -20,7 +19,7 @@ interface MutableContainer {
   state?: unknown;
 }
 
-type Container = DeepReadonly<MutableContainer>;
+type Container = Readonly<MutableContainer>;
 
 interface OptionalSizeAndPosition {
   id: Id;
@@ -228,6 +227,7 @@ const createContainer = (
     parent: updatedOriginContainer.parent,
     isGroup: false,
     splitRatio,
+    state: originContainer.state,
     children: [],
     ...getSizeAfterSplitFrom(updatedOriginContainer, delta, direction),
     ...getPositionAfterSplitFrom(

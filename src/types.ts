@@ -50,13 +50,18 @@ export interface FromDivider {
   y: number;
 }
 
-export interface ContainersMap {
+export interface MutableContainersMap {
   [id: number]: Container;
 }
 
-export interface DividersMap {
+export type ContainersMap = Readonly<MutableContainersMap>;
+
+export interface MutableDividersMap {
   [id: string]: Divider;
 }
+
+export type DividersMap = Readonly<MutableDividersMap>;
+
 export interface ContainerUpdate {
   id: Id;
   parent?: Id;

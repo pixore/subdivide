@@ -4,8 +4,8 @@ import Direction from '../utils/Direction';
 import Container from '../utils/Container';
 import {
   ContainerUpdate,
-  ContainersMap,
-  DividersMap,
+  MutableContainersMap,
+  MutableDividersMap,
   Overlay,
   Layout,
   LayoutUpdate,
@@ -65,8 +65,8 @@ export interface Actions {
 
 export interface MutableState {
   rootId: Id;
-  containers: ContainersMap;
-  dividers: DividersMap;
+  containers: MutableContainersMap;
+  dividers: MutableDividersMap;
   overlay: Overlay;
   layout: Layout;
 }
