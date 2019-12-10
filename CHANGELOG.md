@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/pixore/subdivide/compare/v0.0.7...v0.0.8) (2019-12-10)
+
+
+### Features
+
+* **split:** clone container state when spliting ([aaea6db](https://github.com/pixore/subdivide/commit/aaea6dba65a64aa33773a3e7202b9e585e043da8))
+
 ### [0.0.7](https://github.com/pixore/subdivide/compare/v0.0.6...v0.0.7) (2019-12-07)
 
 
