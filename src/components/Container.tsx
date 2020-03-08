@@ -35,7 +35,7 @@ const Context = React.createContext<State>({
 });
 
 const Container: React.FC<PropTypes> = (props) => {
-  const [stats, setStats] = React.useState();
+  const [stats, setStats] = React.useState<DOMRect>();
   const elementRef = React.useRef<HTMLDivElement>(null);
   const { container } = Config.useClassNames();
   const {

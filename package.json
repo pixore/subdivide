@@ -39,17 +39,17 @@
   "devDependencies": {
     "@pixore/prettier-config": "0.0.2",
     "@types/once": "~1.4.0",
-    "@types/react": "^16.9.5",
-    "@types/react-dom": "^16.9.1",
-    "cypress": "~3.4.1",
+    "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
+    "cypress": "^4.1.0",
     "jscpd": "^2.0.16",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.4",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "standard-version": "^7.0.1",
-    "start-server-and-test": "^1.10.4",
-    "ts-node": "^8.4.1",
-    "typescript": "3.7"
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "standard-version": "^7.1.0",
+    "start-server-and-test": "^1.10.8",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
   }
 }

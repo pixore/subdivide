@@ -1,10 +1,8 @@
 import Subdivide from './components/Subdivide';
 import Config from './contexts/Config';
-import { useContainer } from './components/Container';
-import { State } from './layout/types';
+export { useContainer } from './components/Container';
+export { State as LayoutState } from './layout/types';
 
 export default Subdivide;
 
-export type LayoutState = State;
-
-export { Config, useContainer };
+export { Config };

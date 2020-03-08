@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "dist",
-    "composite": true,
     "target": "esnext",
     "module": "commonjs",
     "jsx": "react",
@@ -19,7 +18,6 @@
     "baseUrl": "./src",
     "typeRoots": ["./node_modules/@types"],
     "lib": ["esnext", "dom"],
-    "declarationDir": "dist",
     "resolveJsonModule": true
   },
   "include": ["src/**/*"],
