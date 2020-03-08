@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import Subdivide, { Config, useContainer, LayoutState } from '../../src';
+import Subdivide, {
+  ConfigProvider,
+  useContainer,
+  LayoutState,
+} from '../../src';
 import Color from '../components/Color';
 
 interface PropTypes {
@@ -36,12 +40,9 @@ const App: React.FC = () => {
   };
 
   return (
-    <Config.Provider
-      initialState={initialState}
-      onLayoutChange={onLayoutChange}
-    >
+    <ConfigProvider initialState={initialState} onLayoutChange={onLayoutChange}>
       <Subdivide component={Panel} />
-    </Config.Provider>
+    </ConfigProvider>
   );
 };
 

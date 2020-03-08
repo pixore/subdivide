@@ -97,7 +97,7 @@ const useClassNames = () => {
   return classNames;
 };
 
-export { ConfigContext };
+export { ConfigContext, useConfig, useClassNames, Provider };
 export default {
   useConfig,
   useClassNames,
