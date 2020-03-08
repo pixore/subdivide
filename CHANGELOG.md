@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/pixore/subdivide/compare/v0.0.9...v0.1.0) (2020-03-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **exports:** Config is not exported anymore | useConfig and useClassNames are exported directly
+
+### Bug Fixes
+
+* **types:** fix typescript config to build type files ([265a601](https://github.com/pixore/subdivide/commit/265a6012b612b325c44e79b9981b6840de9dc9a9))
+
+
+* **exports:** change Config.Provider to ConfigProvider ([34577fd](https://github.com/pixore/subdivide/commit/34577fdc9cf4309f6a554c85d2748f051e0f50ea))
+
 ### [0.0.9](https://github.com/pixore/subdivide/compare/v0.0.8...v0.0.9) (2020-03-08)
 
 
