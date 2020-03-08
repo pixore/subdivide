@@ -34,9 +34,10 @@ const actionsFactory = (layout: UseLayout) => {
 
   const getTo = (event: MouseEvent): Vector => {
     const { layout } = layoutRef.current;
+
     return {
-      x: Percentage.create(layout.width, event.clientX),
-      y: Percentage.create(layout.height, event.clientY),
+      x: Percentage.create(layout.width, event.clientX - layout.left),
+      y: Percentage.create(layout.height, event.clientY - layout.top),
     };
   };
 
