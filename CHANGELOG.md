@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/pixore/subdivide/compare/v0.0.8...v0.0.9) (2020-03-08)
+
+
+### Bug Fixes
+
+* **merge:** consider position of the layout to check the merge ([db1a3b5](https://github.com/pixore/subdivide/commit/db1a3b51c2c6df606b1fc01b29539a89cd5fc062))
+* **resize:** fix the last update size after a resize ([f584962](https://github.com/pixore/subdivide/commit/f58496217e5ff637052ac80028513f2320ca4ca9))
+
 ### [0.0.8](https://github.com/pixore/subdivide/compare/v0.0.7...v0.0.8) (2019-12-10)
 
 
