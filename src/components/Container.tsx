@@ -60,14 +60,16 @@ const Container: React.FC<PropTypes> = (props) => {
 
   React.useEffect(() => {
     const saveStats = () => {
-      if (!elementRef.current) {
-        return;
-      }
-      setStats(elementRef.current.getBoundingClientRect());
+      // wait to have the final size
+      setTimeout(() => {
+        if (!elementRef.current) {
+          return;
+        }
+        setStats(elementRef.current.getBoundingClientRect());
+      }, 100);
     };
 
-    // wait to have the final size
-    setTimeout(() => saveStats(), 100);
+    saveStats();
 
     window.addEventListener('resize', saveStats);
 
