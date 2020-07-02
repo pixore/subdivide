@@ -4,9 +4,8 @@
   "description": "Layout system inspired by blender's subdive layout",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "rm -rf dist && rm -rf .cache",
-    "prebuild": "yarn clean",
-    "build": "tsc --declarationDir dist",
+    "clean": "rm -rf dist && rm -rf .cache && rm -rf tsconfig.tsbuildinfo",
+    "build": "yarn clean && tsc --declarationDir dist",
     "generate:arrows": "ts-node -O '{\"module\": \"commonjs\"}' ./scripts/generate-arrows",
     "start": "parcel examples/index.html",
     "test:types": "tsc --noEmit --composite false",
