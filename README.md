@@ -141,7 +141,7 @@ Use to access to the container data, and update its state. Check how it's used i
 
 👤 **Jose Albizures** by Pixore
 
-- Twitter: [@\_albizures](https://twitter.com/_albizures), [@pixore_io](https://twitter.com/pixore_io)
+- Twitter: [@\albzrs](https://twitter.com/albzrs), [@pixore_io](https://twitter.com/pixore_io)
 - Github: [@albizures](https://github.com/albizures), [@pixore](https://github.com/pixore)
 
 ## 🙏 Thanks!
