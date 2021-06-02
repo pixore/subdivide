@@ -18,12 +18,12 @@ context('Resize', () => {
   it('should resize', () => {
     cy.get('.px-divider div')
       .first()
-      .trigger('mousedown', 0, 200, { force: true });
-    cy.window()
-      .trigger('mousemove', { clientX: 250, clientY: 250 })
-      .trigger('mousemove', { clientX: 230, clientY: 250 })
-      .trigger('mousemove', { clientX: 200, clientY: 250 })
-      .trigger('mouseup');
+      .trigger('mousedown', 5, 250, { force: true });
+
+    cy.window().trigger('mousemove', { clientX: 250, clientY: 250 });
+    cy.window().trigger('mousemove', { clientX: 230, clientY: 250 });
+    cy.window().trigger('mousemove', { clientX: 200, clientY: 250 });
+    cy.window().trigger('mouseup', { clientX: 200, clientY: 250 });
 
     cy.get('.px-container')
       .first()

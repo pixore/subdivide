@@ -16,18 +16,16 @@ context('Split', () => {
   describe('when top left corner is drag', () => {
     describe('left', () => {
       it('should split the container', () => {
-        cy.get('.px-corner')
-          .first()
-          .trigger('mousedown', 35, 35);
-        cy.window()
-          .trigger('mousemove', { clientX: 32, clientY: 30 })
-          .trigger('mousemove', { clientX: 35, clientY: 30 })
-          .trigger('mousemove', { clientX: 40, clientY: 30 })
-          .trigger('mousemove', { clientX: 55, clientY: 30 })
-          .trigger('mousemove', { clientX: 56, clientY: 30 })
-          .trigger('mousemove', { clientX: 57, clientY: 30 })
-          .trigger('mousemove', { clientX: 250, clientY: 30 })
-          .trigger('mouseup');
+        cy.get('.px-corner').first().trigger('mousedown', 35, 35);
+
+        cy.window().trigger('mousemove', { clientX: 32, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 35, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 40, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 55, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 56, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 57, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 250, clientY: 30 });
+        cy.window().trigger('mouseup');
 
         cy.get('.px-container')
           .should(($containers) => {
@@ -55,18 +53,16 @@ context('Split', () => {
 
     describe('down', () => {
       it('should split the container', () => {
-        cy.get('.px-corner')
-          .first()
-          .trigger('mousedown', 35, 35);
-        cy.window()
-          .trigger('mousemove', { clientX: 30, clientY: 32 })
-          .trigger('mousemove', { clientX: 30, clientY: 35 })
-          .trigger('mousemove', { clientX: 30, clientY: 40 })
-          .trigger('mousemove', { clientX: 30, clientY: 55 })
-          .trigger('mousemove', { clientX: 30, clientY: 56 })
-          .trigger('mousemove', { clientX: 30, clientY: 57 })
-          .trigger('mousemove', { clientX: 30, clientY: 250 })
-          .trigger('mouseup');
+        cy.get('.px-corner').first().trigger('mousedown', 35, 35);
+
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 32 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 35 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 40 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 55 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 56 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 57 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 250 });
+        cy.window().trigger('mouseup');
 
         cy.get('.px-container')
           .should(($containers) => {
@@ -96,18 +92,15 @@ context('Split', () => {
   describe('when top right corner is drag', () => {
     describe.only('left', () => {
       it('should split the container', () => {
-        cy.get('.px-corner')
-          .eq(1)
-          .trigger('mousedown', 5, 35, { force: true });
-        cy.window()
-          .trigger('mousemove', { clientX: 457, clientY: 30 })
-          .trigger('mousemove', { clientX: 456, clientY: 30 })
-          .trigger('mousemove', { clientX: 455, clientY: 30 })
-          .trigger('mousemove', { clientX: 440, clientY: 30 })
-          .trigger('mousemove', { clientX: 435, clientY: 30 })
-          .trigger('mousemove', { clientX: 432, clientY: 30 })
-          .trigger('mousemove', { clientX: 250, clientY: 30 })
-          .trigger('mouseup');
+        cy.get('.px-corner').eq(1).trigger('mousedown', 5, 35, { force: true });
+        cy.window().trigger('mousemove', { clientX: 457, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 456, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 455, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 440, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 435, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 432, clientY: 30 });
+        cy.window().trigger('mousemove', { clientX: 250, clientY: 30 });
+        cy.window().trigger('mouseup');
 
         cy.get('.px-container')
           .should(($containers) => {
@@ -137,18 +130,16 @@ context('Split', () => {
   describe('when bottom right corner is drag', () => {
     describe('up', () => {
       it('should split the container', () => {
-        cy.get('.px-corner')
-          .eq(1)
-          .trigger('mousedown', 5, 35, { force: true });
-        cy.window()
-          .trigger('mousemove', { clientX: 30, clientY: 457 })
-          .trigger('mousemove', { clientX: 30, clientY: 456 })
-          .trigger('mousemove', { clientX: 30, clientY: 455 })
-          .trigger('mousemove', { clientX: 30, clientY: 440 })
-          .trigger('mousemove', { clientX: 30, clientY: 435 })
-          .trigger('mousemove', { clientX: 30, clientY: 432 })
-          .trigger('mousemove', { clientX: 30, clientY: 250 })
-          .trigger('mouseup');
+        cy.get('.px-corner').eq(1).trigger('mousedown', 5, 35, { force: true });
+
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 457 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 456 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 455 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 440 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 435 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 432 });
+        cy.window().trigger('mousemove', { clientX: 30, clientY: 250 });
+        cy.window().trigger('mouseup');
 
         cy.get('.px-container')
           .should(($containers) => {
