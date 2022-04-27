@@ -65,3 +65,4 @@ dist
 .jscpd
 cypress/screenshots
 tsconfig.tsbuildinfo
+.parcel-cache

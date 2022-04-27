@@ -62,7 +62,7 @@ And that's it! You can check more examples in the [examples folder](./examples)
 The layout is described by a simple object, it can be serializable and use it as the initial state a preservable layout can be achievable:
 
 ```jsx
-import * as React from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import Subdivide, {
   ConfigProvider,

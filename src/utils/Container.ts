@@ -1,14 +1,14 @@
 import Direction, { DirectionType } from '../utils/Direction';
 import Vector from './Vector';
 import Arr from './Arr';
-import Id from './Id';
 import { State } from '../layout/types';
 import { FromCorner, Size } from '../types';
+import { createId } from './Id';
 
 interface MutableContainer {
-  id: Id;
-  parent: Id;
-  children: Id[];
+  id: number;
+  parent: number;
+  children: number[];
   directionType?: DirectionType;
   splitRatio: number;
   isGroup: boolean;
@@ -22,7 +22,7 @@ interface MutableContainer {
 type Container = Readonly<MutableContainer>;
 
 interface OptionalSizeAndPosition {
-  id: Id;
+  id: number;
   width?: number;
   height?: number;
   top?: number;
@@ -35,7 +35,7 @@ interface Delta {
 }
 
 interface SizeAndPosition {
-  id: Id;
+  id: number;
   width: number;
   height: number;
   top: number;
@@ -189,7 +189,7 @@ interface SplitResult {
   previous: Container;
   next: Container;
   parent: Container;
-  rootId?: Id;
+  rootId?: number;
 }
 
 const newGroupIsNeeded = (
@@ -215,7 +215,7 @@ const getDelta = (container: Container, from: FromCorner, to: Vector) => {
 };
 
 const createContainer = (
-  id: Id,
+  id: number,
   direction: Direction,
   delta: Vector,
   splitRatio: number,
@@ -264,11 +264,11 @@ const getSplitRatio = (
 const createGroup = (
   container: Container,
   directionType: DirectionType,
-  children: Id[],
+  children: number[],
 ) => {
   return {
     ...container,
-    id: Id.create(),
+    id: createId(),
     isGroup: true,
     children,
     directionType,
@@ -276,8 +276,8 @@ const createGroup = (
 };
 
 const getSplitOrder = (
-  originContainerId: Id,
-  newContainerId: Id,
+  originContainerId: number,
+  newContainerId: number,
   isForward: boolean,
 ) => {
   if (isForward) {
@@ -293,14 +293,14 @@ const getSplitOrder = (
 };
 
 const split = (
-  originContainerId: Id,
+  originContainerId: number,
   layout: State,
   direction: Direction,
   delta: Vector,
 ): SplitResult => {
   const { containers, rootId } = layout;
   const originContainer = containers[originContainerId];
-  const newContainerId = Id.create();
+  const newContainerId = createId();
   const isForward = Direction.isForward(direction);
   const directionType = Direction.getType(direction);
 

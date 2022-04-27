@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React from 'react';
 import Direction, { DirectionType } from '../../utils/Direction';
-import Id from '../../utils/Id';
 import Vector from '../../utils/Vector';
 import Container from '../../utils/Container';
 import Config from '../../contexts/Config';
@@ -15,16 +14,14 @@ import {
 } from '../../utils';
 import Percentage from '../../utils/Percentage';
 
-const getAdjacentContainerFactory = (direction: number) => (
-  containers: ContainersMap,
-  id: Id,
-) => {
-  const container = containers[id];
-  const { children } = containers[container.parent];
-  const index = children.indexOf(id);
-  const nextId = children[index + direction];
-  return containers[nextId];
-};
+const getAdjacentContainerFactory =
+  (direction: number) => (containers: ContainersMap, id: number) => {
+    const container = containers[id];
+    const { children } = containers[container.parent];
+    const index = children.indexOf(id);
+    const nextId = children[index + direction];
+    return containers[nextId];
+  };
 
 const getNextContainer = getAdjacentContainerFactory(1);
 const getPrevContainer = getAdjacentContainerFactory(-1);
@@ -121,7 +118,7 @@ const actionsFactory = (layout: UseLayout) => {
     );
   };
 
-  const split = (containerId: Id, delta: Vector, direction: Direction) => {
+  const split = (containerId: number, delta: Vector, direction: Direction) => {
     const { containers } = layoutRef.current;
     const container = containers[containerId];
 

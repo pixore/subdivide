@@ -1,16 +1,14 @@
-import * as React from 'react';
-
+import React from 'react';
 import Config from '../contexts/Config';
 import Corner from './Corner';
 import Direction from '../utils/Direction';
 import { FromCorner, Emitter, Component } from '../types';
 import Percentage from '../utils/Percentage';
-import Id from '../utils/Id';
 
 interface PropTypes {
   emitter: Emitter;
   component: Component;
-  id: Id;
+  id: number;
   height: number;
   width: number;
   top: number;
@@ -18,7 +16,7 @@ interface PropTypes {
   previous?: number;
   next?: number;
   state?: unknown;
-  setState: (id: Id, state: unknown) => void;
+  setState: (id: number, state: unknown) => void;
 }
 
 interface State {

@@ -5,6 +5,6 @@ export {
   Provider as ConfigProvider,
 } from './contexts/Config';
 export { useContainer } from './components/Container';
-export { State as LayoutState } from './layout/types';
+export type { State as LayoutState } from './layout/types';
 
 export default Subdivide;

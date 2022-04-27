@@ -1,5 +1,5 @@
-import * as React from 'react';
-import Id from '../../utils/Id';
+import React from 'react';
+import { createId } from '../../utils/Id';
 import Container from '../../utils/Container';
 import reducer from '../reducers/main';
 import { actionCreators, createActions } from '../actions';
@@ -11,7 +11,7 @@ import Direction from '../../utils/Direction';
 import { throttle } from '../../utils';
 
 const createDefaultState = (): State => {
-  const id = Id.create();
+  const id = createId();
   const item: Container = {
     id,
     parent: -1,
@@ -122,10 +122,10 @@ const getSizeBaseOnPosition = (maxSize: number, position?: number) => {
   return maxSize;
 };
 
-const useLayout = (
+function useLayout(
   emitter: Emitter,
   options: Options = defaultOptions,
-): UseLayout => {
+): UseLayout {
   const { onLayoutChange, initialState } = options;
   const [state, dispatch] = React.useReducer(
     reducer,
@@ -197,6 +197,7 @@ const useLayout = (
   useResize(layout, emitter);
 
   return layout;
-};
+}
+
 export { createDefaultState };
 export default useLayout;

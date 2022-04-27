@@ -1,11 +1,10 @@
-import Id from '../../utils/Id';
 import { Action, ActionType } from '../types';
 
-const rootReducer = (state: Id, action: Action): Id => {
+const rootReducer = (state: number, action: Action): number => {
   const { type, payload } = action;
 
   if (type === ActionType.UPDATE_ROOT) {
-    return payload as Id;
+    return payload as number;
   }
 
   return state;

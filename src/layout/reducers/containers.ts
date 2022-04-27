@@ -1,6 +1,5 @@
 import { ContainersMap, ContainerUpdate } from '../../types';
 import { Action, ActionType } from '../types';
-import Id from '../../utils/Id';
 import Container from '../../utils/Container';
 
 const reducerAdd = (state: ContainersMap, data: Container): ContainersMap => {
@@ -27,7 +26,7 @@ const reducerUpdate = (
   };
 };
 
-const reducerRemove = (state: ContainersMap, id: Id): ContainersMap => {
+const reducerRemove = (state: ContainersMap, id: number): ContainersMap => {
   const newState = { ...state };
   // this is a new object, don't care if it's mutated here
   Reflect.deleteProperty(newState, id);
@@ -46,7 +45,7 @@ const containersReducer = (
     case ActionType.UPDATE_CONTAINER:
       return reducerUpdate(state, payload as ContainerUpdate);
     case ActionType.REMOVE_CONTAINER:
-      return reducerRemove(state, payload as Id);
+      return reducerRemove(state, payload as number);
   }
 
   return state;

@@ -4,7 +4,7 @@ import containersReducer from './containers';
 import overlayReducer from './overlay';
 import layoutReducer from './layout';
 
-const actionReducer = (state: State, action: Action): State => {
+const actionReducer = (state: State, action: Action | Action[]): State => {
   if (Array.isArray(action)) {
     return action.reduce(actionReducer, state);
   }

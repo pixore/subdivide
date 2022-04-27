@@ -6,8 +6,8 @@ import {
   Actions,
   ShowOverlay,
 } from './types';
-import Id from '../utils/Id';
 import Container from '../utils/Container';
+import React from 'react';
 
 const actionCreators: ActionsCreator = {
   add: (data: Container) => ({
@@ -18,29 +18,29 @@ const actionCreators: ActionsCreator = {
     type: ActionType.UPDATE_CONTAINER,
     payload: data,
   }),
-  remove: (id: Id) => ({
+  remove: (id: number) => ({
     type: ActionType.REMOVE_CONTAINER,
     payload: id,
   }),
-  updateRoot: (id: Id) => ({
+  updateRoot: (id: number) => ({
     type: ActionType.UPDATE_ROOT,
     payload: id,
   }),
-  showOverlay: (overlay: Overlay) => ({
+  showOverlay: (data: ShowOverlay) => ({
     type: ActionType.SHOW_OVERLAY,
-    payload: overlay,
+    payload: data,
   }),
   hideOverlay: () => ({
     type: ActionType.HIDE_OVERLAY,
     payload: -1,
   }),
-  updateLayout: (data: ContainerUpdate) => ({
+  updateLayout: (data: LayoutUpdate) => ({
     type: ActionType.UPDATE_LAYOUT,
     payload: data,
   }),
 };
 
-type Dispatch = (action: Action | Action[]) => void;
+type Dispatch = React.Dispatch<Action | Action[]>;
 const createActions = (dispatch: Dispatch): Actions => ({
   add(data: Container) {
     dispatch(actionCreators.add(data));
@@ -48,10 +48,10 @@ const createActions = (dispatch: Dispatch): Actions => ({
   update(data: ContainerUpdate) {
     dispatch(actionCreators.update(data));
   },
-  remove(id: Id) {
+  remove(id: number) {
     dispatch(actionCreators.remove(id));
   },
-  updateRoot(id: Id) {
+  updateRoot(id: number) {
     dispatch(actionCreators.updateRoot(id));
   },
   updateLayout(data: LayoutUpdate) {

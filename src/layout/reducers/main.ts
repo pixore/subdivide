@@ -3,7 +3,7 @@ import actionReducer from './actions';
 import groupReducer from './groups';
 import dividersReducer from './dividers';
 
-const reducer = (state: State, action: Action): State => {
+const reducer = (state: State, action: Action | Action[]): State => {
   const stateAfterActions = actionReducer(state, action);
 
   const stateWithChildrenUpdated = groupReducer(stateAfterActions, action);

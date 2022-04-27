@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { TinyEmitter } from 'tiny-emitter';
 import Container from './Container';
 import Divider from './Divider';
@@ -6,7 +6,7 @@ import { Emitter, Component } from '../types';
 import Layout from '../layout';
 import Overlay from './Overlay';
 import Config from '../contexts/Config';
-import Id from '../utils/Id';
+import { addId } from '../utils/Id';
 
 interface PropTypes {
   component: Component;
@@ -41,7 +41,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   React.useEffect(() => {
     if (initialState) {
       Object.keys(initialState.containers).forEach((id) => {
-        Id.addId(Number(id));
+        addId(Number(id));
       });
     }
   }, []);
@@ -58,7 +58,7 @@ const Subdivide: React.FC<PropTypes> = (props) => {
   }
 
   const setContainerState = React.useCallback(
-    (id: Id, state: unknown) => {
+    (id: number, state: unknown) => {
       actions.update({
         id,
         state,

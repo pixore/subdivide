@@ -1,15 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import Config from '../contexts/Config';
 
 import { DirectionType } from '../utils/Direction';
-import Id from '../utils/Id';
 import Percentage from '../utils/Percentage';
 import { Emitter } from '../types';
 
 interface PropTypes {
   id: string;
-  previous: Id;
-  next: Id;
+  previous: number;
+  next: number;
   top: number;
   left: number;
   width: number;
@@ -37,21 +36,10 @@ const getBarStyle = (isHorizontal: boolean): React.CSSProperties => {
 };
 
 const Divider: React.FC<PropTypes> = (props) => {
-  const {
-    top,
-    left,
-    width,
-    height,
-    previous,
-    next,
-    directionType,
-    emitter,
-  } = props;
-  const {
-    divider,
-    verticalDivider,
-    horizontalDivider,
-  } = Config.useClassNames();
+  const { top, left, width, height, previous, next, directionType, emitter } =
+    props;
+  const { divider, verticalDivider, horizontalDivider } =
+    Config.useClassNames();
   const isHorizontal = directionType === DirectionType.HORIZONTAL;
   const style: React.CSSProperties = {
     position: 'absolute',

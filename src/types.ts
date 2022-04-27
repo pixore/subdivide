@@ -1,5 +1,4 @@
 import Direction, { DirectionType } from './utils/Direction';
-import Id from './utils/Id';
 import Container from './utils/Container';
 
 export interface Size {
@@ -50,22 +49,16 @@ export interface FromDivider {
   y: number;
 }
 
-export interface MutableContainersMap {
-  [id: number]: Container;
-}
+export type ContainersMap = Record<number | string, Container>;
 
-export type ContainersMap = Readonly<MutableContainersMap>;
-
-export interface MutableDividersMap {
+export interface DividersMap {
   [id: string]: Divider;
 }
 
-export type DividersMap = Readonly<MutableDividersMap>;
-
 export interface ContainerUpdate {
-  id: Id;
-  parent?: Id;
-  children?: Id[];
+  id: number;
+  parent?: number;
+  children?: number[];
   directionType?: DirectionType;
   splitRatio?: number;
   width?: number;
@@ -78,8 +71,8 @@ export interface ContainerUpdate {
 export interface Divider {
   id: string;
   directionType: DirectionType;
-  previous: Id;
-  next: Id;
+  previous: number;
+  next: number;
   height: number;
   width: number;
   top: number;
@@ -97,8 +90,8 @@ export interface SplitArgs {
 }
 
 export interface ResizeArgs {
-  previous: Id;
-  next: Id;
+  previous: number;
+  next: number;
   from: FromDivider;
 }
 
@@ -123,4 +116,4 @@ export interface Emitter {
   off(event: Event, callback?: Events[Event]): this;
 }
 
-export type AddContainer = (data: Container) => Id;
+export type AddContainer = (data: Container) => number;

@@ -2,7 +2,6 @@ import { ContainerUpdate, ContainersMap } from '../../types';
 import { State, ActionType, Action } from '../types';
 import { DirectionType } from '../../utils/Direction';
 import Container from '../../utils/Container';
-import Id from '../../utils/Id';
 
 const updateChildren = (
   parent: Container,
@@ -17,7 +16,7 @@ const updateChildren = (
   const { children } = parent;
   let { left, top } = parent;
 
-  return children.reduce<ContainersMap>((currentContainers, id: Id) => {
+  return children.reduce<ContainersMap>((currentContainers, id: number) => {
     const container = currentContainers[id];
     const { splitRatio } = container;
     const decimalSplitRatio = splitRatio / 100;
@@ -49,7 +48,7 @@ const updateChildren = (
   }, containers);
 };
 
-const groupReducer = (state: State, action: Action): State => {
+const groupReducer = (state: State, action: Action | Action[]): State => {
   if (Array.isArray(action)) {
     return action.reduce(groupReducer, state);
   }

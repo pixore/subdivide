@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Config from '../contexts/Config';
 
 import { FromCorner } from '../types';

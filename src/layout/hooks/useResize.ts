@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Direction from '../../utils/Direction';
 import Container from '../../utils/Container';
 import Percentage from '../../utils/Percentage';

@@ -1,14 +1,12 @@
-import { DeepReadonly } from 'utility-types';
-import Id from '../utils/Id';
 import Direction from '../utils/Direction';
 import Container from '../utils/Container';
 import {
   ContainerUpdate,
-  MutableContainersMap,
-  MutableDividersMap,
   Overlay,
   Layout,
   LayoutUpdate,
+  DividersMap,
+  ContainersMap,
 } from '../types';
 
 export enum ActionType {
@@ -30,7 +28,7 @@ export interface ShowOverlay {
 }
 
 export type Payload =
-  | Id
+  | number
   | ContainerUpdate
   | Container
   | Action[]
@@ -45,9 +43,9 @@ export interface Action {
 export interface ActionsCreator {
   add: (data: Container) => Action;
   update: (data: ContainerUpdate | Container) => Action;
-  updateRoot: (id: Id) => Action;
+  updateRoot: (id: number) => Action;
   updateLayout: (data: LayoutUpdate) => Action;
-  remove: (id: Id) => Action;
+  remove: (id: number) => Action;
   showOverlay: (data: ShowOverlay) => Action;
   hideOverlay: () => Action;
 }
@@ -55,20 +53,18 @@ export interface ActionsCreator {
 export interface Actions {
   add: (data: Container) => void;
   update: (data: ContainerUpdate | Container) => void;
-  updateRoot: (id: Id) => void;
+  updateRoot: (id: number) => void;
   updateLayout: (data: LayoutUpdate) => void;
-  remove: (id: Id) => void;
+  remove: (id: number) => void;
   batch: (actions: Action[]) => void;
   showOverlay: (data: ShowOverlay) => void;
   hideOverlay: () => void;
 }
 
-export interface MutableState {
-  rootId: Id;
-  containers: MutableContainersMap;
-  dividers: MutableDividersMap;
+export interface State {
+  rootId: number;
+  containers: ContainersMap;
+  dividers: DividersMap;
   overlay: Overlay;
   layout: Layout;
 }
-
-export type State = DeepReadonly<MutableState>;
