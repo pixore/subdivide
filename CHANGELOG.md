@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/pixore/subdivide/compare/v0.1.3...v0.1.4) (2022-04-28)
+
+
+### Features
+
+* update dependencies and fix types ([794729c](https://github.com/pixore/subdivide/commit/794729c480d627c044098db2cc27406a5a4aea2a))
+* update minor version, update parcel and fix type issues ([c9c746c](https://github.com/pixore/subdivide/commit/c9c746cb1309c59136d6e952db62f334fba418e2))
+
 ### [0.1.3](https://github.com/pixore/subdivide/compare/v0.1.2...v0.1.3) (2021-06-03)
 
 ### [0.1.2](https://github.com/pixore/subdivide/compare/v0.1.1...v0.1.2) (2020-07-02)
