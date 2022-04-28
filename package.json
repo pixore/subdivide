@@ -2,10 +2,19 @@
   "name": "@pixore/subdivide",
   "version": "0.1.4",
   "description": "Layout system inspired by blender's subdive layout",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "clean": "rm -rf dist && rm -rf .cache && rm -rf tsconfig.tsbuildinfo",
-    "build": "pnpm clean && tsc --declarationDir dist",
+    "build": "pnpm clean && tsup",
     "generate:arrows": "ts-node -O '{\"module\": \"commonjs\"}' ./scripts/generate-arrows",
     "start": "parcel examples/index.html",
     "test:types": "tsc --noEmit --composite false",
@@ -53,6 +62,7 @@
     "standard-version": "^9.3.0",
     "start-server-and-test": "^1.10.8",
     "ts-node": "^10.0.0",
+    "tsup": "^5.12.6",
     "typescript": "^4.3.2"
   }
 }
