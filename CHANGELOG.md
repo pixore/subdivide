@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/pixore/subdivide/compare/v0.1.6...v0.1.7) (2022-04-28)
+
+
+### Bug Fixes
+
+* check initial state ([4646002](https://github.com/pixore/subdivide/commit/46460028a88ef192c89199f7d3f99ff0e3154214))
+
 ### [0.1.6](https://github.com/pixore/subdivide/compare/v0.1.5...v0.1.6) (2022-04-28)
 
 
