@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/pixore/subdivide/compare/v0.1.5...v0.1.6) (2022-04-28)
+
+
+### Bug Fixes
+
+* **init-state:** support containers without directionType ([2416e2f](https://github.com/pixore/subdivide/commit/2416e2f248f42de8466666a10baf45a856f8ca9c))
+
 ### [0.1.5](https://github.com/pixore/subdivide/compare/v0.1.4...v0.1.5) (2022-04-28)
 
 ### [0.1.4](https://github.com/pixore/subdivide/compare/v0.1.3...v0.1.4) (2022-04-28)
