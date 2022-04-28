@@ -56,37 +56,40 @@ const ConfigContext = React.createContext<ConfigState>(initialValue);
 
 function checkState(state: any): asserts state is State {
   if (process.env.NODE_ENV !== 'production') {
-    const containerList = Object.keys(state?.containers);
-    const containers =
-      containerList.length > 0 &&
-      containerList.every((key) => {
-        const container = state?.containers[key];
+    const containers = Object.keys(state?.containers ?? {}).every((key) => {
+      const container = state?.containers[key];
 
-        return (
-          container.directionType === undefined ||
-          container.directionType === DirectionType.HORIZONTAL ||
-          container.directionType === DirectionType.VERTICAL
-        );
-      });
-    const dividerList = Object.keys(state?.dividers);
-    const dividers =
-      dividerList.length > 0 &&
-      dividerList.every((key) => {
-        const divider = state?.dividers[key];
+      return (
+        container.directionType === undefined ||
+        container.directionType === DirectionType.HORIZONTAL ||
+        container.directionType === DirectionType.VERTICAL
+      );
+    });
+    const dividers = Object.keys(state?.dividers ?? {}).every((key) => {
+      const divider = state?.dividers[key];
 
-        return (
-          divider.directionType === DirectionType.HORIZONTAL ||
-          divider.directionType === DirectionType.VERTICAL
-        );
-      });
+      return (
+        divider.directionType === DirectionType.HORIZONTAL ||
+        divider.directionType === DirectionType.VERTICAL
+      );
+    });
 
     const overlay =
-      state?.overlay?.directionType === Direction.TOP ||
-      state?.overlay?.directionType === Direction.BOTTOM ||
-      state?.overlay?.directionType === Direction.LEFT ||
-      state?.overlay?.directionType === Direction.RIGHT;
-    if (!(containers && dividers && overlay)) {
-      throw new Error('Invalid subdivide state');
+      state?.overlay?.direction === Direction.TOP ||
+      state?.overlay?.direction === Direction.BOTTOM ||
+      state?.overlay?.direction === Direction.LEFT ||
+      state?.overlay?.direction === Direction.RIGHT;
+
+    if (!containers) {
+      throw new Error('Invalid subdivide state: Invalid container found');
+    }
+
+    if (!dividers) {
+      throw new Error('Invalid subdivide state: Invalid divider found');
+    }
+
+    if (!overlay) {
+      throw new Error('Invalid subdivide state: Invalid overlay found');
     }
   }
 }
