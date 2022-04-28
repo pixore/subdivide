@@ -5,7 +5,7 @@ import { State } from '../layout/types';
 import { FromCorner, Size } from '../types';
 import { createId } from './Id';
 
-interface MutableContainer {
+interface Container {
   id: number;
   parent: number;
   children: number[];
@@ -18,8 +18,6 @@ interface MutableContainer {
   left: number;
   state?: unknown;
 }
-
-type Container = Readonly<MutableContainer>;
 
 interface OptionalSizeAndPosition {
   id: number;

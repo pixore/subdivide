@@ -27,11 +27,12 @@ const defaultStyle: React.CSSProperties = {
 interface PropTypes {
   initial?: string;
   onChange?: (color: string) => void;
+  children: React.ReactNode;
 }
 
 const noop = () => undefined;
 
-const Color: React.FC<PropTypes> = (props) => {
+function Color(props: PropTypes) {
   const { children, initial, onChange = noop } = props;
   const [color, setColor] = React.useState<string>(
     () => initial || getRandomColor(),
@@ -50,6 +51,6 @@ const Color: React.FC<PropTypes> = (props) => {
       <span style={spanStyle}>{children}</span>
     </div>
   );
-};
+}
 
 export default Color;

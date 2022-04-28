@@ -14,9 +14,9 @@ export enum DirectionType {
 
 namespace Direction {
   /**
-   * I couldn't come up with a better name (programming ¯\_(ツ)_/¯) for this,
-   * but this represent left and bottom directions which are the directions
-   * that don't require change the left or top properties, just width and height.
+   * I couldn't come up with a better naming (programming ¯\_(ツ)_/¯) for this,
+   * but this represents left and bottom directions which are the directions
+   * which don't require change their left or top properties, just width and height.
    */
   export const isBackward = (direction: Direction): boolean => {
     return direction === Direction.LEFT || direction === Direction.TOP;

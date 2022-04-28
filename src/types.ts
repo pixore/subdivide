@@ -51,9 +51,7 @@ export interface FromDivider {
 
 export type ContainersMap = Record<number | string, Container>;
 
-export interface DividersMap {
-  [id: string]: Divider;
-}
+export type DividersMap = Record<string, Divider>;
 
 export interface ContainerUpdate {
   id: number;

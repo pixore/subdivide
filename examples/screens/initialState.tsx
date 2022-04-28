@@ -1,16 +1,17 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import Subdivide, { ConfigProvider } from '../../src';
 import ColorPane from '../components/ColorPane';
 import initialState from './initial-state.json';
 
-const App: React.FC = () => {
+function App() {
   return (
     <ConfigProvider initialState={initialState}>
       <Subdivide component={ColorPane} />
     </ConfigProvider>
   );
-};
+}
 
-render(<App />, document.getElementById('root'));
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);

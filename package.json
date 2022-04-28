@@ -32,21 +32,24 @@
   },
   "homepage": "https://github.com/pixore/subdivide#readme",
   "dependencies": {
-    "tiny-emitter": "^2.1.0",
-    "utility-types": "^3.10.0"
+    "tiny-emitter": "^2.1.0"
+  },
+  "peerDependencies": {
+    "react": "17 || 18",
+    "react-dom": "17 || 18"
   },
   "devDependencies": {
     "@pixore/prettier-config": "0.0.2",
     "@types/node": "^17.0.29",
     "@types/once": "~1.4.0",
-    "@types/react": "^17.0.9",
-    "@types/react-dom": "^17.0.6",
-    "cypress": "^7.4.0",
+    "@types/react": "^18.0.8",
+    "@types/react-dom": "^18.0.0",
+    "cypress": "^9.6.0",
     "jscpd": "^3.3.26",
     "npm-run-all": "^4.1.5",
     "parcel": "^2.5.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "standard-version": "^9.3.0",
     "start-server-and-test": "^1.10.8",
     "ts-node": "^10.0.0",

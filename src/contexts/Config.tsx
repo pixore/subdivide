@@ -1,5 +1,6 @@
 import React from 'react';
-import { State } from '../layout/types';
+import { RawState, State } from '../layout/types';
+import Direction, { DirectionType } from '../utils/Direction';
 
 interface ClassNames {
   layout: string;
@@ -42,17 +43,54 @@ export interface ConfigState {
   splitRatio: number;
 }
 
-interface PropTypes {
-  initialState?: State;
+interface Props {
+  initialState?: State | RawState;
   onLayoutChange?: (state: State) => void;
   classNames?: OptionalClassNames;
   cornerSize?: number;
   splitRatio?: number;
+  children: React.ReactNode;
 }
 
 const ConfigContext = React.createContext<ConfigState>(initialValue);
 
-const Provider: React.FC<PropTypes> = (props) => {
+function checkState(state: any): asserts state is State {
+  if (process.env.NODE_ENV !== 'production') {
+    const containerList = Object.keys(state?.containers);
+    const containers =
+      containerList.length > 0 &&
+      containerList.every((key) => {
+        const container = state?.containers[key];
+
+        return (
+          container.directionType === DirectionType.HORIZONTAL ||
+          container.directionType === DirectionType.VERTICAL
+        );
+      });
+    const dividerList = Object.keys(state?.dividers);
+    const dividers =
+      dividerList.length > 0 &&
+      dividerList.every((key) => {
+        const divider = state?.dividers[key];
+
+        return (
+          divider.directionType === DirectionType.HORIZONTAL ||
+          divider.directionType === DirectionType.VERTICAL
+        );
+      });
+
+    const overlay =
+      state?.overlay?.directionType === Direction.TOP ||
+      state?.overlay?.directionType === Direction.BOTTOM ||
+      state?.overlay?.directionType === Direction.LEFT ||
+      state?.overlay?.directionType === Direction.RIGHT;
+    if (!(containers && dividers && overlay)) {
+      throw new Error('Invalid subdivide state');
+    }
+  }
+}
+
+function Provider(props: Props) {
   const {
     children,
     initialState,
@@ -61,6 +99,8 @@ const Provider: React.FC<PropTypes> = (props) => {
     cornerSize = initialValue.cornerSize,
     splitRatio = initialValue.splitRatio,
   } = props;
+
+  checkState(initialState);
 
   const {
     layout = defaultClassNames.layout,
@@ -88,7 +128,7 @@ const Provider: React.FC<PropTypes> = (props) => {
   return (
     <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>
   );
-};
+}
 
 const useConfig = () => React.useContext(ConfigContext);
 const useClassNames = () => {

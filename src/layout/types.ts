@@ -68,3 +68,50 @@ export interface State {
   overlay: Overlay;
   layout: Layout;
 }
+
+export interface RawState {
+  rootId: number;
+  containers: Record<
+    number | string,
+    {
+      id: number;
+      parent: number;
+      children: number[];
+      directionType?: string;
+      splitRatio: number;
+      isGroup: boolean;
+      width: number;
+      height: number;
+      top: number;
+      left: number;
+      state?: unknown;
+    }
+  >;
+  dividers: Record<
+    string,
+    {
+      id: string;
+      directionType: string;
+      previous: number;
+      next: number;
+      height: number;
+      width: number;
+      top: number;
+      left: number;
+    }
+  >;
+  overlay: {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+    show: boolean;
+    direction: string;
+  };
+  layout: {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  };
+}

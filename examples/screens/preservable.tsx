@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import Subdivide, {
   ConfigProvider,
   useContainer,
@@ -7,11 +7,7 @@ import Subdivide, {
 } from '../../src';
 import Color from '../components/Color';
 
-interface PropTypes {
-  id: number;
-}
-
-const Panel: React.FC<PropTypes> = (props) => {
+function Panel() {
   const { id, setState, state } = useContainer();
   const onChange = (color: string) => {
     setState(color);
@@ -21,7 +17,7 @@ const Panel: React.FC<PropTypes> = (props) => {
       {id}
     </Color>
   );
-};
+}
 
 const getInitialState = () => {
   try {
@@ -32,7 +28,7 @@ const getInitialState = () => {
   }
 };
 
-const App: React.FC = () => {
+function App() {
   const initialState = React.useMemo(() => getInitialState(), []);
 
   const onLayoutChange = (state: LayoutState) => {
@@ -44,6 +40,7 @@ const App: React.FC = () => {
       <Subdivide component={Panel} />
     </ConfigProvider>
   );
-};
+}
 
-render(<App />, document.getElementById('root'));
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);

@@ -1,10 +1,10 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import Subdivide, { useContainer } from '../../src';
 import Color from '../components/Color';
 
-const Stats: React.FC = () => {
+function Stats() {
   const { stats } = useContainer();
 
   if (!stats) {
@@ -18,10 +18,11 @@ const Stats: React.FC = () => {
       <div>top: {stats.top}</div>
     </Color>
   );
-};
+}
 
-const App: React.FC = () => {
+function App() {
   return <Subdivide component={Stats} />;
-};
+}
 
-render(<App />, document.getElementById('root'));
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);
