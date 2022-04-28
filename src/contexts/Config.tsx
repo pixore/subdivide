@@ -63,6 +63,7 @@ function checkState(state: any): asserts state is State {
         const container = state?.containers[key];
 
         return (
+          container.directionType === undefined ||
           container.directionType === DirectionType.HORIZONTAL ||
           container.directionType === DirectionType.VERTICAL
         );
